@@ -1,6 +1,5 @@
 import express from 'express'
-import { createUser, loginUser } from '../servieces/authService';
-
+import { createUser, loginUser } from '../servieces/authService.js'
 const router = express.Router();
 
 router.post('/login', async (req, res, next) => {

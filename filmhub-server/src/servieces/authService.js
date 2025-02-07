@@ -1,7 +1,7 @@
-import UserModel from "../db/userModel";
+import UserModel from "../db/userModel.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-import createBadRequestError from "../errors/badRequestError";
+import createBadRequestError from "../errors/badRequestError.js";
 
 const createUser = async ({ username, email, password }) => {
     if (!username || !email || !password) {
