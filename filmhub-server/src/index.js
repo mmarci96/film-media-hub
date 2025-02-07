@@ -34,7 +34,7 @@ const main = async () => {
             console.log(`App is listening on http://${HOST}:${PORT}`);
         });
     } catch (e) {
-        console.error(err);
+        console.error(e);
         process.exit(1);
     }
 };
