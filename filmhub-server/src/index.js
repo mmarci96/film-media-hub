@@ -8,47 +8,35 @@ import errorHandler from './middleware/errorHandler';
 dotenv.config();
 
 const app = express();
-const { MONGO_URI, PORT = 8080 } = process.env;
+const { MONGO_URI, PORT = 8080, HOST = '0.0.0.0' } = process.env;
 
 const allowedOrigins = ['http://localhost:5173', 'http://localhost:80'];
 
-const options: cors.CorsOptions = {
+const options = {
     origin: allowedOrigins,
 };
 
 app.use(cors(options));
 
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json());
 
-app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/media', mediaRoutes);
-app.use('/api/posts', postRoutes);
-app.use('/api/comments', commentRoutes);
-app.use('/api/follows', followRoutes);
-app.use('/api/likes', likeRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.get('/api/hello', (req, res) => {
-    res.send('Hello world!');
+app.get('/health', (req, res) => {
+    res.status(200).send({ messege: "ok" });
 });
 
 app.use(errorHandler);
 
 const main = async () => {
-    const url = MONGO_URI;
-    if (!url) {
-        console.error('Missing MONGO_URL environment variable');
+    try {
+        await mongoose.connect(MONGO_URI);
+        app.listen(PORT, HOST, () => {
+            console.log(`App is listening on http://${HOST}:${PORT}`);
+        });
+    } catch (e) {
+        console.error(err);
         process.exit(1);
     }
-    await mongoose.connect(url);
-
-    app.listen(PORT as number, '0.0.0.0', () => {
-        console.log('App is listening on ', PORT);
-    });
 };
 
-main().catch((err) => {
-    console.error(err);
-    process.exit(1);
-}
+main()
