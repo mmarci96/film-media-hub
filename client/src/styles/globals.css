@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global CSS */
+.drawer-styles {
+    @apply min-w-[80vw] overflow-hidden;
+}
+
+.drawer-header-styles {
+    @apply flex flex-col gap-1 overflow-hidden;
+}
+
+.drawer-body-styles {
+    @apply flex flex-col overflow-hidden items-start relative bg-black;
+}
+
+/* Global CSS */
+.card-styles {
+    @apply border-none bg-background/60 dark:bg-default-100/50 w-full m-2;
+}
+
+.card-body-styles {
+    @apply p-4; /* Or other appropriate padding value */
+}

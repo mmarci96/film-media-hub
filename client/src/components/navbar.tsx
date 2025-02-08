@@ -1,4 +1,3 @@
-import { Button } from "@heroui/button";
 import { Kbd } from "@heroui/kbd";
 import { Link } from "@heroui/link";
 import { Input } from "@heroui/input";
@@ -17,13 +16,9 @@ import clsx from "clsx";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import {
-    TwitterIcon,
-    GithubIcon,
-    DiscordIcon,
-    HeartFilledIcon,
     SearchIcon,
 } from "@/components/icons";
-import { Logo } from "@/components/icons";
+import DropDownComponent from "./drop-down";
 
 export const Navbar = () => {
     const searchInput = (
@@ -56,17 +51,21 @@ export const Navbar = () => {
                         color="foreground"
                         href="/"
                     >
-                        <Logo />
-                        <p className="font-bold text-inherit">ACME</p>
+                        <img src="./logo.png"
+                            className={"hover:scale-105 w-8 h-8 border-4 border-[#181a2f]" +
+                                "object-fit rounded-full ease-in duration-300 animation-spin"} />
+                        <p className="font-bold text-lg py-1 px-2">FilmHub</p>
                     </Link>
                 </NavbarBrand>
-                <div className="hidden md:flex gap-4 justify-start ml-2">
+                <div className="hidden md:flex gap-4 justify-start ml-4 ring-1 ring-[#26233A] rounded-xl px-4 p-2">
                     {siteConfig.navItems.map((item) => (
-                        <NavbarItem key={item.href}>
+                        <NavbarItem key={item.href}
+                            className={"hover:scale-110 hover:ring-1 hover:bg-[#18121F] ring-[#2C647C]  rounded-lg hover:px-2  hover:tracking-wider ease-in duration-200 "}
+                        >
                             <Link
                                 className={clsx(
                                     linkStyles({ color: "foreground" }),
-                                    "data-[active=true]:text-primary data-[active=true]:font-medium"
+                                    "data-[active=true]:text-primary text-md hover:bg-60/100 ease-in-out duration-200 data-[active=true]:font-medium",
                                 )}
                                 color="foreground"
                                 href={item.href}
@@ -86,24 +85,10 @@ export const Navbar = () => {
                     <ThemeSwitch />
                 </NavbarItem>
                 <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-                <NavbarItem className="hidden md:flex">
-                    <Button
-                        isExternal
-                        as={Link}
-                        className="text-sm font-normal text-default-600 bg-default-100"
-                        href={siteConfig.links.sponsor}
-                        startContent={<HeartFilledIcon className="text-danger" />}
-                        variant="flat"
-                    >
-                        Sponsor
-                    </Button>
-                </NavbarItem>
             </NavbarContent>
 
             <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-                <Link isExternal href={siteConfig.links.github}>
-                    <GithubIcon className="text-default-500" />
-                </Link>
+                <DropDownComponent />
                 <ThemeSwitch />
                 <NavbarMenuToggle />
             </NavbarContent>

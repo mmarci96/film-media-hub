@@ -47,5 +47,7 @@ export const siteConfig = {
             href: "/about",
         },
     ],
-    links: {},
+    links: {
+        github: "https://github.com/mmarci96/film-media-hub"
+    },
 };
