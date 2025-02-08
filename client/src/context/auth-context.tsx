@@ -1,4 +1,3 @@
-
 import { createContext, useState, useEffect } from "react";
 
 interface AuthContextType {

@@ -1,9 +1,9 @@
-import UserModel from "../db/userModel.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import createBadRequestError from "../errors/badRequestError.js";
 import dotenv from 'dotenv';
-import UserDetailsModel from "../db/userDetailsModel.js";
+import UserDetailsModel from "../db/userDetails.model.js";
+import UserModel from "../db/user.model.js";
 dotenv.config();
 const { JWT_SECRET_KEY } = process.env || '';
 

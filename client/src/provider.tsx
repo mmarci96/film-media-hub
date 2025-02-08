@@ -2,6 +2,7 @@ import type { NavigateOptions } from "react-router-dom";
 import { HeroUIProvider } from "@heroui/system";
 import { useHref, useNavigate } from "react-router-dom";
 import { AuthProvider } from "@/context/auth-context";
+import { FavoritesProvider } from "./context/favorites-context";
 
 declare module "@react-types/shared" {
     interface RouterConfig {
@@ -14,9 +15,11 @@ export function Provider({ children }: { children: React.ReactNode }) {
 
     return (
         <AuthProvider>
-            <HeroUIProvider navigate={navigate} useHref={useHref}>
-                {children}
-            </HeroUIProvider>
+            <FavoritesProvider>
+                <HeroUIProvider navigate={navigate} useHref={useHref}>
+                    {children}
+                </HeroUIProvider>
+            </FavoritesProvider>
         </AuthProvider>
     );
 }

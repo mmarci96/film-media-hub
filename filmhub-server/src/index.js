@@ -3,6 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import errorHandler from './middleware/errorHandler.js';
 import authRoutes from './routes/authRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -21,6 +22,7 @@ app.use(cors(options));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.get('/health', (req, res) => {
     res.status(200).send({ messege: "ok" });
 });

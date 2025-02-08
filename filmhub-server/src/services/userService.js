@@ -1,6 +1,6 @@
-import UserModel from "../db/userModel";
-import UserDetailsModel from "../db/userDetailsModel";
-import createBadRequestError from "../errors/badRequestError";
+import UserModel from "../db/user.model.js";
+import UserDetailsModel from "../db/userDetails.model.js";
+import createBadRequestError from "../errors/badRequestError.js";
 
 const getFavoritesByUserId = async (userId) => {
     if (!userId) {
@@ -12,7 +12,7 @@ const getFavoritesByUserId = async (userId) => {
         createBadRequestError(404, 'user')
     }
 
-    return user;
+    return user.userDetails.favorites;
 }
 
 const addToFavorite = async (userId, mediaId) => {
@@ -23,7 +23,8 @@ const addToFavorite = async (userId, mediaId) => {
     const user = await UserModel.findById(userId);
     const update = await UserDetailsModel.findByIdAndUpdate(
         user.userDetails,
-        { $push: { favorites: mediaId } }
+        { $push: { favorites: mediaId } },
+        { new: true }
     )
 
     return update;
@@ -37,7 +38,8 @@ const removeFavorite = async (userId, mediaId) => {
     const user = await UserModel.findById(userId);
     const update = await UserDetailsModel.findByIdAndUpdate(
         user.userDetails,
-        { $pop: { favorites: mediaId } }
+        { $pull: { favorites: mediaId } },
+        { new: true }
     )
     return update;
 }

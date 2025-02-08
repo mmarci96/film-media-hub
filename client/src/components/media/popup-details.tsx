@@ -1,7 +1,6 @@
 import { Image } from "@heroui/image";
 import { Chip } from "@heroui/chip";
 import { FaStar, FaClock, FaThumbsUp, FaCalendarAlt } from "react-icons/fa";
-
 import GenreList from "@/components/media/media-genres";
 import { MediaDetails, MediaItem } from "@/types";
 

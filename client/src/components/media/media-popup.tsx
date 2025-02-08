@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useTmdbDetails } from "@/hooks/use-tmdb-details";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import PopupDetails from "@/components/media/popup-details";
+import { useFavorites } from "@/hooks/use-favorites";
 
 interface MediaPopupProps {
     media: MediaItem;
@@ -20,6 +21,8 @@ interface MediaPopupProps {
 
 const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) => {
     const [favorite, setFavorite] = useState(false);
+    const { favoriteList, addToFavorite, removeFavorite, fetchFavorites } = useFavorites();
+
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { mediaDetails, fetchMediaDetails, loading, error } = useTmdbDetails();
 
@@ -29,9 +32,16 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
     }
 
     useEffect(() => {
-        isOpen && fetchMediaDetails(media.id, mediaType)
-    }, [isOpen])
+        if (isOpen) {
+            fetchMediaDetails(media.id, mediaType)
+        }
+    }, [isOpen, addToFavorite])
 
+    useEffect(() => {
+        if (favoriteList?.includes(media.id.toString())) {
+            setFavorite(true)
+        }
+    }, [isOpen])
     if (!media) return null;
 
     return (
@@ -40,45 +50,53 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
 
             <Drawer isOpen={isOpen} onOpenChange={onOpenChange} className="min-w-[80vw] overflow-hidden">
                 <DrawerContent className="overflow-hidden">
-                    <>
-                        <DrawerHeader className="flex flex-col gap-1 overflow-hidden">{media.title || "No Title Available"}</DrawerHeader>
+                    <DrawerHeader className="flex flex-col gap-1 overflow-hidden">{media.title || "No Title Available"}</DrawerHeader>
 
-                        <DrawerBody className="flex flex-col overflow-hidden items-start relative bg-black">
-                            {media.poster_path && (
-                                <div
-                                    className="absolute inset-0 w-full h-full max-h-[480px] bg-cover bg-center"
-                                    style={{
-                                        backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1)), url(https://image.tmdb.org/t/p/w780${media.backdrop_path})`,
-                                    }}
-                                />)}
-                            <h3 className="text-xl italic wider z-10"> Synopsis: </h3>
-                            <p className="text-md italic z-10" >
-                                {mediaDetails?.overview || "No description available."}
-                            </p>
-                            <Card
-                                isBlurred
-                                className="border-none bg-background/60 dark:bg-default-100/50 w-full m-2"
-                                shadow="sm"
+                    <DrawerBody className="flex flex-col overflow-hidden items-start relative bg-black">
+                        {media.poster_path && (
+                            <div
+                                className="absolute inset-0 w-full h-full max-h-[480px] bg-cover bg-center"
+                                style={{
+                                    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1)), url(https://image.tmdb.org/t/p/w780${media.backdrop_path})`,
+                                }}
+                            />)}
+                        <h3 className="text-xl italic wider z-10"> Synopsis: </h3>
+                        <p className="text-md italic z-10" >
+                            {mediaDetails?.overview || "No description available."}
+                        </p>
+                        <Card
+                            isBlurred
+                            className="border-none bg-background/60 dark:bg-default-100/50 w-full m-2"
+                            shadow="sm"
+                        >
+                            <CardBody>
+                                <PopupDetails mediaDetails={mediaDetails} media={media} />
+                            </CardBody>
+                        </Card>
+                    </DrawerBody>
+                    <DrawerFooter>
+                        {favorite ?
+                            <Button color="warning"
+                                onPress={() => {
+                                    removeFavorite(media.id)
+                                    setFavorite(false)
+                                }}
                             >
-                                <CardBody>
-                                    <PopupDetails mediaDetails={mediaDetails} media={media} />
-                                </CardBody>
-                            </Card>
-                        </DrawerBody>
-                        <DrawerFooter>
-                            {favorite ?
-                                <Button color="success" >
-                                    Remove Favorite <FaStar />
-                                </Button>
-                                :
-                                <Button color="success">
-                                    Save to Favorites <FaRegStar />
-                                </Button>}
-                            <Button color="primary" onPress={handleMediaDetailsPage}>
-                                Watch Now
+                                Remove Favorite <FaStar />
                             </Button>
-                        </DrawerFooter>
-                    </>
+                            :
+                            <Button
+                                onPress={() => {
+                                    addToFavorite(media.id)
+                                    setFavorite(true)
+                                }}
+                                color="success">
+                                Save to Favorites <FaRegStar />
+                            </Button>}
+                        <Button color="primary" onPress={handleMediaDetailsPage}>
+                            Watch Now
+                        </Button>
+                    </DrawerFooter>
                 </DrawerContent>
             </Drawer>
         </>
