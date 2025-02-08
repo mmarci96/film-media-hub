@@ -5,7 +5,7 @@ import MediaCard from "@/components/media-card";
 import { useTmdb } from "@/hooks/use-tmdb";
 import React, { useState } from "react"
 import { ListType, MediaType } from "@/types";
-
+import { Select, SelectItem } from "@heroui/select";
 interface MediaListProps {
     mediaType: MediaType;
     defaultListType: ListType;
@@ -34,21 +34,20 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, defaultListType }) => 
 
     return (
         <section className="flex flex-col items-center justify-center py-2 md:py-4">
-
             <div className="mb-4">
-                <label htmlFor="listType" className="mr-2 font-medium text-lg">Select List Type:</label>
-                <select
-                    id="listType"
-                    className="border rounded p-2"
+                <Select
+                    className="min-w-[320px] w-[52vw]"
+                    label="Select List:"
                     value={listType}
+                    placeholder="Select list to show..."
                     onChange={handleListTypeChange}
                 >
                     {listOptions.map((option) => (
-                        <option key={option} value={option}>
+                        <SelectItem key={option} value={option}>
                             {option[0].toUpperCase() + option.split("_").join(" ").substring(1)}
-                        </option>
+                        </SelectItem>
                     ))}
-                </select>
+                </Select>
             </div>
 
             {loading && (
