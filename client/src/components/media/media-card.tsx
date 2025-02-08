@@ -18,7 +18,9 @@ const MediaCard: React.FC<MediaCardProps> = ({ media, mediaType }) => {
                             fallbackSrc="https://via.placeholder.com/312x432"
                             width={320}
                             height={400}
-                            src={`https://image.tmdb.org/t/p/w500${media.poster_path}`}
+                            src={media.poster_path?.startsWith('https') ?
+                                media.poster_path :
+                                `https://image.tmdb.org/t/p/w500${media.poster_path}`}
                             alt={media.title || "Movie Poster"}
                             className="rounded-xl pb-0 p-1 object-cover"
                         />

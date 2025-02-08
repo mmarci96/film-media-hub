@@ -18,7 +18,7 @@ export const siteConfig = {
         },
         {
             label: "Anime",
-            href: "/anime",
+            href: "/animes",
         },
         {
             label: "About",

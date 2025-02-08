@@ -3,19 +3,29 @@ import { Skeleton } from "@heroui/skeleton";
 import { Select, SelectItem } from "@heroui/select";
 import { Button } from "@heroui/button";
 import MediaCard from "@/components/media/media-card";
-import { useTmdb } from "@/hooks/use-tmdb";
-import React, { useState } from "react"
-import { ListType, MediaType } from "@/types";
+import React, { useState, useEffect } from "react"
+import { ListType, MediaItem, MediaType } from "@/types";
+
 interface MediaListProps {
     mediaType: MediaType;
-    defaultListType: ListType;
+    listType: ListType;
+    mediaList: MediaItem[] | null;
+    error: string | null;
+    loading: boolean;
+    onLoadMore: (page: number) => void;
+    onSelectListType: (listType: ListType) => void;
 }
 
-const MediaList: React.FC<MediaListProps> = ({ mediaType, defaultListType }) => {
+const MediaList: React.FC<MediaListProps> = (
+    { mediaType, listType, mediaList, error, loading, onLoadMore, onSelectListType }
+) => {
     const [page, setPage] = useState(1);
-    const [listType, setListType] = useState<ListType>(defaultListType);
+    //const [listType, setListType] = useState<ListType>(defaultListType);
 
-    const { mediaList, error, loading } = useTmdb(mediaType, page, listType);
+    useEffect(() => {
+        onLoadMore(page);
+    }, [page, onLoadMore]);
+
     const listOptions: ListType[] = [
         "popular",
         "top_rated",
@@ -28,8 +38,9 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, defaultListType }) => 
     }
 
     const handleListTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setListType(e.target.value as ListType);
-        setPage(1);
+        //setListType(e.target.value as ListType);
+        onSelectListType(e.target.value as ListType)
+        onLoadMore(1);
     };
 
     return (
@@ -76,7 +87,7 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, defaultListType }) => 
             </div>
 
             <div className="mt-6 flex gap-4">
-                <Button onPress={() => setPage((prev) => prev + 1)}>Show More</Button>
+                <Button onPress={() => setPage((prevPage) => prevPage + 1)}>Show More</Button>
             </div>
         </section>
     );
