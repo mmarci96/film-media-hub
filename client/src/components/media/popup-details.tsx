@@ -16,7 +16,9 @@ const PopupDetails: React.FC<PopupDetailsProps> = ({ mediaDetails, media }) => {
                 isBlurred
                 className="m-1 object-cover ring-1 shadow-xl"
                 height={360}
-                src={`https://image.tmdb.org/t/p/w500/${media.poster_path}`}
+                src={media.poster_path?.startsWith('https') ?
+                    media.poster_path :
+                    `https://image.tmdb.org/t/p/w500/${media.poster_path}`}
                 width={240}
             />
             <div className="flex flex-col items-start gap-2 mx-auto ml-8">

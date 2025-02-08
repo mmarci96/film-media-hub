@@ -1,3 +1,4 @@
+import { ScrollShadow } from "@heroui/scroll-shadow";
 import { Drawer } from "@heroui/drawer";
 import { DrawerContent } from "@heroui/drawer";
 import { DrawerHeader } from "@heroui/drawer";
@@ -12,7 +13,8 @@ import { useTmdbDetails } from "@/hooks/use-tmdb-details";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import PopupDetails from "@/components/media/popup-details";
 import { useFavorites } from "@/hooks/use-favorites";
-
+import { useAnimeDetails } from "@/hooks/use-anime-details";
+import { MediaDetails } from "@/types";
 interface MediaPopupProps {
     media: MediaItem;
     children: any;
@@ -22,9 +24,20 @@ interface MediaPopupProps {
 const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) => {
     const [favorite, setFavorite] = useState(false);
     const { favoriteList, addToFavorite, removeFavorite, fetchFavorites } = useFavorites();
-
+    const [mediaDetails, setMediaDetails] = useState<MediaDetails | null>(null);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const { mediaDetails, fetchMediaDetails, loading, error } = useTmdbDetails();
+    const { fetchAnimeDetails } = useAnimeDetails();
+    const { fetchMediaDetails } = useTmdbDetails();
+
+    const getMediaDetails = async (mediaId: number, mediaType: MediaType) => {
+        if (mediaType === 'anime') {
+            const details = await fetchAnimeDetails(mediaId.toString())
+            details && setMediaDetails(details)
+        } else {
+            const details = await fetchMediaDetails(mediaId, mediaType)
+            details && setMediaDetails(details)
+        }
+    }
 
     const handleMediaDetailsPage = () => {
         console.log("handle details to:", media.id);
@@ -33,7 +46,7 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
 
     useEffect(() => {
         if (isOpen) {
-            fetchMediaDetails(media.id, mediaType)
+            getMediaDetails(media.id, mediaType)
         }
     }, [isOpen, addToFavorite])
 
@@ -57,13 +70,9 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
                             <div
                                 className="absolute inset-0 w-full h-full max-h-[480px] bg-cover bg-center"
                                 style={{
-                                    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1)), url(https://image.tmdb.org/t/p/w780${media.backdrop_path})`,
+                                    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1)), url(${media.backdrop_path?.startsWith('http') ? "" : "https://image.tmdb.org/t/p/w780"}${media.backdrop_path})`,
                                 }}
                             />)}
-                        <h3 className="text-xl italic wider z-10"> Synopsis: </h3>
-                        <p className="text-md italic z-10" >
-                            {mediaDetails?.overview || "No description available."}
-                        </p>
                         <Card
                             isBlurred
                             className="border-none bg-background/60 dark:bg-default-100/50 w-full m-2"
@@ -72,7 +81,14 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
                             <CardBody>
                                 <PopupDetails mediaDetails={mediaDetails} media={media} />
                             </CardBody>
+
                         </Card>
+                        <ScrollShadow className="w-full h-36" hideScrollBar >
+                            <p className="text-md italic z-10" >
+                                Synopsis: {mediaDetails?.overview || "No description available."}
+                            </p>
+                        </ScrollShadow>
+
                     </DrawerBody>
                     <DrawerFooter>
                         {favorite ?

@@ -24,7 +24,7 @@ export interface MediaDetails {
     original_title?: string;
     overview?: string;
     genres?: Genre[];
-    release_date?: string;
+    release_date?: string | Date;
     runtime?: number;
     vote_average?: number;
     vote_count?: number;
@@ -76,3 +76,60 @@ export type ListType =
     | "upcoming"
     | "now_playing"
     | "airing_today";
+
+export interface AnimeItem {
+    mal_id: number;
+    title?: string;
+    title_english?: string;
+    title_japanese?: string;
+    title_synonyms?: string[];
+    overview?: string;
+    synopsis?: string;
+    genres?: Genre[];
+    release_date?: string;
+    aired?: {
+        from?: string;
+        to?: string;
+        string?: string;
+    };
+    runtime?: number;
+    episodes?: number;
+    score?: number;
+    scored_by?: number;
+    popularity?: number;
+    rank?: number;
+    members?: number;
+    favorites?: number;
+    status?: string;
+    season?: string;
+    year?: number;
+    source?: string;
+    rating?: string;
+    duration?: string;
+    studios?: { mal_id: number; name: string }[];
+    producers?: { mal_id: number; name: string }[];
+    licensors?: { mal_id: number; name: string }[];
+    themes?: { mal_id: number; name: string }[];
+    explicit_genres?: { mal_id: number; name: string }[];
+    background?: string;
+    trailer?: {
+        youtube_id?: string;
+        url?: string;
+        embed_url?: string;
+    };
+    images?: {
+        jpg?: {
+            image_url: string;
+            small_image_url: string;
+            large_image_url: string;
+        };
+    };
+    broadcast?: {
+        day?: string;
+        time?: string;
+        timezone?: string;
+    };
+}
+
+
+

@@ -20,7 +20,6 @@ const MediaList: React.FC<MediaListProps> = (
     { mediaType, listType, mediaList, error, loading, onLoadMore, onSelectListType }
 ) => {
     const [page, setPage] = useState(1);
-    //const [listType, setListType] = useState<ListType>(defaultListType);
 
     useEffect(() => {
         onLoadMore(page);
@@ -38,7 +37,6 @@ const MediaList: React.FC<MediaListProps> = (
     }
 
     const handleListTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        //setListType(e.target.value as ListType);
         onSelectListType(e.target.value as ListType)
         onLoadMore(1);
     };
