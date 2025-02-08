@@ -28,8 +28,8 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { fetchAnimeDetails } = useAnimeDetails();
     const { fetchMediaDetails } = useTmdbDetails();
-
     const getMediaDetails = async (mediaId: number, mediaType: MediaType) => {
+
         if (mediaType === 'anime') {
             const details = await fetchAnimeDetails(mediaId.toString())
             details && setMediaDetails(details)
@@ -46,6 +46,8 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
 
     useEffect(() => {
         if (isOpen) {
+            fetchFavorites();
+
             getMediaDetails(media.id, mediaType)
         }
     }, [isOpen, addToFavorite])
@@ -61,11 +63,15 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
         <>
             <div onClick={onOpen}>{children}</div>
 
-            <Drawer isOpen={isOpen} onOpenChange={onOpenChange} className="min-w-[80vw] overflow-hidden">
+            <Drawer isOpen={isOpen} onOpenChange={onOpenChange} className="drawer-styles">
                 <DrawerContent className="overflow-hidden">
-                    <DrawerHeader className="flex flex-col gap-1 overflow-hidden">{media.title || "No Title Available"}</DrawerHeader>
+                    <DrawerHeader
+                        className="drawer-header-styles"
+                    >
+                        {media.title || "No Title Available"}
+                    </DrawerHeader>
 
-                    <DrawerBody className="flex flex-col overflow-hidden items-start relative bg-black">
+                    <DrawerBody className="drawer-body-styles">
                         {media.poster_path && (
                             <div
                                 className="absolute inset-0 w-full h-full max-h-[480px] bg-cover bg-center"

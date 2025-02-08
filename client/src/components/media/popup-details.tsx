@@ -10,6 +10,7 @@ interface PopupDetailsProps {
 }
 
 const PopupDetails: React.FC<PopupDetailsProps> = ({ mediaDetails, media }) => {
+
     return (
         <div className="flex items-center justify-start">
             <Image
