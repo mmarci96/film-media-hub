@@ -25,7 +25,7 @@ export interface MediaDetails {
     overview?: string;
     genres?: Genre[];
     release_date?: string | Date;
-    runtime?: number;
+    runtime?: number | string;
     vote_average?: number;
     vote_count?: number;
     poster_path?: string;

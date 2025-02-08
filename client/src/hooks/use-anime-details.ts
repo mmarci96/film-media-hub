@@ -27,7 +27,7 @@ export const useAnimeDetails = () => {
                 overview: details.synopsis,
                 genres: details.genres,
                 release_date: date,
-                runtime: details?.runtime,
+                runtime: details?.episodes + "Ep x20",
                 vote_average: details.score,
                 backdrop_path: details?.images?.jpg?.large_image_url,
                 poster_path: details?.images?.jpg?.image_url,

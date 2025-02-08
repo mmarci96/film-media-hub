@@ -1,4 +1,4 @@
-import { ListType, MediaItem, Genre } from "@/types"
+import { ListType, MediaItem } from "@/types"
 import { useEffect, useState } from "react"
 import { AnimeItem } from "@/types"
 
@@ -14,22 +14,24 @@ export const useAnime = (listType: ListType, page: number) => {
     ): Promise<void> => {
         setLoading(true)
         try {
-            let apiUrl = `${BASE_URL}/top/anime`
+            let apiUrl = ''
             if (listType === 'popular') {
-                apiUrl += `?order_by=popularity`;
+                apiUrl = `${BASE_URL}/top/anime?filter=bypopularity`;
+                apiUrl = 'https://api.jikan.moe/v4/top/anime?filter=bypopularity'
             } else if (listType === "on_the_air") {
-                apiUrl += `?filter=airing`;
+                apiUrl = `https://api.jikan.moe/v4/top/anime?filter=airing`;
+            } else if (listType === 'now_playing') {
+                apiUrl = `https://api.jikan.moe/v4/top/anime?filter=favorite`
             } else {
-                apiUrl += `?filter=${listType}`
+                apiUrl = `https://api.jikan.moe/v4/top/anime?filter=upcoming`
             }
 
-            const res = await fetch(`${apiUrl}?page=${page}`)
+            const res = await fetch(`${apiUrl}&page=${page}`)
             const { data } = await res.json();
-            if (!res.ok) {
-                console.log(res);
+            if (!res) {
                 setError("Unexpected error happenned!")
             }
-            console.log(data)
+
             const list: MediaItem[] = data.map((anime: AnimeItem) => {
                 console.log(anime)
                 const animeItem: MediaItem = {

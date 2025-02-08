@@ -35,6 +35,9 @@ const MediaList: React.FC<MediaListProps> = (
     if (mediaType === 'tv') {
         listOptions.push('on_the_air', 'airing_today')
     }
+    if (mediaType === 'anime') {
+        listOptions.push("upcoming", "on_the_air")
+    }
 
     const handleListTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onSelectListType(e.target.value as ListType)
