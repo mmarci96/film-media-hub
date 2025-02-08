@@ -1,5 +1,5 @@
 import { title } from "@/components/primitives";
-import MediaList from "@/components/media-list";
+import MediaList from "@/components/media/media-list";
 import DefaultLayout from "@/layouts/default";
 
 export default function SeriesPage() {

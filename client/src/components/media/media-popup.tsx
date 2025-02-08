@@ -10,7 +10,7 @@ import { useDisclosure } from "@/hooks/use-disclosure";
 import React, { useEffect, useState } from "react";
 import { useTmdbDetails } from "@/hooks/use-tmdb-details";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import PopupDetails from "./media/popup-details";
+import PopupDetails from "@/components/media/popup-details";
 
 interface MediaPopupProps {
     media: MediaItem;

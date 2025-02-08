@@ -1,7 +1,7 @@
 import { Card } from "@heroui/card";
 import { Skeleton } from "@heroui/skeleton";
 import { Button } from "@heroui/button";
-import MediaCard from "@/components/media-card";
+import MediaCard from "@/components/media/media-card";
 import { useTmdb } from "@/hooks/use-tmdb";
 import React, { useState } from "react"
 import { ListType, MediaType } from "@/types";

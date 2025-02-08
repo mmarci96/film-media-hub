@@ -4,7 +4,6 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
     size?: number;
 };
 
-
 export interface MediaItem {
     id: number;
     title?: string;
@@ -70,6 +69,10 @@ export interface UseTmdbResult {
 }
 
 export type MediaType = "movie" | "tv" | "anime";
-export type ListType = "popular" | "top_rated" | "on_the_air" | "upcoming" | "now_playing" | "airing_today";
-
-
+export type ListType =
+    | "popular"
+    | "top_rated"
+    | "on_the_air"
+    | "upcoming"
+    | "now_playing"
+    | "airing_today";

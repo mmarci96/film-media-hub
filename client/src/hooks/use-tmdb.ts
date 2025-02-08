@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
+
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+
 import { UseTmdbResult, MediaType, MediaItem, ListType } from "@/types";
 
-export const useTmdb = (type: MediaType, page: number, list: ListType): UseTmdbResult => {
+export const useTmdb = (
+    type: MediaType,
+    page: number,
+    list: ListType,
+): UseTmdbResult => {
     const [mediaList, setMediaList] = useState<MediaItem[] | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -13,10 +19,15 @@ export const useTmdb = (type: MediaType, page: number, list: ListType): UseTmdbR
 
     const checkMediaListForDuplicates = (list: MediaItem[]): MediaItem[] => {
         const idList = updateIdList(list);
+
         return list.filter((movie, index) => idList.indexOf(movie.id) === index);
     };
 
-    const fetchMedia = async (type: MediaType, currentPage: number, tmdbList: ListType) => {
+    const fetchMedia = async (
+        type: MediaType,
+        currentPage: number,
+        tmdbList: ListType,
+    ) => {
         setLoading(true);
         try {
             const response = await fetch(
@@ -27,7 +38,7 @@ export const useTmdb = (type: MediaType, page: number, list: ListType): UseTmdbR
                         accept: "application/json",
                         Authorization: `Bearer ${TMDB_API_KEY}`,
                     },
-                }
+                },
             );
 
             if (!response.ok) {
@@ -35,9 +46,13 @@ export const useTmdb = (type: MediaType, page: number, list: ListType): UseTmdbR
             }
 
             const data = await response.json();
-            const mediaListed = checkMediaListForDuplicates(data.results as MediaItem[]);
+            const mediaListed = checkMediaListForDuplicates(
+                data.results as MediaItem[],
+            );
 
-            setMediaList((prevList) => (currentPage === 1 ? mediaListed : [...(prevList || []), ...mediaListed]));
+            setMediaList((prevList) =>
+                currentPage === 1 ? mediaListed : [...(prevList || []), ...mediaListed],
+            );
         } catch (err) {
             if (err instanceof Error) {
                 console.error("Failed to fetch movie list:", err.message);

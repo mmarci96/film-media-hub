@@ -1,7 +1,7 @@
 import { MediaItem, MediaType } from "@/types";
 import { Card, CardBody } from "@heroui/card";
 import { Image } from "@heroui/image";
-import MediaPopup from "./media-popup";
+import MediaPopup from "@/components/media/media-popup";
 
 interface MediaCardProps {
     media: MediaItem;

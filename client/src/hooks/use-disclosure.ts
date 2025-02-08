@@ -7,7 +7,6 @@ export interface DisclosureHandler {
     onOpenChange: () => void;
 }
 
-
 export const useDisclosure = (): DisclosureHandler => {
     const [isOpen, setOpen] = useState(false);
 
@@ -16,7 +15,9 @@ export const useDisclosure = (): DisclosureHandler => {
     const onOpenChange = (): void => setOpen(!isOpen);
 
     return {
-        isOpen, onOpen, onClose, onOpenChange
-    }
-}
-
+        isOpen,
+        onOpen,
+        onClose,
+        onOpenChange,
+    };
+};

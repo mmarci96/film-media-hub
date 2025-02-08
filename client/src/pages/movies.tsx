@@ -1,6 +1,6 @@
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import MediaList from "@/components/media-list";
+import MediaList from "@/components/media/media-list";
 
 export default function MoviesPage() {
     const mediaType = 'movie'
