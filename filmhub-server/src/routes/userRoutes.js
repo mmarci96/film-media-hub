@@ -1,6 +1,6 @@
 import express from "express"
 import { authenticateToken } from "../middleware/authToken.js";
-import { addToFavorite, getFavoritesByUserId, removeFavorite } from "../services/userService.js";
+import { addToFavorite, deleteUser, getFavoritesByUserId, getUserById, removeFavorite, updateUser } from "../services/userService.js";
 
 const router = express.Router();
 
@@ -10,6 +10,37 @@ router.get('/', async (req, res, next) => {
         return res.status(200).send({ data: users })
     } catch (err) {
         next(err)
+    }
+})
+
+router.patch('/', authenticateToken, async (req, res, next) => {
+    try {
+        const { userId } = req;
+        const { ...updateData } = req.body;
+        const updatedUser = await updateUser({ id: userId, ...updateData })
+        res.status(201).send({ data: updatedUser })
+    } catch (err) {
+        next(err)
+    }
+})
+
+router.delete("/", authenticateToken, async (req, res, next) => {
+    try {
+        const { userId } = req;
+        const deleteStatus = await deleteUser(userId);
+        res.status(204).send({ message: "Deleted successfully!", data: deleteStatus })
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.get('/:id', authenticateToken, async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const user = await getUserById(id);
+        res.status(200).send({ data: user })
+    } catch (err) {
+        next(eer)
     }
 })
 
