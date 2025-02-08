@@ -34,6 +34,6 @@ export interface UseTmdbResult {
 }
 
 export type MediaType = "movie" | "tv" | "anime";
-export type ListType = "popular" | "top_rated" | "now_playing" | "upcoming" | "airing_today";
+export type ListType = "popular" | "top_rated" | "on_the_air" | "upcoming" | "now_playing" | "airing_today";
 
 

@@ -11,7 +11,7 @@ export default function SeriesPage() {
             <div className="inline-block max-w-lg text-center justify-center">
                 <h1 className={title()}>Series</h1>
             </div>
-            <MediaList mediaType={mediaType} listType={listType} />
+            <MediaList mediaType={mediaType} defaultListType={listType} />
         </DefaultLayout>
     );
 }

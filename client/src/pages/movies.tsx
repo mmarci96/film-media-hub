@@ -12,7 +12,7 @@ export default function MoviesPage() {
                 <h1 className={title()}>Movies:</h1>
             </div>
 
-            <MediaList mediaType={mediaType} listType={listType} />
+            <MediaList mediaType={mediaType} defaultListType={listType} />
         </DefaultLayout>
     );
 }

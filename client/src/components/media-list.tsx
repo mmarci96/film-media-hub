@@ -8,21 +8,54 @@ import { ListType, MediaType } from "@/types";
 
 interface MediaListProps {
     mediaType: MediaType;
-    listType: ListType;
+    defaultListType: ListType;
 }
 
-const MediaList: React.FC<MediaListProps> = ({ mediaType, listType }) => {
+const MediaList: React.FC<MediaListProps> = ({ mediaType, defaultListType }) => {
     const [page, setPage] = useState(1);
+    const [listType, setListType] = useState<ListType>(defaultListType);
+
     const { mediaList, error, loading } = useTmdb(mediaType, page, listType);
+    const listOptions: ListType[] = [
+        "popular",
+        "top_rated",
+    ];
+    if (mediaType === 'movie') {
+        listOptions.push("upcoming", "now_playing")
+    }
+    if (mediaType === 'tv') {
+        listOptions.push('on_the_air', 'airing_today')
+    }
+
+    const handleListTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setListType(e.target.value as ListType);
+        setPage(1);
+    };
 
     return (
         <section className="flex flex-col items-center justify-center py-2 md:py-4">
 
+            <div className="mb-4">
+                <label htmlFor="listType" className="mr-2 font-medium text-lg">Select List Type:</label>
+                <select
+                    id="listType"
+                    className="border rounded p-2"
+                    value={listType}
+                    onChange={handleListTypeChange}
+                >
+                    {listOptions.map((option) => (
+                        <option key={option} value={option}>
+                            {option[0].toUpperCase() + option.split("_").join(" ").substring(1)}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
             {loading && (
                 <div className="flex flex-wrap justify-center">
                     {Array.from({ length: 8 }).map((_, index) => (
-                        <Card key={index} className="rounded-lg my-4 mx-2 w-[264px] h-[420px] overflow-hidden shadow-md ring-2 radius-lg" >
-                            <Skeleton className=" w-[250px] mx-2 my-2 h-[420px] rounded-lg" />
+                        <Card key={index} className="rounded-lg my-4 mx-2 w-[320px] h-[440px] overflow-hidden shadow-md ring-2 radius-lg" >
+                            <Skeleton className="w-[302px] mx-2 my-2 h-[420px] rounded-lg" />
                             <div>
                                 <Skeleton className="w-4/5 m-2 rounded-lg">
                                     <div className="h-4 w-full rounded-lg bg-default-200" />
@@ -37,7 +70,7 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, listType }) => {
 
             <div className="flex flex-wrap justify-center w-[92vw]">
                 {mediaList?.map((media) => (
-                    <div key={media.id} >
+                    <div key={media.id}>
                         <MediaCard media={media} mediaType={mediaType} />
                     </div>
                 ))}
@@ -46,7 +79,9 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, listType }) => {
             <div className="mt-6 flex gap-4">
                 <Button onPress={() => setPage((prev) => prev + 1)}>Show More</Button>
             </div>
-        </section>)
-}
+        </section>
+    );
+};
 
-export default MediaList
+export default MediaList;
+

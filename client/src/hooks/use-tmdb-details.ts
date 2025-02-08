@@ -2,8 +2,6 @@ import { useState } from "react";
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 import { MediaDetails, MediaType } from "@/types";
 
-
-
 export const useTmdbDetails = () => {
     const [error, setError] = useState<string | null>(null)
     const [mediaDetails, setMediaDetails] = useState<MediaDetails | null>(null);
