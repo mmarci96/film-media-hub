@@ -1,12 +1,11 @@
 import { Card } from "@heroui/card";
 import { Skeleton } from "@heroui/skeleton";
+import { Select, SelectItem } from "@heroui/select";
 import { Button } from "@heroui/button";
 import MediaCard from "@/components/media/media-card";
 import { useTmdb } from "@/hooks/use-tmdb";
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { ListType, MediaType } from "@/types";
-import { Select, SelectItem } from "@heroui/select";
-import { useFavorites } from "@/hooks/use-favorites";
 interface MediaListProps {
     mediaType: MediaType;
     defaultListType: ListType;
@@ -16,7 +15,6 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, defaultListType }) => 
     const [page, setPage] = useState(1);
     const [listType, setListType] = useState<ListType>(defaultListType);
 
-    const { favoriteList, fetchFavorites, addToFavorite } = useFavorites()
     const { mediaList, error, loading } = useTmdb(mediaType, page, listType);
     const listOptions: ListType[] = [
         "popular",
@@ -33,9 +31,6 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, defaultListType }) => 
         setListType(e.target.value as ListType);
         setPage(1);
     };
-    useEffect(() => {
-        fetchFavorites();
-    }, [])
 
     return (
         <section className="flex flex-col items-center justify-center py-2 md:py-4 -mt-16">

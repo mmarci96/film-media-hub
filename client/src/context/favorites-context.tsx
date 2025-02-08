@@ -49,7 +49,6 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
             })
             if (res.ok) {
                 const data = await res.json()
-                console.log(data);
                 setFavoriteList(prev => ([...prev, mediaId.toString()]))
             }
         } catch (err) {
