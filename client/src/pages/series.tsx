@@ -8,7 +8,7 @@ export default function SeriesPage() {
 
     return (
         <DefaultLayout>
-            <div className="inline-block max-w-lg text-center justify-center">
+            <div className="hidden md:inline-block py-0 mt-6 w-8">
                 <h1 className={title()}>Series</h1>
             </div>
             <MediaList mediaType={mediaType} defaultListType={listType} />

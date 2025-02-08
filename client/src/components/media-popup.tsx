@@ -9,6 +9,7 @@ import { useDisclosure } from "@/hooks/use-disclosure";
 import React, { useEffect, useState } from "react";
 import { useTmdbDetails } from "@/hooks/use-tmdb-details";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { Image } from "@heroui/image";
 
 interface MediaPopupProps {
     media: MediaItem;
@@ -23,10 +24,13 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
 
     const handleMediaDetailsPage = () => {
         console.log("handle details to:", media.id);
+        console.log(mediaDetails);
+
     }
 
 
     useEffect(() => {
+        handleMediaDetailsPage();
         fetchMediaDetails(media.id, mediaType)
     }, [])
 
@@ -41,16 +45,23 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
                     <>
                         <DrawerHeader className="flex flex-col gap-1">{media.title || "No Title Available"}</DrawerHeader>
 
-                        <DrawerBody className="flex flex-col  items-start relative">
+                        <DrawerBody className="flex flex-col items-start relative bg-black">
                             {media.poster_path && (
                                 <div
                                     className="absolute inset-0 w-full h-full max-h-[480px] bg-cover bg-center"
                                     style={{
-                                        backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 1)), url(https://image.tmdb.org/t/p/w780${media.backdrop_path})`,
+                                        backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url(https://image.tmdb.org/t/p/w780${media.backdrop_path})`,
                                     }}
                                 />)}
                             <h3 className="text-xl italic wider z-10"> Synopsis: </h3>
                             <p className="text-md italic z-10">{media.overview || "No description available."}</p>
+                            <Image
+                                isBlurred
+                                width={240}
+                                height={360}
+                                src={`https://image.tmdb.org/t/p/w500/${media.poster_path}`}
+                                className="m-4 object-cover ring-1 shadow-xl"
+                            />
                         </DrawerBody>
                         <DrawerFooter>
                             {favorite ?

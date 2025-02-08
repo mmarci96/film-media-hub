@@ -8,7 +8,7 @@ export default function MoviesPage() {
 
     return (
         <DefaultLayout>
-            <div className="inline-block max-w-lg text-center">
+            <div className="hidden md:inline-block py-0 mt-6 w-8">
                 <h1 className={title()}>Movies:</h1>
             </div>
 

@@ -33,7 +33,7 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, defaultListType }) => 
     };
 
     return (
-        <section className="flex flex-col items-center justify-center py-2 md:py-4">
+        <section className="flex flex-col items-center justify-center py-2 md:py-4 -mt-16">
             <div className="mb-4">
                 <Select
                     className="min-w-[320px] w-[52vw]"
