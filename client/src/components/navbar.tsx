@@ -82,6 +82,7 @@ export const Navbar = () => {
                 justify="end"
             >
                 <NavbarItem className="hidden sm:flex gap-2">
+                    <DropDownComponent />
                     <ThemeSwitch />
                 </NavbarItem>
                 <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
