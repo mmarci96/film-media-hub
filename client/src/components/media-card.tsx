@@ -11,7 +11,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ media, mediaType }) => {
     return (
         <MediaPopup media={media} mediaType={mediaType}
             children={
-                <Card className="rounded-lg my-4 mx-1 max-w-[320px] h-[440px] text-elipsis overflow-hidden shadow-md ring-2 hover:scale-105 cursor-pointer">
+                <Card className="rounded-lg my-4 mx-2 max-w-[320px] h-[440px] text-elipsis overflow-hidden shadow-md ring-2 hover:scale-105 cursor-pointer">
                     <CardBody className="p-0 text-elipsis overflow-hidden">
                         <img
                             src={`https://image.tmdb.org/t/p/w500${media.poster_path}`}
