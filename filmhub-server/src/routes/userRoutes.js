@@ -4,6 +4,15 @@ import { addToFavorite, getFavoritesByUserId, removeFavorite } from "../services
 
 const router = express.Router();
 
+router.get('/', async (req, res, next) => {
+    try {
+        const users = await getUsers();
+        return res.status(200).send({ data: users })
+    } catch (err) {
+        next(err)
+    }
+})
+
 router.get('/favorites', authenticateToken, async (req, res, next) => {
     try {
         const { userId } = req;
