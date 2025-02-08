@@ -20,9 +20,9 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, listType }) => {
 
             {loading && (
                 <div className="flex flex-wrap justify-evenly">
-                    {Array.from({ length: 12 }).map((_, index) => (
-                        <Card className="rounded-lg my-4 mx-2 w-[264px] h-[420px] overflow-hidden shadow-md ring-2 radius-lg" >
-                            <Skeleton key={index} className=" w-[250px] mx-2 my-2 h-[420px] rounded-lg" />
+                    {Array.from({ length: 8 }).map((_, index) => (
+                        <Card key={index} className="rounded-lg my-4 mx-2 w-[264px] h-[420px] overflow-hidden shadow-md ring-2 radius-lg" >
+                            <Skeleton className=" w-[250px] mx-2 my-2 h-[420px] rounded-lg" />
                             <div>
                                 <Skeleton className="w-4/5 m-2 rounded-lg">
                                     <div className="h-4 w-full rounded-lg bg-default-200" />
@@ -36,9 +36,9 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, listType }) => {
             {error && <p className="text-red-500 font-medium">{error}</p>}
 
             <div className="flex flex-wrap justify-between w-[92vw]">
-                {mediaList?.map((movie) => (
-                    <div key={movie.id} >
-                        <MediaCard media={movie} mediaType={mediaType} />
+                {mediaList?.map((media) => (
+                    <div key={media.id} >
+                        <MediaCard media={media} mediaType={mediaType} />
                     </div>
                 ))}
             </div>
