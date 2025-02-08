@@ -6,7 +6,7 @@ router.post('/login', async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const token = await loginUser({ email, password })
-        res.status(200)({ message: "Successful login", token: token })
+        res.status(200).send({ message: "Successful login", token: token })
     } catch (err) {
         next(err);
     }

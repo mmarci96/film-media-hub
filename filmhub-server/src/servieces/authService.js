@@ -2,6 +2,10 @@ import UserModel from "../db/userModel.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import createBadRequestError from "../errors/badRequestError.js";
+import dotenv from 'dotenv';
+dotenv.config();
+const { JWT_SECRET_KEY } = process.env || '';
+
 
 const createUser = async ({ username, email, password }) => {
     if (!username || !email || !password) {
@@ -40,7 +44,7 @@ const loginUser = async ({ email, password }) => {
         throw createBadRequestError(401, "invalid credentials");
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, { expiresIn: '1h' });
     return { user, token };
 }
 
