@@ -1,0 +1,123 @@
+import { ScrollShadow } from "@heroui/scroll-shadow";
+import { Drawer } from "@heroui/drawer";
+import { DrawerContent } from "@heroui/drawer";
+import { DrawerHeader } from "@heroui/drawer";
+import { DrawerBody } from "@heroui/drawer";
+import { DrawerFooter } from "@heroui/drawer";
+import { CardBody, Card } from "@heroui/card";
+import { Button } from "@heroui/button";
+import { MediaItem, MediaType } from "@/types";
+import { useDisclosure } from "@/hooks/use-disclosure";
+import React, { useEffect, useState } from "react";
+import { useTmdbDetails } from "@/hooks/use-tmdb-details";
+import { FaStar, FaRegStar } from "react-icons/fa";
+import PopupDetails from "@/components/media/popup-details";
+import { useFavorites } from "@/hooks/use-favorites";
+import { useAnimeDetails } from "@/hooks/use-anime-details";
+import { MediaDetails } from "@/types";
+interface MediaPopupProps {
+    media: MediaItem;
+    children: any;
+    mediaType: MediaType;
+}
+
+const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) => {
+    const [favorite, setFavorite] = useState(false);
+    const { favoriteList, addToFavorite, removeFavorite, fetchFavorites } = useFavorites();
+    const [mediaDetails, setMediaDetails] = useState<MediaDetails | null>(null);
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const { fetchAnimeDetails } = useAnimeDetails();
+    const { fetchMediaDetails } = useTmdbDetails();
+
+    const getMediaDetails = async (mediaId: number, mediaType: MediaType) => {
+        if (mediaType === 'anime') {
+            const details = await fetchAnimeDetails(mediaId.toString())
+            details && setMediaDetails(details)
+        } else {
+            const details = await fetchMediaDetails(mediaId, mediaType)
+            details && setMediaDetails(details)
+        }
+    }
+
+    const handleMediaDetailsPage = () => {
+        console.log("handle details to:", media.id);
+        console.log(mediaDetails);
+    }
+
+    useEffect(() => {
+        if (isOpen) {
+            getMediaDetails(media.id, mediaType)
+        }
+    }, [isOpen, addToFavorite])
+
+    useEffect(() => {
+        if (favoriteList?.includes(media.id.toString())) {
+            setFavorite(true)
+        }
+    }, [isOpen])
+    if (!media) return null;
+
+    return (
+        <>
+            <div onClick={onOpen}>{children}</div>
+
+            <Drawer isOpen={isOpen} onOpenChange={onOpenChange} className="min-w-[80vw] overflow-hidden">
+                <DrawerContent className="overflow-hidden">
+                    <DrawerHeader className="flex flex-col gap-1 overflow-hidden">{media.title || "No Title Available"}</DrawerHeader>
+
+                    <DrawerBody className="flex flex-col overflow-hidden items-start relative bg-black">
+                        {media.poster_path && (
+                            <div
+                                className="absolute inset-0 w-full h-full max-h-[480px] bg-cover bg-center"
+                                style={{
+                                    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1)), url(${media.backdrop_path?.startsWith('http') ? "" : "https://image.tmdb.org/t/p/w780"}${media.backdrop_path})`,
+                                }}
+                            />)}
+                        <Card
+                            isBlurred
+                            className="border-none bg-background/60 dark:bg-default-100/50 w-full m-2"
+                            shadow="sm"
+                        >
+                            <CardBody>
+                                <PopupDetails mediaDetails={mediaDetails} media={media} />
+                            </CardBody>
+
+                        </Card>
+                        <ScrollShadow className="w-full h-36" hideScrollBar >
+                            <p className="text-md italic z-10" >
+                                Synopsis: {mediaDetails?.overview || "No description available."}
+                            </p>
+                        </ScrollShadow>
+
+                    </DrawerBody>
+                    <DrawerFooter>
+                        {favorite ?
+                            <Button color="warning"
+                                onPress={() => {
+                                    removeFavorite(media.id)
+                                    setFavorite(false)
+                                }}
+                            >
+                                Remove Favorite <FaStar />
+                            </Button>
+                            :
+                            <Button
+                                onPress={() => {
+                                    addToFavorite(media.id)
+                                    setFavorite(true)
+                                }}
+                                color="success">
+                                Save to Favorites <FaRegStar />
+                            </Button>}
+                        <Button color="primary" onPress={handleMediaDetailsPage}>
+                            Watch Now
+                        </Button>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
+        </>
+    );
+};
+
+export default MediaPopup;
+

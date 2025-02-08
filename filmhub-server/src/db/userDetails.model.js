@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 const userDetailsSchema = new Schema({
     favorites: { type: [String], default: [] },
-    createdA: { type: Date, default: Date.now },
+    createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date },
 });
 

@@ -5,6 +5,7 @@ import MoviesPage from "@/pages/movies";
 import AboutPage from "@/pages/about";
 import FavoritesPage from "./pages/favorites";
 import SeriesPage from "./pages/series";
+import AnimePage from "./pages/animes";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
             <Route element={<FavoritesPage />} path="/favorites" />
             <Route element={<MoviesPage />} path="/movies" />
             <Route element={<SeriesPage />} path="/series" />
+            <Route element={<AnimePage />} path="/animes" />
             <Route element={<AboutPage />} path="/about" />
         </Routes>
     );

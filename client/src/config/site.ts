@@ -18,7 +18,7 @@ export const siteConfig = {
         },
         {
             label: "Anime",
-            href: "/anime",
+            href: "/animes",
         },
         {
             label: "About",
@@ -27,43 +27,25 @@ export const siteConfig = {
     ],
     navMenuItems: [
         {
-            label: "Profile",
-            href: "/profile",
+            label: "Home",
+            href: "/",
         },
         {
-            label: "Dashboard",
-            href: "/dashboard",
+            label: "Movies",
+            href: "/movies",
         },
         {
-            label: "Projects",
-            href: "/projects",
+            label: "Series",
+            href: "/series",
         },
         {
-            label: "Team",
-            href: "/team",
+            label: "Anime",
+            href: "/anime",
         },
         {
-            label: "Calendar",
-            href: "/calendar",
-        },
-        {
-            label: "Settings",
-            href: "/settings",
-        },
-        {
-            label: "Help & Feedback",
-            href: "/help-feedback",
-        },
-        {
-            label: "Logout",
-            href: "/logout",
+            label: "About",
+            href: "/about",
         },
     ],
-    links: {
-        github: "https://github.com/frontio-ai/heroui",
-        twitter: "https://twitter.com/hero_ui",
-        docs: "https://heroui.com",
-        discord: "https://discord.gg/9b6yyZKmH4",
-        sponsor: "https://patreon.com/jrgarciadev",
-    },
+    links: {},
 };

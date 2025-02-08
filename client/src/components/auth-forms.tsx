@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form } from "@heroui/form"
 import { Input } from "@heroui/input"
 import { Button } from "@heroui/button";
+import { useAuth } from "@/hooks/use-auth";
 
 const AuthForms = () => {
     const [hasAccount, setHasAccount] = useState(false)
@@ -10,6 +11,7 @@ const AuthForms = () => {
         email: '',
         password: ''
     })
+    const { token, isAuthenticated, login } = useAuth();
     const resetFormData = () => {
         setFormData({
             username: '',
@@ -17,6 +19,7 @@ const AuthForms = () => {
             password: ''
         })
     }
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -27,17 +30,23 @@ const AuthForms = () => {
                 body: JSON.stringify(formData),
                 headers: { 'Content-Type': 'application/json' },
             })
-            if (res.ok) {
-                const data = await res.json();
-                console.log(data);
-                console.log("Form submitted:", formData);
+            if (!res.ok) {
+                console.error('res not ok')
             }
+            const data = await res.json();
+            const { token } = data;
+            console.log("data:", data);
+
+            if (token && authType === "login") {
+                console.log("token:", token);
+
+                login(token);
+            }
+            setHasAccount(true)
         } catch (err) {
             console.error(err);
-
         }
     };
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };

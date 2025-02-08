@@ -1,8 +1,9 @@
-import UserModel from "../db/userModel.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import createBadRequestError from "../errors/badRequestError.js";
 import dotenv from 'dotenv';
+import UserDetailsModel from "../db/userDetails.model.js";
+import UserModel from "../db/user.model.js";
 dotenv.config();
 const { JWT_SECRET_KEY } = process.env || '';
 
@@ -24,7 +25,13 @@ const createUser = async ({ username, email, password }) => {
 
     const salt = await bcryptjs.genSalt();
     const hashedPassword = await bcryptjs.hash(password, salt);
-    const newUser = new UserModel({ username, email, password: hashedPassword });
+    const userDetails = new UserDetailsModel({ favorites: [] })
+    const details = await userDetails.save();
+    const newUser = new UserModel({
+        username, email,
+        password: hashedPassword, userDetails: details._id
+    });
+
     await newUser.save();
     return newUser;
 }
@@ -44,8 +51,8 @@ const loginUser = async ({ email, password }) => {
         throw createBadRequestError(401, "invalid credentials");
     }
 
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, { expiresIn: '1h' });
-    return { user, token };
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, { expiresIn: '7d' });
+    return token;
 }
 
 export { createUser, loginUser };
