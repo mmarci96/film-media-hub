@@ -29,7 +29,7 @@ export const deleteUser = async (id) => {
 }
 
 export const getUserById = async (id) => {
-    const user = await UserModel.findById(id).select("|-password").populate('userDetails');
+    const user = await UserModel.findById(id).select("-password").populate('userDetails');
     if (!user) {
         createBadRequestError(404, "user")
     }

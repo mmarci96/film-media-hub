@@ -34,16 +34,6 @@ router.delete("/", authenticateToken, async (req, res, next) => {
     }
 })
 
-router.get('/:id', authenticateToken, async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const user = await getUserById(id);
-        res.status(200).send({ data: user })
-    } catch (err) {
-        next(eer)
-    }
-})
-
 router.get('/favorites', authenticateToken, async (req, res, next) => {
     try {
         const { userId } = req;
@@ -55,6 +45,16 @@ router.get('/favorites', authenticateToken, async (req, res, next) => {
     }
 })
 
+
+router.get('/:id', authenticateToken, async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const user = await getUserById(id);
+        res.status(200).send({ data: user })
+    } catch (err) {
+        next(err)
+    }
+})
 router.patch('/favorites', authenticateToken, async (req, res, next) => {
     try {
         const { userId } = req;
