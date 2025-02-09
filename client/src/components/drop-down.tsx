@@ -10,9 +10,10 @@ import { User } from "@heroui/user";
 import { PlusIcon } from "./icons";
 import { useAuth } from "@/hooks/use-auth";
 import { IoSettings } from "react-icons/io5";
+import ModalForm from "./modal-form";
 
 export default function DropDownComponent() {
-    const { logout } = useAuth()
+    const { logout, isAuthenticated, login } = useAuth()
     return (
         <Dropdown
             showArrow
@@ -22,11 +23,17 @@ export default function DropDownComponent() {
             }}
             radius="sm"
         >
-            <DropdownTrigger>
-                <Button disableRipple variant="ghost">
-                    <IoSettings /> Account
+            {isAuthenticated ? (
+                <DropdownTrigger>
+                    <Button disableRipple variant="ghost">
+                        <IoSettings /> Account
+                    </Button>
+                </DropdownTrigger>
+            ) : (
+                <Button variant="ghost" >
+                    <ModalForm />
                 </Button>
-            </DropdownTrigger>
+            )}
             <DropdownMenu
                 aria-label="Custom item styles"
                 className="p-3"
@@ -64,30 +71,6 @@ export default function DropDownComponent() {
                     <DropdownItem key="settings">Settings</DropdownItem>
                     <DropdownItem key="new_project" endContent={<PlusIcon className="text-large" />}>
                         New Project
-                    </DropdownItem>
-                </DropdownSection>
-
-                <DropdownSection showDivider aria-label="Preferences">
-                    <DropdownItem key="quick_search" shortcut="⌘K">
-                        Quick search
-                    </DropdownItem>
-                    <DropdownItem
-                        key="theme"
-                        isReadOnly
-                        className="cursor-default"
-                        endContent={
-                            <select
-                                className="z-10 outline-none w-16 py-0.5 rounded-md text-tiny group-data-[hover=true]:border-default-500 border-small border-default-300 dark:border-default-200 bg-transparent text-default-500"
-                                id="theme"
-                                name="theme"
-                            >
-                                <option>System</option>
-                                <option>Dark</option>
-                                <option>Light</option>
-                            </select>
-                        }
-                    >
-                        Theme
                     </DropdownItem>
                 </DropdownSection>
 
