@@ -11,7 +11,7 @@ const MediaPage = () => {
     const handleMedia = async (id: string, mediaType: MediaType) => {
         if (mediaType === 'anime') {
             const { fetchAnimeDetails } = useAnimeDetails()
-            const data = await fetchAnimeDetails(id.toString())
+            const data = await fetchAnimeDetails(id)
             data && setMediaData(data)
         } else {
             const { fetchMediaDetails } = useTmdbDetails();
