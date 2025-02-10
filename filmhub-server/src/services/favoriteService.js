@@ -1,5 +1,5 @@
-import UserFavoriteModel from "../db/user.favorite.model";
-import createBadRequestError from "../errors/badRequestError";
+import UserFavoriteModel from "../db/user.favorite.model.js";
+import createBadRequestError from "../errors/badRequestError.js";
 
 export const saveFavoriteMedia = async ({
     userId, mediaId, mediaType
