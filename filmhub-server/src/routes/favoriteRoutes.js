@@ -1,6 +1,6 @@
 import express from 'express';
 import { authenticateToken } from "../middleware/authToken.js";
-import { getFavoritesByUserId } from '../services/userService.js';
+import { deleteFavoriteMedia, getFavoritesByUserId, saveFavoriteMedia } from '../services/favoriteService.js';
 
 const router = express.Router();
 
