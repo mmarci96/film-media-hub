@@ -1,6 +1,22 @@
 import UserFavoriteModel from "../db/user.favorite.model.js";
 import createBadRequestError from "../errors/badRequestError.js";
 
+export const deleteFavoriteMedia = async ({ userId, mediaId, mediaType }) => {
+    if (!userId || !mediaId || !mediaType) {
+        createBadRequestError(400, "missing data to save favorite");
+    }
+
+    const deleted = await UserFavoriteModel.findOneAndDelete({
+        userId, mediaId, mediaType
+    })
+
+    if (!deleted) {
+        createBadRequestError(404, "failed to delete")
+    }
+
+    return deleted;
+}
+
 export const saveFavoriteMedia = async ({
     userId, mediaId, mediaType
 }) => {
@@ -24,7 +40,7 @@ export const saveFavoriteMedia = async ({
     return favorite;
 }
 
-export const deleteFavoriteMedia = async ({
+export const deleteFavoriteMediaById = async ({
     userId, favoriteId
 }) => {
     if (!userId || !favoriteId) {

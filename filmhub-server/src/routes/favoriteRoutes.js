@@ -32,6 +32,18 @@ router.post('/', authenticateToken, async (req, res, next) => {
     }
 });
 
+router.delete('/', authenticateToken, async (req, res, next) => {
+    try {
+        const { userId } = req;
+        const { mediaId, mediaType } = req.body;
+        const result = await deleteFavoriteMedia({ userId, mediaType, mediaId })
+
+        res.status(203).send({ data: result })
+    } catch (err) {
+        next(err)
+    }
+})
+
 router.delete('/:favoriteId', authenticateToken, async (req, res, next) => {
     try {
         const { userId } = req;
