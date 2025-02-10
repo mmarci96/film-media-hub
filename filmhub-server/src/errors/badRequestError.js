@@ -47,25 +47,31 @@ class BadRequestError extends CustomError {
 
 const createBadRequestError = (code, subject) => {
     const messages = {
-        400: `Bad request for ${subject}.`,
-        401: `Unauthorized access to ${subject}.`,
-        403: `Forbidden access to ${subject}.`,
-        404: `No ${subject} found.`,
-        405: `Method not allowed for ${subject}.`,
-        408: `Request timeout for ${subject}.`,
-        409: `Conflict with ${subject}.`,
-        410: `${subject} is gone.`,
-        422: `Unprocessable entity: ${subject}.`,
-        429: `Too many requests for ${subject}.`,
-        500: `Internal server error related to ${subject}.`,
-        502: `Bad gateway when accessing ${subject}.`,
-        503: `Service unavailable for ${subject}.`,
-        504: `Gateway timeout for ${subject}.`
+        400: `Bad Request`,
+        401: `Unauthorized`,
+        403: `Forbidden`,
+        404: `Not Found`,
+        405: `Method Not Allowed`,
+        408: `Request Timeout`,
+        409: `Conflict`,
+        410: `Gone`,
+        422: `Unprocessable Entity`,
+        429: `Too Many Requests`,
+        500: `Internal Server Error`,
+        502: `Bad Gateway`,
+        503: `Service Unavailable`,
+        504: `Gateway Timeout`
     };
 
-    const message = messages[code] || `Unexpected error with ${subject}.`;
-    console.log(`Error Logged: Code - ${code}, Message - ${message}`);
-    return new BadRequestError({ code, message, logging: true });
+    const baseMessage = messages[code] || `Unexpected Error`;
+    const fullMessage = `${baseMessage}: ${subject}`;
+
+    console.log(`Error Logged: Code - ${code}, Message - ${fullMessage}`);
+    return new BadRequestError({
+        code,
+        message: fullMessage,
+        logging: true
+    });
 }
 
 export default createBadRequestError;
