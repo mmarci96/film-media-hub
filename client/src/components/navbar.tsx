@@ -60,12 +60,12 @@ export const Navbar = () => {
                 <div className="hidden md:flex gap-4 justify-start ml-4 ring-1 ring-[#26233A] rounded-xl px-4 p-2">
                     {siteConfig.navItems.map((item) => (
                         <NavbarItem key={item.href}
-                            className={"hover:scale-110 hover:ring-1 hover:bg-[#18121F] ring-[#2C647C]  rounded-lg hover:px-2  hover:tracking-wider ease-in duration-200 "}
+                            className={"hover:scale-110 hover:ring-1 bg-secondgrey ring-[#2C647C]  rounded-lg hover:px-2  hover:tracking-wider ease-in duration-200 "}
                         >
                             <Link
                                 className={clsx(
                                     linkStyles({ color: "foreground" }),
-                                    "data-[active=true]:text-primary text-md hover:bg-60/100 ease-in-out duration-200 data-[active=true]:font-medium",
+                                    "data-[active=true]:text-primary text-md  ease-in duration-200 data-[active=true]:font-medium",
                                 )}
                                 color="foreground"
                                 href={item.href}
