@@ -27,7 +27,7 @@ export const saveFavoriteMedia = async ({
 export const deleteFavoriteMedia = async ({
     userId, favoriteId
 }) => {
-    if (!userId || !mediaId || !mediaType) {
+    if (!userId || !favoriteId) {
         return createBadRequestError(400, "missing data to save favorite");
     }
 
