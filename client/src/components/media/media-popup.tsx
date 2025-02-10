@@ -23,13 +23,12 @@ interface MediaPopupProps {
 
 const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) => {
     const [favorite, setFavorite] = useState(false);
-    const { favoriteList, addToFavorite, removeFavorite, fetchFavorites } = useFavorites();
+    const { favoriteList, addToFavorite, removeFavorite, fetchFavorites, favoriteIds } = useFavorites();
     const [mediaDetails, setMediaDetails] = useState<MediaDetails | null>(null);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { fetchAnimeDetails } = useAnimeDetails();
     const { fetchMediaDetails } = useTmdbDetails();
     const getMediaDetails = async (mediaId: number, mediaType: MediaType) => {
-
         if (mediaType === 'anime') {
             const details = await fetchAnimeDetails(mediaId.toString())
             details && setMediaDetails(details)
@@ -49,13 +48,12 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
     useEffect(() => {
         if (isOpen) {
             fetchFavorites();
-
             getMediaDetails(media.id, mediaType)
         }
-    }, [isOpen, addToFavorite])
+    }, [isOpen])
 
     useEffect(() => {
-        if (favoriteList?.includes(media.id.toString())) {
+        if (favoriteIds?.includes(media.id.toString())) {
             setFavorite(true)
         }
     }, [isOpen])
