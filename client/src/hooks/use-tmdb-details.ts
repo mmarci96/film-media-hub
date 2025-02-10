@@ -22,14 +22,12 @@ export const useTmdbDetails = () => {
                     },
                 },
             );
-
             if (!response.ok) {
                 setError("Unextected error")
             }
+
             const data = await response.json();
             const details: MediaDetails = data
-            console.log(details);
-
             return details;
         } catch (err) {
             setLoading(false);

@@ -23,7 +23,7 @@ interface MediaPopupProps {
 
 const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) => {
     const [favorite, setFavorite] = useState(false);
-    const { favoriteList, addToFavorite, removeFavorite, fetchFavorites, favoriteIds } = useFavorites();
+    const { addToFavorite, removeFavorite, fetchFavorites, favoriteIds } = useFavorites();
     const [mediaDetails, setMediaDetails] = useState<MediaDetails | null>(null);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { fetchAnimeDetails } = useAnimeDetails();
@@ -34,15 +34,13 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
             details && setMediaDetails(details)
         } else {
             const details = await fetchMediaDetails(mediaId, mediaType)
-            console.log(details);
-
             details && setMediaDetails(details)
         }
     }
 
     const handleMediaDetailsPage = () => {
         console.log("handle details to:", media.id);
-        console.log(mediaDetails);
+        //console.log(mediaDetails);
     }
 
     useEffect(() => {
@@ -55,8 +53,10 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
     useEffect(() => {
         if (favoriteIds?.includes(media.id.toString())) {
             setFavorite(true)
+        } else {
+            setFavorite(false)
         }
-    }, [isOpen])
+    }, [isOpen, addToFavorite, removeFavorite, favoriteIds])
     if (!media) return null;
 
     return (
@@ -99,19 +99,13 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
                     <DrawerFooter>
                         {favorite ?
                             <Button color="warning"
-                                onPress={() => {
-                                    removeFavorite(media.id)
-                                    setFavorite(false)
-                                }}
+                                onPress={() => removeFavorite(media.id, mediaType)}
                             >
                                 Remove Favorite <FaStar />
                             </Button>
                             :
                             <Button
-                                onPress={() => {
-                                    addToFavorite(media.id, mediaType)
-                                    setFavorite(true)
-                                }}
+                                onPress={() => addToFavorite(media.id, mediaType)}
                                 color="success">
                                 Save to Favorites <FaRegStar />
                             </Button>}

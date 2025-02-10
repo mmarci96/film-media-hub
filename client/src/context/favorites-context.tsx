@@ -4,7 +4,7 @@ import { MediaType } from "@/types";
 interface FavoritesContentList {
     favoriteList: FavoriteElement[];
     addToFavorite: (mediaId: string | number, mediaType: MediaType) => Promise<void>;
-    removeFavorite: (mediaId: string | number) => Promise<void>;
+    removeFavorite: (mediaId: string | number, mediaType: MediaType) => Promise<void>;
     fetchFavorites: () => Promise<void>;
     favoriteIds: string[];
 }
@@ -40,11 +40,8 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
             if (res.ok) {
                 const { data } = await res.json()
                 const favorites: FavoriteElement[] = data;
-                console.log("Favorite list: ", favorites);
                 setFavoriteList(favorites)
-
                 const idList = favorites.map(favorite => favorite.mediaId);
-                console.log("favrite ids: ", idList);
                 setFavoriteIds(idList);
             }
         } catch (error) {
@@ -64,26 +61,27 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
             })
             if (res) {
                 const { data } = await res.json()
-                console.log("Favorite added: ", data);
-
+                setFavoriteIds(prev => [...prev, data?.mediaId])
             }
         } catch (err) {
             console.error(err);
         }
     }
 
-    const removeFavorite = async (mediaId: string | number): Promise<void> => {
+    const removeFavorite = async (mediaId: string | number, mediaType: MediaType): Promise<void> => {
         try {
-            const res = await fetch('/api/users/favorites', {
+            const res = await fetch('/api/favorites/', {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 },
-                body: JSON.stringify({ mediaId: mediaId.toString() })
+                body: JSON.stringify({ mediaId, mediaType })
             })
             if (res.ok) {
-                await res.json()
+                const { data } = await res.json();
+                const clearedList = favoriteIds.filter(id => id !== data.mediaId.toString())
+                setFavoriteIds(clearedList)
             }
         } catch (err) {
             console.error(err);
