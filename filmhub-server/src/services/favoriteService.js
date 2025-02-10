@@ -16,7 +16,7 @@ export const saveFavoriteMedia = async ({
     const saveFavorite = new UserFavoriteModel({
         userId, mediaId, mediaType
     })
-    const favorite = await UserFavoriteModel.save();
+    const favorite = await saveFavorite.save();
     if (!favorite) {
         return createBadRequestError(400, "favorites")
     }
