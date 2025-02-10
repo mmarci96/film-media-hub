@@ -49,6 +49,7 @@ export const getFavoritesByUserId = async (userId) => {
     const favoriteList = await UserFavoriteModel
         .find({ userId })
         .sort({ createdAt: -1 })
+        .select('_id mediaId mediaType createdAt')
     if (!favoriteList) {
         createBadRequestError(404, 'no favorites')
     }
