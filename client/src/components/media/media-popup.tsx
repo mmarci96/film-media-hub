@@ -35,6 +35,8 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
             details && setMediaDetails(details)
         } else {
             const details = await fetchMediaDetails(mediaId, mediaType)
+            console.log(details);
+
             details && setMediaDetails(details)
         }
     }
@@ -89,7 +91,7 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
                             </CardBody>
 
                         </Card>
-                        <ScrollShadow className="w-full h-36" hideScrollBar >
+                        <ScrollShadow className="w-full h-36 z-10" hideScrollBar >
                             <p className="text-md italic z-10" >
                                 Synopsis: {mediaDetails?.overview || "No description available."}
                             </p>
@@ -109,7 +111,7 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
                             :
                             <Button
                                 onPress={() => {
-                                    addToFavorite(media.id)
+                                    addToFavorite(media.id, mediaType)
                                     setFavorite(true)
                                 }}
                                 color="success">
