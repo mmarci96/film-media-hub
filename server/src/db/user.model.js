@@ -5,7 +5,6 @@ const userSchema = new Schema({
     password: { type: String, required: true },
     createdA: { type: Date, default: Date.now },
     updatedAt: { type: Date },
-    userDetails: { type: Schema.Types.ObjectId, ref: 'UserDetails' },
 });
 
 const UserModel = mongoose.model('User', userSchema);

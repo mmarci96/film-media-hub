@@ -8,7 +8,7 @@ dotenv.config();
 const { JWT_SECRET_KEY } = process.env || '';
 
 
-const createUser = async ({ username, email, password }) => {
+const createUser = async ({ username, email, password, theme }) => {
     if (!username || !email || !password) {
         throw createBadRequestError(400, "credentials missing");
     }
@@ -25,14 +25,16 @@ const createUser = async ({ username, email, password }) => {
 
     const salt = await bcryptjs.genSalt();
     const hashedPassword = await bcryptjs.hash(password, salt);
-    const userDetails = new UserDetailsModel({ favorites: [] })
-    const details = await userDetails.save();
     const newUser = new UserModel({
         username, email,
-        password: hashedPassword, userDetails: details._id
+        password: hashedPassword
     });
 
     await newUser.save();
+    const createDetails = new UserDetailsModel({
+        userId, theme
+    })
+    await createDetails.save();
     return newUser;
 }
 
