@@ -24,11 +24,10 @@ For the backend I initiated the project just in Express and NodeJs using Mongoos
 ### TMDB - [TMDB API](https://developer.themoviedb.org/docs/getting-started)
 Since I'm using TMDB free API to display many of my content to run the code you will need to aquire one.
 ### Jikan - [Jikan API](https://jikan.moe/)
-Jikan (時間) is an unofficial & open-source API for the “most active online anime + manga community and database”.
-For more info:
+Jikan (時間) is an unofficial & open-source API for the “most active online anime + manga community and database”. It's completely free to use. Only limiting your maximal request per minute.
 
 ---
-## Screenschots
+## Screenshots
 <div align="center"><table><tr>Theme Select</tr><tr><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/light.png"/></td><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/dark.png"/></td></tr></table></div>
