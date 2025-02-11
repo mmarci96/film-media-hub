@@ -12,3 +12,17 @@ For the backend I initiated the project just in Express and NodeJs using Mongoos
 Since I'm using TMDB free API to display many of my content to run the code you will need to aquire one.
 To get started go to  https://developer.themoviedb.org/docs/getting-started
 https://jikan.moe/
+
+<div align="center"><table><tr>Theme Select</tr><tr><td>
+<img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/light.png"/></td><td>
+<img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/dark.png"/></td></tr></table></div>
+
+
+<div align="center"><table><tr>Browse and Save Movies or Series</tr><tr><td>
+<img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/browse-filter.png"/></td><td>
+<img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/save-favorites.png"/></td></tr></table></div>
+
+<div align="center"><table><tr>List you favorites</tr><tr><td>
+<img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/get-favorites.png"/></td><td>
+<img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/check-favorites.png"/></td></tr></table></div>
+
