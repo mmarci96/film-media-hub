@@ -11,7 +11,8 @@ export default function IndexPage() {
         <DefaultLayout>
             <section className="flex flex-col items-center justify-center py-2 md:py-4">
                 {isAuthenticated ?
-                    <div>Welcome !
+                    <div className="flex flex-col items-center justify-center">
+                        <h1 className="text-xl my-4 tracking-wider"> Welcome to FilmHub!</h1>
                         <Button variant="ghost" >
                             <Link to={"/favorites"} >
                                 Lets see your favortites!

@@ -1,6 +1,6 @@
 import express from "express";
-import { authenticateToken } from "../middleware/authToken";
-import { updateAvatar } from "../services/userDetailsService";
+import { authenticateToken } from "../middleware/authToken.js";
+import { updateAvatar } from "../services/userDetailsService.js";
 
 const router = express.Router();
 

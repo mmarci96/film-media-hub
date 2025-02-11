@@ -30,12 +30,12 @@ const createUser = async ({ username, email, password, theme }) => {
         password: hashedPassword
     });
 
-    await newUser.save();
+    const user = await newUser.save();
     const createDetails = new UserDetailsModel({
-        userId, theme
+        userId: user._id, theme
     })
     await createDetails.save();
-    return newUser;
+    return user;
 }
 
 const loginUser = async ({ email, password }) => {
