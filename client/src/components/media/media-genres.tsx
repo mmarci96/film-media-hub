@@ -8,9 +8,10 @@ interface GenreListProps {
 
 const GenreList: React.FC<GenreListProps> = ({ genres }) => {
     return (
-        <section className="flex flex-wrap gap-2">
+        <section className="flex flex-wrap justify-start gap-2 my-2">
+            <p className="italix text-lg italic p-2"> Genres:  </p>
             {genres && genres.map((genre) => (
-                <Chip key={genre.id} className="p-2 h-12 bg-90/100 shadow-xl mx-1 rounded-lg">
+                <Chip key={genre.id} className="p-2 h-12 ring-1 bg-90/100 shadow-xl mx-1 rounded-xl">
                     {genre.name}
                 </Chip>
             ))}

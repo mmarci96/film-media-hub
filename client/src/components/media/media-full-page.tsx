@@ -1,4 +1,5 @@
 import { MediaDetails } from "@/types";
+import { FaStar, FaClock, FaThumbsUp, FaCalendarAlt, FaQuestionCircle } from "react-icons/fa";
 import MediaGenres from '@/components/media/media-genres'
 import {
     Card,
@@ -9,6 +10,7 @@ import {
     CardBody,
     Divider
 } from "@heroui/react";
+import MediaStatistic from "./media-statistics";
 
 interface MediaFullPageProps {
     mediaDetails: MediaDetails;
@@ -37,102 +39,90 @@ const MediaFullPage: React.FC<MediaFullPageProps> = ({ mediaDetails }) => {
                     className="border-none bg-background/60 dark:bg-default-100/50 w-full m-2 p-3"
                     shadow="sm"
                 >
-                    <div className="flex justify-between" >
-                        <h1> {mediaDetails.title} </h1>
-                        <h2 className="text-gray-400">
-                            {mediaDetails.tagline}
-                        </h2>
-                        <Image
-                            src={mediaDetails.poster_path}
-                            alt={mediaDetails.title}
-                            className="rounded-xl shadow-2xl ml-auto mr-0 w-[40vw] min-w-[280px]"
-                        />
-                    </div>
-                    <div className="col-span-12 md:col-span-8 lg:col-span-9 space-y-6">
-                        {mediaDetails?.genres && <MediaGenres genres={mediaDetails.genres} />}
-                        <Card className="gap-4">
-                            <CardBody >
-                                <div className="flex">
-                                    <Chip variant="bordered">
-                                        Release Date
-                                    </Chip>
-                                    <p>{mediaDetails?.release_date}</p>
-                                </div>
-                                {mediaDetails?.runtime &&
-                                    <div className="flex">
-                                        <Chip variant="bordered">
-                                            Runtime
-                                        </Chip>
-                                        <p>{mediaDetails.runtime}
-                                        </p>
-                                    </div>}
+                    <div className="flex w-[86vw] justify-between flex-col sm:flex-row sm:mx-auto" >
 
+                        <div className="flex justify-center sm:justify-normal">
+                            <Image
+                                src={mediaDetails.poster_path}
+                                alt={mediaDetails.title}
+                                className="rounded-xl shadow-2xl object-cover max-w-[400px] w-[40vw] min-w-[280px] sm:mx-auto"
+                            />
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <h1 className="text-2xl font-bold mx-auto"> {mediaDetails.title} </h1>
+                            <h2 className="text-lg italic opacity-70">
+                                {mediaDetails.tagline}
+                            </h2>
+                            <div className="mx-2">
+                                <MediaStatistic mediaDetails={mediaDetails} />
+                                {mediaDetails?.genres &&
+                                    <MediaGenres genres={mediaDetails.genres} />}
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className="col-span-12 mt-4 md:col-span-8 lg:col-span-9 space-y-6">
+                        <Card >
+                            <CardBody className="gap-1 flex flex-row justify-between" >
                                 {mediaDetails.budget &&
                                     <div className="flex">
-                                        <Chip variant="bordered">
+                                        <Chip variant="shadow" className=" text-lg p-2">
                                             Budget
                                         </Chip>
-                                        <p>{formatCurrency(mediaDetails.budget)}
+                                        <p className="p-1 italic text-md">{formatCurrency(mediaDetails.budget)}
                                         </p>
                                     </div>}
 
                                 <div className="flex">
-                                    <Chip variant="bordered">
+                                    <Chip variant="shadow" className=" text-lg p-2">
                                         Revenue
                                     </Chip>
-                                    <p>{mediaDetails.revenue}</p>
+                                    <p className="p-1 italic text-md">{mediaDetails.revenue}</p>
                                 </div>
                                 <div className="flex">
-                                    <Chip variant="bordered">
+                                    <Chip variant="shadow" className=" text-lg p-2">
                                         Status
                                     </Chip>
-                                    <p>{mediaDetails.status}</p>
+                                    <p className="p-1 italic text-md">{mediaDetails.status}</p>
                                 </div>
                             </CardBody>
                         </Card>
 
                         <Divider />
 
-                        <Chip variant="bordered" className="text-lg">
+                        <Chip variant="shadow" className=" text-lg p-2">
                             Overview
                         </Chip>
                         <p className="text-md p-4">
                             {mediaDetails.overview}
                         </p>
-                        <div className="space-y-2">
-                            <Chip variant="bordered">Production Companies</Chip>
-                            <div className="flex flex-wrap gap-4">
+                        <div className="pb-8">
+
+                            <Chip variant="shadow" className=" text-lg p-2 my-4">
+                                Production Companies</Chip>
+                            <div className="flex flex-wrap gap-4 justify-around">
                                 {mediaDetails.production_companies?.map((company) => (
-                                    <div
+                                    <Card
+                                        isBlurred
                                         key={company.id}
-                                        className="flex items-center gap-2 bg-gray-800 rounded-lg p-2"
+                                        className="flex  items-center gap-2 bg-background/60  dark:bg-default-100/50 rounded-xl p-2"
                                     >
-                                        {company.logo_path && (
+                                        {company.logo_path ? (
                                             <Avatar
                                                 src={`https://image.tmdb.org/t/p/w200${company.logo_path}`}
                                                 alt={company.name}
                                                 size="sm"
                                             />
-                                        )}
+                                        ) : <FaQuestionCircle size={32} />}
                                         <Chip variant="bordered">{company.name}</Chip>
-                                    </div>
+                                    </Card>
                                 ))}
                             </div>
                         </div>
-
-                        {/* Ratings */}
-                        <div className="flex items-center gap-4">
-                            <Badge variant="flat">
-                                ⭐ {mediaDetails?.vote_average?.toFixed(1)}
-                            </Badge>
-                            <Chip className="text-gray-400">
-                                ({mediaDetails?.vote_count?.toLocaleString()} votes)
-                            </Chip>
-                        </div>
                     </div>
                 </Card>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 
