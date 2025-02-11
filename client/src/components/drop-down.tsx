@@ -11,14 +11,18 @@ import { PlusIcon } from "./icons";
 import { useAuth } from "@/hooks/use-auth";
 import { IoSettings } from "react-icons/io5";
 import ModalForm from "./modal-form";
+import { MdAccountCircle } from "react-icons/md";
+import { FaStar } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function DropDownComponent() {
-    const { logout, isAuthenticated, login } = useAuth()
+    const { logout, isAuthenticated, currentUser } = useAuth();
+
     return (
         <Dropdown
             showArrow
             classNames={{
-                base: "before:bg-default-200", // change arrow background
+                base: "before:bg-default-200",
                 content: "p-0 border-small border-divider bg-background",
             }}
             radius="sm"
@@ -57,25 +61,30 @@ export default function DropDownComponent() {
                         <User
                             avatarProps={{
                                 size: "sm",
-                                src: "https://avatars.githubusercontent.com/u/30373425?v=4",
+                                icon: <MdAccountCircle size={32} />
                             }}
                             classNames={{
                                 name: "text-default-600",
                                 description: "text-default-500",
                             }}
-                            description="@jrgarciadev"
-                            name="Junior Garcia"
+                            description={currentUser?.email}
+                            name={currentUser?.username}
                         />
                     </DropdownItem>
-                    <DropdownItem key="dashboard">Dashboard</DropdownItem>
-                    <DropdownItem key="settings">Settings</DropdownItem>
-                    <DropdownItem key="new_project" endContent={<PlusIcon className="text-large" />}>
-                        New Project
+                    <DropdownItem key="favorites" endContent={<FaStar className="text-medium" />}>
+                        <Link to={'/favorites'}>
+                            Favorites
+                        </Link>
+                    </DropdownItem>
+                    <DropdownItem key="new_something" endContent={<PlusIcon className="text-large" />}>
+                        Create list
                     </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection aria-label="Help & Feedback">
-                    <DropdownItem onPress={() => console.log('not implemented')} key="help_and_feedback">Help & Feedback</DropdownItem>
+                    <DropdownItem onPress={() => console.log('not implemented')} key="help_and_feedback">
+                        Help & Feedback
+                    </DropdownItem>
                     <DropdownItem onPress={logout} key="logout">Log Out</DropdownItem>
                 </DropdownSection>
             </DropdownMenu>
