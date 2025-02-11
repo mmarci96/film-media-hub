@@ -10,7 +10,7 @@ import {
     Input,
     Link,
 } from "@heroui/react";
-import { MailIcon, LockIcon } from "./icons";
+import { MailIcon, LockIcon } from "@/components/nav/icons";
 import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
 

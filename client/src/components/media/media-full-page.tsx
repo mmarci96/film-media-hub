@@ -1,11 +1,10 @@
 import { MediaDetails } from "@/types";
-import { FaStar, FaClock, FaThumbsUp, FaCalendarAlt, FaQuestionCircle } from "react-icons/fa";
+import { FaQuestionCircle } from "react-icons/fa";
 import MediaGenres from '@/components/media/media-genres'
 import {
     Card,
     Image,
     Chip,
-    Badge,
     Avatar,
     CardBody,
     Divider
