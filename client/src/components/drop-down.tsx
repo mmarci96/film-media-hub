@@ -11,9 +11,15 @@ import { PlusIcon } from "./icons";
 import { useAuth } from "@/hooks/use-auth";
 import { IoSettings } from "react-icons/io5";
 import ModalForm from "./modal-form";
+import { MdAccountCircle } from "react-icons/md";
+import { useEffect } from "react";
 
 export default function DropDownComponent() {
-    const { logout, isAuthenticated, login } = useAuth()
+    const { logout, isAuthenticated, currentUser } = useAuth();
+    useEffect(() => {
+        console.log(currentUser);
+    }, [currentUser])
+
     return (
         <Dropdown
             showArrow
@@ -57,7 +63,7 @@ export default function DropDownComponent() {
                         <User
                             avatarProps={{
                                 size: "sm",
-                                src: "https://avatars.githubusercontent.com/u/30373425?v=4",
+                                icon: <MdAccountCircle size={32} />
                             }}
                             classNames={{
                                 name: "text-default-600",
