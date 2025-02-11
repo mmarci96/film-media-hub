@@ -24,36 +24,32 @@ const MediaFullPage: React.FC<MediaFullPageProps> = ({ mediaDetails }) => {
     };
 
     return (
-        <div className="!px-0">
+        <div className="p-4 pt-0 m-2 mt-1">
             {/* Backdrop Image */}
-            <Image
-                src={mediaDetails.backdrop_path}
-                alt={mediaDetails.title}
-                className="h-96 w-full object-cover"
+            <div
+                className="absolute inset-0 w-full h-full max-h-[480px] bg-cover bg-center"
+                style={{ backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1)), url(${mediaDetails.backdrop_path})`, }}
             />
 
             <div className="!px-0">
-                <Card className="gap-8">
-                    {/* Poster Column */}
-                    <div className="col-span-12 md:col-span-4 lg:col-span-3 -mt-48">
-                        <Image
-                            src={mediaDetails.poster_path}
-                            alt={mediaDetails.title}
-                            className="rounded-xl shadow-2xl"
-                        />
-                    </div>
-
-                    {/* Details Column */}
-                    <div className="col-span-12 md:col-span-8 lg:col-span-9 space-y-6">
-                        {/* Title and Basic Info */}
-                        <Chip variant="bordered">{mediaDetails.title}</Chip>
+                <Card
+                    isBlurred
+                    className="border-none bg-background/60 dark:bg-default-100/50 w-full m-2 p-3"
+                    shadow="sm"
+                >
+                    <div className="flex justify-between" >
+                        <h1> {mediaDetails.title} </h1>
                         <h2 className="text-gray-400">
                             {mediaDetails.tagline}
                         </h2>
-
-                        {/* Genres */}
+                        <Image
+                            src={mediaDetails.poster_path}
+                            alt={mediaDetails.title}
+                            className="rounded-xl shadow-2xl ml-auto mr-0 w-[40vw] min-w-[280px]"
+                        />
+                    </div>
+                    <div className="col-span-12 md:col-span-8 lg:col-span-9 space-y-6">
                         {mediaDetails?.genres && <MediaGenres genres={mediaDetails.genres} />}
-
                         <Card className="gap-4">
                             <CardBody >
                                 <div className="flex">
