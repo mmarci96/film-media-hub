@@ -23,7 +23,12 @@ export const useTmdb = (
 
         return list
             .filter((movie, index) => idList.indexOf(movie.id) === index)
-            .map(movie => ({ ...movie, ['backdrop_path']: PREFIX_800 + movie['backdrop_path'], ['mediaType']: type }));
+            .map(movie => ({
+                ...movie,
+                ['backdrop_path']: PREFIX_800 + movie['backdrop_path'],
+                ['poster_path']: PREFIX_400 + movie['poster_path'],
+                ['mediaType']: type
+            }));
     };
 
     const fetchMedia = async (

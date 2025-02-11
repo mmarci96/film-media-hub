@@ -7,24 +7,26 @@ import { useTmdbDetails } from "@/hooks/use-tmdb-details";
 
 const MediaPage = () => {
     const [mediaData, setMediaData] = useState<MediaDetails | null>(null)
+    const { fetchMediaDetails } = useTmdbDetails();
+    const { fetchAnimeDetails } = useAnimeDetails()
     const { id, mediaType = 'tv' as MediaType } = useParams()
     const handleMedia = async (id: string, mediaType: MediaType) => {
         if (mediaType === 'anime') {
-            const { fetchAnimeDetails } = useAnimeDetails()
             const data = await fetchAnimeDetails(id)
             data && setMediaData(data)
         } else {
-            const { fetchMediaDetails } = useTmdbDetails();
             const data = await fetchMediaDetails(parseInt(id), mediaType)
             data && setMediaData(data)
         }
     }
 
     useEffect(() => {
-        console.log(mediaData);
-
         id && handleMedia(id, mediaType as MediaType)
     }, [id, mediaType])
+
+    useEffect(() => {
+        console.log(mediaData);
+    }, [mediaData])
 
     return (
         <DefaultLayout>
