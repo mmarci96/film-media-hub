@@ -6,6 +6,7 @@
 ![GitHub license](https://img.shields.io/github/license/mmarci96/film-media-hub?style=for-the-badge)
 
 ## Overview
+The Film Hub webapp let users browse, filter and search for movies or tv series, as well as saving them for later into their favorites. 
 I wanted to racreate my first visually pleasant webapp during my coding jorney with using React with the HeroUI library and using outside API-s to get data as well as using an Express server with MongoDB to save and store users preferences.
 Browse, search and find movies or TV series. Save favorites, get data about them, find and compare streaming services.
 
@@ -20,11 +21,9 @@ I wanted to experiment using Typescript in the frontend to make to project maint
 For the backend I initiated the project just in Express and NodeJs using Mongoose. This helps me work my way around writing Typescript interfaces but enjoying some type system. This might change if the server side grows.
 
 ## Outside API-s
-### TMDB
-- [TMDB API](https://developer.themoviedb.org/docs/getting-started)
+### TMDB - [TMDB API](https://developer.themoviedb.org/docs/getting-started)
 Since I'm using TMDB free API to display many of my content to run the code you will need to aquire one.
-### Jikan
-- [Jikan API](https://jikan.moe/)
+### Jikan - [Jikan API](https://jikan.moe/)
 Jikan (時間) is an unofficial & open-source API for the “most active online anime + manga community and database”.
 For more info:
 
