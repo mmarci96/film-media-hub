@@ -1,5 +1,4 @@
 import { Image } from "@heroui/image";
-import { Chip } from "@heroui/chip";
 import GenreList from "@/components/media/media-genres";
 import { MediaDetails, MediaItem } from "@/types";
 import MediaStatistic from "./media-statistics";

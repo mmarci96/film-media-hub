@@ -14,15 +14,38 @@ import { link as linkStyles } from "@heroui/theme";
 import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
-import { ThemeSwitch } from "@/components/theme-switch";
+import { ThemeSwitch } from "@/components/nav/theme-switch";
 import {
     SearchIcon,
-} from "@/components/icons";
+} from "@/components/nav/icons";
 import DropDownComponent from "./drop-down";
+import { useTmdbDetails } from "@/hooks/use-tmdb-details";
+import { useEffect, useState } from "react";
+import NavTipTool from "@/components/nav/nav-tip-tool";
+import MediaSearchResult from "../media/media-search-result";
 
 export const Navbar = () => {
+    const [searchResults, setSearchResults] = useState<null | any>(null)
+    const [searchValue, setSearchValue] = useState('')
+    const { fetchTmdbSearchData } = useTmdbDetails();
+
+    useEffect(() => {
+        searchValue !== '' ?
+            fetchTmdbSearchData(searchValue)
+                .then(results => setSearchResults(results))
+            : setSearchResults(null);
+    }, [searchValue])
+
+    useEffect(() => {
+        console.log(searchResults);
+
+    }, [searchResults])
+
+
     const searchInput = (
         <Input
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
             aria-label="Search"
             classNames={{
                 inputWrapper: "bg-default-100",
@@ -44,6 +67,7 @@ export const Navbar = () => {
 
     return (
         <HeroUINavbar maxWidth="xl" position="sticky" className="z-20">
+            {searchResults && <MediaSearchResult results={searchResults.results} />}
             <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
                 <NavbarBrand className="gap-3 max-w-fit">
                     <Link
@@ -82,10 +106,13 @@ export const Navbar = () => {
                 justify="end"
             >
                 <NavbarItem className="hidden sm:flex gap-2">
-                    <DropDownComponent />
+                    <NavTipTool
+                        tipContent={"Click to see options"}
+                        children={<DropDownComponent />}
+                    />
                     <ThemeSwitch />
                 </NavbarItem>
-                <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
+                <NavbarItem className="hidden md:flex">{searchInput}</NavbarItem>
             </NavbarContent>
 
             <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">

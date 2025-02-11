@@ -9,13 +9,15 @@ import { Button } from "@heroui/button";
 import { User } from "@heroui/user";
 import { PlusIcon } from "./icons";
 import { useAuth } from "@/hooks/use-auth";
-import { IoSettings } from "react-icons/io5";
-import ModalForm from "./modal-form";
+import { RiAccountCircleFill, RiAccountCircleLine } from "react-icons/ri";
+import ModalForm from "@/components/modal-form";
 import { MdAccountCircle } from "react-icons/md";
 import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function DropDownComponent() {
+    const [isOpen, setOpen] = useState(false);
     const { logout, isAuthenticated, currentUser } = useAuth();
 
     return (
@@ -29,9 +31,19 @@ export default function DropDownComponent() {
         >
             {isAuthenticated ? (
                 <DropdownTrigger>
-                    <Button disableRipple variant="ghost">
-                        <IoSettings /> Account
-                    </Button>
+                    <div
+                        onClick={() => setOpen(!isOpen)}
+                        className="w-8 h-8 rounded-full ring-1 ring-foreground opacity-70 bg-default-100 cursor-pointer"
+                    >
+                        {isOpen ?
+                            <RiAccountCircleLine
+                                size={32}
+                                className="ring-2 rounded-full ring-foreground"
+                            />
+                            :
+                            <RiAccountCircleFill size={32} />
+                        }
+                    </div>
                 </DropdownTrigger>
             ) : (
                 <Button variant="ghost" >

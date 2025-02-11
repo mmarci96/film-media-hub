@@ -6,8 +6,8 @@ import { DrawerBody } from "@heroui/drawer";
 import { DrawerFooter } from "@heroui/drawer";
 import { CardBody, Card } from "@heroui/card";
 import { Button } from "@heroui/button";
+import { useDisclosure } from "@heroui/react";
 import { MediaItem, MediaType } from "@/types";
-import { useDisclosure } from "@/hooks/use-disclosure";
 import React, { useEffect, useState } from "react";
 import { useTmdbDetails } from "@/hooks/use-tmdb-details";
 import { FaStar, FaRegStar } from "react-icons/fa";
@@ -37,11 +37,6 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
             const details = await fetchMediaDetails(mediaId, mediaType)
             details && setMediaDetails(details)
         }
-    }
-
-    const handleMediaDetailsPage = () => {
-        console.log("handle details to:", media.id);
-        //console.log(mediaDetails);
     }
 
     useEffect(() => {

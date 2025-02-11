@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MediaDetails, MediaType } from "@/types";
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-
+const BASE_URL = 'https://api.themoviedb.org/3/'
 const PREFIX_800 = 'https://image.tmdb.org/t/p/w780/'
 const PREFIX_400 = 'https://image.tmdb.org/t/p/w400/'
 export const useTmdbDetails = () => {
@@ -14,7 +14,7 @@ export const useTmdbDetails = () => {
         setLoading(true);
         try {
             const response = await fetch(
-                `https://api.themoviedb.org/3/${type}/${id}?language=en-US`,
+                `${BASE_URL}${type}/${id}?language=en-US`,
                 {
                     method: "GET",
                     headers: {
@@ -39,5 +39,29 @@ export const useTmdbDetails = () => {
         }
     };
 
-    return { fetchMediaDetails, error, loading };
+    const fetchTmdbSearchData = async (searchTerm: string) => {
+        try {
+            const response = await fetch(`${BASE_URL}search/multi?query=${searchTerm}&language=en-US`, {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${TMDB_API_KEY}`,
+                },
+            })
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`)
+            }
+
+            const data = await response.json()
+            return data;
+        } catch (err: Error | any) {
+            console.error('Failed to fetch data:', err)
+            setError(err.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return { fetchMediaDetails, error, loading, fetchTmdbSearchData };
 };

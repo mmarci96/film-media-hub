@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from 'react';
-import LoadingAnimation from "./layouts/fallback";
+import LoadingAnimation from "@/layouts/fallback";
 const IndexPage = lazy(() => import('@/pages/index'))
 const MoviesPage = lazy(() => import('@/pages/movies'))
 const AboutPage = lazy(() => import("@/pages/about"))
