@@ -25,11 +25,9 @@ const createUser = async ({ username, email, password }) => {
 
     const salt = await bcryptjs.genSalt();
     const hashedPassword = await bcryptjs.hash(password, salt);
-    const userDetails = new UserDetailsModel({ favorites: [] })
-    const details = await userDetails.save();
     const newUser = new UserModel({
         username, email,
-        password: hashedPassword, userDetails: details._id
+        password: hashedPassword
     });
 
     await newUser.save();
