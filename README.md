@@ -24,6 +24,7 @@ Browse, search and find movies or TV series. Save favorites, get data about them
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+
 I implemented TypeScript in the frontend to enhance long-term maintainability. 
 HeroUI provides a wide variety of components and extendable React hooks, combined with Tailwind CSS for custom styling. 
 The backend currently uses Express.js with Mongoose, offering flexibility for future TypeScript integration as the project evolves.
