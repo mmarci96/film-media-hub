@@ -23,13 +23,12 @@ interface MediaPopupProps {
 
 const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) => {
     const [favorite, setFavorite] = useState(false);
-    const { favoriteList, addToFavorite, removeFavorite, fetchFavorites } = useFavorites();
+    const { addToFavorite, removeFavorite, fetchFavorites, favoriteIds } = useFavorites();
     const [mediaDetails, setMediaDetails] = useState<MediaDetails | null>(null);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { fetchAnimeDetails } = useAnimeDetails();
     const { fetchMediaDetails } = useTmdbDetails();
     const getMediaDetails = async (mediaId: number, mediaType: MediaType) => {
-
         if (mediaType === 'anime') {
             const details = await fetchAnimeDetails(mediaId.toString())
             details && setMediaDetails(details)
@@ -41,22 +40,23 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
 
     const handleMediaDetailsPage = () => {
         console.log("handle details to:", media.id);
-        console.log(mediaDetails);
+        //console.log(mediaDetails);
     }
 
     useEffect(() => {
         if (isOpen) {
             fetchFavorites();
-
             getMediaDetails(media.id, mediaType)
         }
-    }, [isOpen, addToFavorite])
+    }, [isOpen])
 
     useEffect(() => {
-        if (favoriteList?.includes(media.id.toString())) {
+        if (favoriteIds?.includes(media.id.toString())) {
             setFavorite(true)
+        } else {
+            setFavorite(false)
         }
-    }, [isOpen])
+    }, [isOpen, addToFavorite, removeFavorite, favoriteIds])
     if (!media) return null;
 
     return (
@@ -89,7 +89,7 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
                             </CardBody>
 
                         </Card>
-                        <ScrollShadow className="w-full h-36" hideScrollBar >
+                        <ScrollShadow className="w-full h-36 z-10" hideScrollBar >
                             <p className="text-md italic z-10" >
                                 Synopsis: {mediaDetails?.overview || "No description available."}
                             </p>
@@ -99,19 +99,13 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
                     <DrawerFooter>
                         {favorite ?
                             <Button color="warning"
-                                onPress={() => {
-                                    removeFavorite(media.id)
-                                    setFavorite(false)
-                                }}
+                                onPress={() => removeFavorite(media.id, mediaType)}
                             >
                                 Remove Favorite <FaStar />
                             </Button>
                             :
                             <Button
-                                onPress={() => {
-                                    addToFavorite(media.id)
-                                    setFavorite(true)
-                                }}
+                                onPress={() => addToFavorite(media.id, mediaType)}
                                 color="success">
                                 Save to Favorites <FaRegStar />
                             </Button>}

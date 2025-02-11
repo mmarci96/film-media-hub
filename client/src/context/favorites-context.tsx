@@ -1,26 +1,36 @@
 import { createContext, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-interface FavoritesContentList {
-    favoriteList: string[];
-    addToFavorite: (mediaId: string | number) => Promise<void>;
-    removeFavorite: (mediaId: string | number) => Promise<void>;
+import { MediaType } from "@/types";
+export interface FavoritesContentList {
+    favoriteList: FavoriteElement[];
+    addToFavorite: (mediaId: string | number, mediaType: MediaType) => Promise<void>;
+    removeFavorite: (mediaId: string | number, mediaType: MediaType) => Promise<void>;
     fetchFavorites: () => Promise<void>;
+    favoriteIds: string[];
+}
+export interface FavoriteElement {
+    _id: string;
+    createdAt: string;
+    mediaId: string;
+    mediaType: MediaType;
 }
 
 export const FavoritesContext = createContext<FavoritesContentList>({
     favoriteList: [],
     addToFavorite: async () => { },
     removeFavorite: async () => { },
-    fetchFavorites: async () => { }
+    fetchFavorites: async () => { },
+    favoriteIds: []
 });
 
 export const FavoritesProvider = ({ children }: { children: React.ReactNode }) => {
-    const [favoriteList, setFavoriteList] = useState<string[]>([])
+    const [favoriteList, setFavoriteList] = useState<FavoriteElement[]>([])
+    const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
     const { token } = useAuth()
 
     const fetchFavorites = async (): Promise<void> => {
         try {
-            const res = await fetch('/api/users/favorites', {
+            const res = await fetch('/api/favorites', {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -29,44 +39,49 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
             })
             if (res.ok) {
                 const { data } = await res.json()
-                const favorites = data;
+                const favorites: FavoriteElement[] = data;
                 setFavoriteList(favorites)
+                const idList = favorites.map(favorite => favorite.mediaId);
+                setFavoriteIds(idList);
             }
         } catch (error) {
             console.error(error);
         }
     }
 
-    const addToFavorite = async (mediaId: string | number): Promise<void> => {
+    const addToFavorite = async (mediaId: string | number, mediaType: MediaType): Promise<void> => {
         try {
-            const res = await fetch('/api/users/favorites', {
-                method: "PATCH",
+            const res = await fetch('/api/favorites', {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 },
-                body: JSON.stringify({ mediaId: mediaId.toString() })
+                body: JSON.stringify({ mediaId: mediaId.toString(), mediaType })
             })
-            if (res.ok) {
-                const data = await res.json()
-                setFavoriteList(prev => ([...prev, mediaId.toString()]))
+            if (res) {
+                const { data } = await res.json()
+                setFavoriteIds(prev => [...prev, data?.mediaId])
             }
         } catch (err) {
             console.error(err);
         }
     }
-    const removeFavorite = async (mediaId: string | number): Promise<void> => {
+
+    const removeFavorite = async (mediaId: string | number, mediaType: MediaType): Promise<void> => {
         try {
-            const res = await fetch('/api/users/favorites', {
+            const res = await fetch('/api/favorites/', {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 },
-                body: JSON.stringify({ mediaId: mediaId.toString() })
+                body: JSON.stringify({ mediaId, mediaType })
             })
             if (res.ok) {
-                await res.json()
+                const { data } = await res.json();
+                const clearedList = favoriteIds.filter(id => id !== data.mediaId.toString())
+                setFavoriteIds(clearedList)
             }
         } catch (err) {
             console.error(err);
@@ -76,7 +91,7 @@ export const FavoritesProvider = ({ children }: { children: React.ReactNode }) =
 
     return (
         <FavoritesContext.Provider
-            value={{ favoriteList, addToFavorite, removeFavorite, fetchFavorites }}
+            value={{ favoriteList, addToFavorite, removeFavorite, fetchFavorites, favoriteIds }}
         >
             {children}
         </FavoritesContext.Provider>

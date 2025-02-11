@@ -1,6 +1,6 @@
 import express from 'express';
 import { authenticateToken } from "../middleware/authToken.js";
-import { getFavoritesByUserId } from '../services/userService.js';
+import { deleteFavoriteMedia, getFavoritesByUserId, saveFavoriteMedia } from '../services/favoriteService.js';
 
 const router = express.Router();
 
@@ -31,6 +31,18 @@ router.post('/', authenticateToken, async (req, res, next) => {
         next(err);
     }
 });
+
+router.delete('/', authenticateToken, async (req, res, next) => {
+    try {
+        const { userId } = req;
+        const { mediaId, mediaType } = req.body;
+        const result = await deleteFavoriteMedia({ userId, mediaType, mediaId })
+
+        res.status(203).send({ data: result })
+    } catch (err) {
+        next(err)
+    }
+})
 
 router.delete('/:favoriteId', authenticateToken, async (req, res, next) => {
     try {
