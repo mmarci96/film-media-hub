@@ -69,8 +69,8 @@ export default function DropDownComponent() {
                                 name: "text-default-600",
                                 description: "text-default-500",
                             }}
-                            description="@jrgarciadev"
-                            name="Junior Garcia"
+                            description={currentUser?.email}
+                            name={currentUser?.username}
                         />
                     </DropdownItem>
                     <DropdownItem key="dashboard">Dashboard</DropdownItem>

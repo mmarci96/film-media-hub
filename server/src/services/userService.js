@@ -35,7 +35,13 @@ export const getUserById = async (id) => {
     if (!user) {
         createBadRequestError(404, "user")
     }
-    return { ...user, ...userDetails };
+    const data = {
+        username: user.username,
+        email: user.email,
+        theme: userDetails.theme,
+        avatar: userDetails.avatar
+    }
+    return data;
 }
 
 
