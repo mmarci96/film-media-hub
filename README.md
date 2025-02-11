@@ -1,9 +1,17 @@
 # Film Hub
-
 ![GitHub repo size](https://img.shields.io/github/repo-size/mmarci96/film-media-hub?style=for-the-badge)
 ![GitHub contributors](https://img.shields.io/github/contributors/mmarci96/film-media-hub?style=for-the-badge)
 ![GitHub last commit](https://img.shields.io/github/last-commit/mmarci96/film-media-hub?style=for-the-badge)
 ![GitHub license](https://img.shields.io/github/license/mmarci96/film-media-hub?style=for-the-badge)
+
+## Table of context
+<div align="center">
+<a href="#overview"><kbd> Overview </kbd></a>&ensp;&ensp;
+<a href="#stack"><kbd>  Stack </kbd></a>&ensp;&ensp;
+<a href="#external-apis"><kbd>  External API-s </kbd></a>&ensp;&ensp;
+<a href="#screenshots"><kbd>  Screenshots </kbd></a>&ensp;&ensp;
+<a href="#installation-and-usage"><kbd>  Installation </kbd></a>&ensp;&ensp;
+</div>
 
 ## Overview
 The Film Hub webapp let users browse, filter and search for movies or tv series, as well as saving them for later into their favorites. 
@@ -16,9 +24,16 @@ Browse, search and find movies or TV series. Save favorites, get data about them
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+I implemented TypeScript in the frontend to enhance long-term maintainability. 
+HeroUI provides a wide variety of components and extendable React hooks, combined with Tailwind CSS for custom styling. 
+The backend currently uses Express.js with Mongoose, offering flexibility for future TypeScript integration as the project evolves.
+
 ---
-I wanted to experiment using Typescript in the frontend to make to project maintainable to work on it for a longer period. HeroUI offers a wide variety of components, easy to extend React hooks and Tailwindcss to your custom needs.
-For the backend I initiated the project just in Express and NodeJs using Mongoose. This helps me work my way around writing Typescript interfaces but enjoying some type system. This might change if the server side grows.
+## External APIs
+### TMDB - [TMDB API](https://developer.themoviedb.org/docs/getting-started)
+This project utilizes TMDB's free API for content display. You'll need to obtain your own API key to run the application.
+### Jikan - [Jikan API](https://jikan.moe/)
+Jikan (時間) offers an unofficial, open-source API for anime and manga data. While completely free to use, it enforces rate limiting (30 requests/minute).
 
 ## Outside API-s
 ### TMDB - [TMDB API](https://developer.themoviedb.org/docs/getting-started)
@@ -32,20 +47,19 @@ Jikan (時間) is an unofficial & open-source API for the “most active online 
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/light.png"/></td><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/dark.png"/></td></tr></table></div>
 
-
-<div align="center"><table><tr>Browse and Save Movies or Series</tr><tr><td>
+<div align="center"><table><tr>Browse and Save Media</tr><tr><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/browse-filter.png"/></td><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/search-filter.png"/></td><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/save-favorites.png"/></td></tr></table></div>
 
-<div align="center"><table><tr>List you favorites</tr><tr><td>
+<div align="center"><table><tr>Manage Your Favorites</tr><tr><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/get-favorites.png"/></td><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/check-favorites.png"/></td></tr></table></div>
 
-## Installation & Usage
+## Installation and Usage
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/film-hub.git
+   git clone https://github.com/mmarci96/film-media-hub.git
    ```
 2. Install dependencies:
    ```sh
@@ -59,16 +73,21 @@ Jikan (時間) is an unofficial & open-source API for the “most active online 
    ```sh
     cp .env.sample ./server/.env 
    ```
-4. Set up a MongoDB cluster with Atlas or Docker and add to the .env file:
-    ```env
-    MONGO_URI=mongodb://localhost:27017/filmhub-db
+4. Create a local instance (Docker) or cloud cluster (Atlas) and update the connection string in .env:
+    ```.env
+    MONGO_URI=mongodb://localhost:27017/filmhub-db #Local example
+
     PORT=8080
 
     JWT_SECRET_KEY=your-secret-key
-
     ```
+
 5. Start a terminal session for server and client and run:
     ```sh
+    # Server directory
+    npm run dev
+
+    # Client directory
     npm run dev
     ```
 
