@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 import { UseTmdbResult, MediaType, MediaItem, ListType } from "@/types";
-const PREFIX_800 = 'https://image.tmdb.org/t/p/w780/'
-const PREFIX_400 = 'https://image.tmdb.org/t/p/w400/'
+const PREFIX_800 = 'https://image.tmdb.org/t/p/w780'
+const PREFIX_400 = 'https://image.tmdb.org/t/p/w400'
 export const useTmdb = (
     type: MediaType,
     page: number,

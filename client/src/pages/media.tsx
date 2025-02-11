@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAnimeDetails } from "@/hooks/use-anime-details";
 import { useTmdbDetails } from "@/hooks/use-tmdb-details";
+import MediaFullPage from "@/components/media/media-full-page";
 
 const MediaPage = () => {
     const [mediaData, setMediaData] = useState<MediaDetails | null>(null)
@@ -22,16 +23,12 @@ const MediaPage = () => {
 
     useEffect(() => {
         id && handleMedia(id, mediaType as MediaType)
-    }, [id, mediaType])
-
-    useEffect(() => {
-        console.log(mediaData);
-    }, [mediaData])
-
+    }, [])
     return (
         <DefaultLayout>
             <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
 
+                {mediaData && <MediaFullPage mediaDetails={mediaData} />}
             </section>
         </DefaultLayout>
     );
