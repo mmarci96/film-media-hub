@@ -20,23 +20,33 @@ import { useTmdbDetails } from "@/hooks/use-tmdb-details";
 import { useEffect, useState } from "react";
 import NavTipTool from "@/components/nav/nav-tip-tool";
 import MediaSearchResult from "../media/media-search-result";
+import { MediaItem } from "@/types";
 
 export const Navbar = () => {
-    const [searchResults, setSearchResults] = useState<null | any>(null)
+    const [searchResults, setSearchResults] = useState<MediaItem[]>([])
+    const [page, setPage] = useState(1);
     const [searchValue, setSearchValue] = useState('')
     const { fetchTmdbSearchData } = useTmdbDetails();
 
+    const handleLoadMore = () => {
+        setPage(prev => prev + 1)
+    }
     useEffect(() => {
         searchValue !== '' ?
-            fetchTmdbSearchData(searchValue)
-                .then(results => setSearchResults(results))
-            : setSearchResults(null);
+            fetchTmdbSearchData(searchValue, 1)
+                .then((results: MediaItem[]) => {
+                    setPage(1)
+                    setSearchResults(results)
+                })
+            : setSearchResults([]);
     }, [searchValue])
 
     useEffect(() => {
-        console.log(searchResults);
-
-    }, [searchResults])
+        if (searchValue) {
+            fetchTmdbSearchData(searchValue, page)
+                .then(results => setSearchResults((prev) => [...prev, ...results]))
+        }
+    }, [page])
 
 
     const searchInput = (
@@ -64,7 +74,7 @@ export const Navbar = () => {
 
     return (
         <>
-            {searchResults && <MediaSearchResult results={searchResults} onReset={setSearchValue} />}
+            {searchResults.length && <MediaSearchResult results={searchResults} onReset={setSearchValue} onLoadMore={handleLoadMore} />}
             <HeroUINavbar maxWidth="xl" position="sticky" className="z-20">
                 <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
                     <NavbarBrand className="gap-3 max-w-fit">

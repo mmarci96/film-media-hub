@@ -39,9 +39,11 @@ export const useTmdbDetails = () => {
         }
     };
 
-    const fetchTmdbSearchData = async (searchTerm: string) => {
+    const fetchTmdbSearchData = async (searchTerm: string, page: number):
+        Promise<MediaItem[]> => {
         try {
-            const response = await fetch(`${BASE_URL}search/multi?query=${searchTerm}&language=en-US`, {
+            const url = `${BASE_URL}search/multi?query=${searchTerm}&language=en-US&page=${page}`
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     accept: 'application/json',
@@ -54,7 +56,7 @@ export const useTmdbDetails = () => {
             }
 
             const data = await response.json()
-            const results: MediaItem = data.results.map((result: MediaSearchItem) => ({
+            const results: MediaItem[] = data.results.map((result: MediaSearchItem) => ({
                 id: result.id,
                 title: result?.name,
                 name: result?.title,
@@ -68,6 +70,7 @@ export const useTmdbDetails = () => {
         } catch (err: Error | any) {
             console.error('Failed to fetch data:', err)
             setError(err.message)
+            return []
         } finally {
             setLoading(false)
         }
