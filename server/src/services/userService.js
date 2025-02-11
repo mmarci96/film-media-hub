@@ -1,4 +1,5 @@
 import UserModel from "../db/user.model.js";
+import UserDetailsModel from "../db/userDetails.model.js";
 import createBadRequestError from "../errors/badRequestError.js";
 
 export const getUsers = async () => {
@@ -28,11 +29,13 @@ export const deleteUser = async (id) => {
 }
 
 export const getUserById = async (id) => {
-    const user = await UserModel.findById(id).select("-password").populate('userDetails');
+    const user = await UserModel.findById(id).select("-password");
+    const userDetails = await UserDetailsModel.findOne({ userId: id }).select("theme avatar");
+
     if (!user) {
         createBadRequestError(404, "user")
     }
-    return user;
+    return { ...user, ...userDetails };
 }
 
 

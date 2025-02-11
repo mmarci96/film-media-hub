@@ -34,6 +34,16 @@ router.delete("/", authenticateToken, async (req, res, next) => {
     }
 })
 
+router.get('/my-account', authenticateToken, async (req, res, next) => {
+    try {
+        const { userId } = req;
+        const user = await getUserById(userId);
+        res.status(200).send({ data: user })
+    } catch (err) {
+        next(err)
+    }
+})
+
 router.get('/:id', authenticateToken, async (req, res, next) => {
     try {
         const { id } = req.params;
