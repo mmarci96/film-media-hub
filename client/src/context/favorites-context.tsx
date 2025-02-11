@@ -1,14 +1,14 @@
 import { createContext, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { MediaType } from "@/types";
-interface FavoritesContentList {
+export interface FavoritesContentList {
     favoriteList: FavoriteElement[];
     addToFavorite: (mediaId: string | number, mediaType: MediaType) => Promise<void>;
     removeFavorite: (mediaId: string | number, mediaType: MediaType) => Promise<void>;
     fetchFavorites: () => Promise<void>;
     favoriteIds: string[];
 }
-interface FavoriteElement {
+export interface FavoriteElement {
     _id: string;
     createdAt: string;
     mediaId: string;

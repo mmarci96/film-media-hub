@@ -22,6 +22,7 @@ export const useAnimeDetails = () => {
 
             const mediaDetails: MediaDetails = {
                 id: details.mal_id,
+                mediaType: 'anime',
                 title: details.title,
                 original_title: details.title_japanese,
                 overview: details.synopsis,

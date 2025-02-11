@@ -28,6 +28,7 @@ export const useTmdbDetails = () => {
 
             const data = await response.json();
             const details: MediaDetails = data
+            details.mediaType = type;
             return details;
         } catch (err) {
             setLoading(false);

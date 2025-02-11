@@ -40,7 +40,8 @@ export const useAnime = (listType: ListType, page: number) => {
                     name: anime?.title_english,
                     overview: anime?.overview,
                     poster_path: anime?.images?.jpg?.image_url,
-                    backdrop_path: anime?.images?.jpg?.large_image_url
+                    backdrop_path: anime?.images?.jpg?.large_image_url,
+                    mediaType: 'anime'
                 }
                 return animeItem;
             })

@@ -4,6 +4,23 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
     size?: number;
 };
 
+export interface Genre {
+    id: number;
+    name: string;
+}
+
+export const mediaDetailToItem = (mediaDetails: MediaDetails): MediaItem => {
+    const item: MediaItem = {
+        id: mediaDetails.id,
+        title: mediaDetails.title,
+        overview: mediaDetails.overview,
+        poster_path: mediaDetails.poster_path,
+        backdrop_path: mediaDetails.backdrop_path,
+        mediaType: mediaDetails?.mediaType,
+    }
+    return item;
+}
+
 export interface MediaItem {
     id: number;
     title?: string;
@@ -11,14 +28,11 @@ export interface MediaItem {
     overview?: string;
     poster_path?: string;
     backdrop_path?: string;
-}
-
-export interface Genre {
-    id: number;
-    name: string;
+    mediaType?: MediaType;
 }
 
 export interface MediaDetails {
+    mediaType?: MediaType
     id: number;
     title?: string;
     original_title?: string;
