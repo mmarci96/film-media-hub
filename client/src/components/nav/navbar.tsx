@@ -22,6 +22,7 @@ import DropDownComponent from "./drop-down";
 import { useTmdbDetails } from "@/hooks/use-tmdb-details";
 import { useEffect, useState } from "react";
 import NavTipTool from "@/components/nav/nav-tip-tool";
+import MediaSearchResult from "../media/media-search-result";
 
 export const Navbar = () => {
     const [searchResults, setSearchResults] = useState<null | any>(null)
@@ -29,7 +30,7 @@ export const Navbar = () => {
     const { fetchTmdbSearchData } = useTmdbDetails();
 
     useEffect(() => {
-        searchValue ?
+        searchValue !== '' ?
             fetchTmdbSearchData(searchValue)
                 .then(results => setSearchResults(results))
             : setSearchResults(null);
@@ -66,6 +67,7 @@ export const Navbar = () => {
 
     return (
         <HeroUINavbar maxWidth="xl" position="sticky" className="z-20">
+            {searchResults && <MediaSearchResult results={searchResults.results} />}
             <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
                 <NavbarBrand className="gap-3 max-w-fit">
                     <Link

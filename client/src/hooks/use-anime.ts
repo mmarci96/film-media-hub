@@ -33,7 +33,7 @@ export const useAnime = (listType: ListType, page: number) => {
             }
 
             const list: MediaItem[] = data.map((anime: AnimeItem) => {
-                console.log(anime)
+                //console.log(anime)
                 const animeItem: MediaItem = {
                     id: anime.mal_id,
                     title: anime?.title,
