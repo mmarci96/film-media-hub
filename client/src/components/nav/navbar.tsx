@@ -64,7 +64,7 @@ export const Navbar = () => {
 
     return (
         <>
-            {searchResults && <MediaSearchResult results={searchResults.results} />}
+            {searchResults && <MediaSearchResult results={searchResults} onReset={setSearchValue} />}
             <HeroUINavbar maxWidth="xl" position="sticky" className="z-20">
                 <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
                     <NavbarBrand className="gap-3 max-w-fit">

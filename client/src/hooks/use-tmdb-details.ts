@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MediaDetails, MediaType } from "@/types";
+import { MediaDetails, MediaItem, MediaSearchItem, MediaType } from "@/types";
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3/'
 const PREFIX_800 = 'https://image.tmdb.org/t/p/w780/'
@@ -54,7 +54,17 @@ export const useTmdbDetails = () => {
             }
 
             const data = await response.json()
-            return data;
+            const results: MediaItem = data.results.map((result: MediaSearchItem) => ({
+                id: result.id,
+                title: result?.name,
+                name: result?.title,
+                mediaType: result?.media_type,
+                overview: result?.overview,
+                backdrop_path: PREFIX_800 + result.backdrop_path,
+                poster_path: PREFIX_400 + result.poster_path
+            }));
+
+            return results;
         } catch (err: Error | any) {
             console.error('Failed to fetch data:', err)
             setError(err.message)
