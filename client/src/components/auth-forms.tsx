@@ -6,15 +6,16 @@ import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
 
 const AuthForms = () => {
-    const [hasAccount, setHasAccount] = useState(false)
+    const { login } = useAuth();
     const { theme } = useTheme();
+    const [hasAccount, setHasAccount] = useState(false)
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: '',
         theme
     })
-    const { login } = useAuth();
+    const [messege, setMessege] = useState<string | null>(null)
     const resetFormData = () => {
         setFormData({
             username: '',
@@ -27,15 +28,20 @@ const AuthForms = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            formData.theme = theme;
-            const authType = !hasAccount ? "login" : "signup";
+            setMessege(null)
+            const authType = hasAccount ? "login" : "signup";
             const res = await fetch(`/api/auth/${authType}`, {
                 method: "POST",
                 body: JSON.stringify(formData),
                 headers: { 'Content-Type': 'application/json' },
             })
             if (!res.ok) {
-                console.error('res not ok')
+                let msg = '';
+                hasAccount ?
+                    msg = 'Login failed! No user with the email or incorrect password...' :
+                    msg = 'Unsuccessful registration. Username or email taken...'
+                setMessege(msg);
+                return
             }
 
             const data = await res.json();
@@ -43,13 +49,14 @@ const AuthForms = () => {
             console.log("data:", data);
 
             if (token && authType === "login") {
-                console.log("token:", token);
-
                 login(token);
+            } else {
+                setMessege('Account created! Log in to continue.')
             }
             setHasAccount(true)
         } catch (err) {
             console.error(err);
+            setMessege("Error processing request... Try again!")
         }
     };
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +70,10 @@ const AuthForms = () => {
             onReset={resetFormData}
             onSubmit={handleSubmit}
         >
-            {hasAccount &&
+            <h1>
+                {hasAccount ? "Login" : "Register"}
+            </h1>
+            {!hasAccount &&
                 <Input
                     isRequired
                     errorMessage="Please enter a valid username"
@@ -87,7 +97,6 @@ const AuthForms = () => {
                 type="email"
                 onChange={handleChange}
             />
-
             <Input
                 isRequired
                 errorMessage="Please enter a valid password"
@@ -99,18 +108,19 @@ const AuthForms = () => {
                 type="password"
                 onChange={handleChange}
             />
-            <div className="flex items-center mx-auto gap-2">
+            <div className="relative w-full mx-auto flex flex-col items-center">
+                {messege && <p className="absolute text-sm"> {messege} </p>}
+            </div>
+
+            <div className="flex items-center mx-auto gap-2 mt-4">
                 <Button color="primary" type="submit">
-                    Submit
-                </Button>
-                <Button type="reset" variant="flat">
-                    Reset
+                    {hasAccount ? "Sing in" : "Sign up"}
                 </Button>
             </div>
             <div className="flex flex-col mx-auto items-center">
-                <p className="mb-4"> {hasAccount ? "Do you have an account already?" : "No account yet?"}</p>
-                <Button color="default" onPress={() => setHasAccount(!hasAccount)}>
-                    {hasAccount ? "Sign In" : "Create Account"}
+                <p className="mb-4"> {hasAccount ? "Do you have an account already?" : "You don\'t have and account yet?"}</p>
+                <Button color="default" onPress={() => { setHasAccount(!hasAccount); setMessege(null) }}>
+                    {!hasAccount ? "Sign In" : "Create Account"}
                 </Button>
             </div>
 

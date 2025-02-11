@@ -1,5 +1,5 @@
-import UserDetailsModel from "../db/userDetails.model"
-import createBadRequestError from "../errors/badRequestError"
+import UserDetailsModel from "../db/userDetails.model.js"
+import createBadRequestError from "../errors/badRequestError.js"
 
 export const saveUserTheme = async (userId, theme) => {
     if (!userId) {
