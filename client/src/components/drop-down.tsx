@@ -12,19 +12,17 @@ import { useAuth } from "@/hooks/use-auth";
 import { IoSettings } from "react-icons/io5";
 import ModalForm from "./modal-form";
 import { MdAccountCircle } from "react-icons/md";
-import { useEffect } from "react";
+import { FaStar } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function DropDownComponent() {
     const { logout, isAuthenticated, currentUser } = useAuth();
-    useEffect(() => {
-        console.log(currentUser);
-    }, [currentUser])
 
     return (
         <Dropdown
             showArrow
             classNames={{
-                base: "before:bg-default-200", // change arrow background
+                base: "before:bg-default-200",
                 content: "p-0 border-small border-divider bg-background",
             }}
             radius="sm"
@@ -73,15 +71,20 @@ export default function DropDownComponent() {
                             name={currentUser?.username}
                         />
                     </DropdownItem>
-                    <DropdownItem key="dashboard">Dashboard</DropdownItem>
-                    <DropdownItem key="settings">Settings</DropdownItem>
-                    <DropdownItem key="new_project" endContent={<PlusIcon className="text-large" />}>
-                        New Project
+                    <DropdownItem key="favorites" endContent={<FaStar className="text-medium" />}>
+                        <Link to={'/favorites'}>
+                            Favorites
+                        </Link>
+                    </DropdownItem>
+                    <DropdownItem key="new_something" endContent={<PlusIcon className="text-large" />}>
+                        Create list
                     </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection aria-label="Help & Feedback">
-                    <DropdownItem onPress={() => console.log('not implemented')} key="help_and_feedback">Help & Feedback</DropdownItem>
+                    <DropdownItem onPress={() => console.log('not implemented')} key="help_and_feedback">
+                        Help & Feedback
+                    </DropdownItem>
                     <DropdownItem onPress={logout} key="logout">Log Out</DropdownItem>
                 </DropdownSection>
             </DropdownMenu>
