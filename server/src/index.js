@@ -5,6 +5,7 @@ import errorHandler from './middleware/errorHandler.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import favoriteRoutes from './routes/favoriteRoutes.js';
+import userDetailsRoutes from './routes/userDetailsRoutes.js'
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -28,6 +29,7 @@ app.get('/health', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/user-details', userDetailsRoutes);
 app.use('/api/favorites', favoriteRoutes);
 
 app.use(errorHandler);

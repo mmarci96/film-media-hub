@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 const userDetailsSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
+    theme: { type: String, required: true },
     avatar: { type: String, default: 'none' },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date },

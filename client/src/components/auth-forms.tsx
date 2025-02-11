@@ -1,29 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Form } from "@heroui/form"
 import { Input } from "@heroui/input"
 import { Button } from "@heroui/button";
 import { useAuth } from "@/hooks/use-auth";
+import { useTheme } from "@/hooks/use-theme";
 
 const AuthForms = () => {
     const [hasAccount, setHasAccount] = useState(false)
+    const { theme } = useTheme();
     const [formData, setFormData] = useState({
         username: '',
         email: '',
-        password: ''
+        password: '',
+        theme
     })
-    const { token, isAuthenticated, login } = useAuth();
+    const { login } = useAuth();
     const resetFormData = () => {
         setFormData({
             username: '',
             email: '',
-            password: ''
+            password: '',
+            theme
         })
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-
+            formData.theme = theme;
             const authType = !hasAccount ? "login" : "signup";
             const res = await fetch(`/api/auth/${authType}`, {
                 method: "POST",
@@ -33,6 +37,7 @@ const AuthForms = () => {
             if (!res.ok) {
                 console.error('res not ok')
             }
+
             const data = await res.json();
             const { token } = data;
             console.log("data:", data);

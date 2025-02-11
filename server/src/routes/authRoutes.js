@@ -15,8 +15,8 @@ router.post('/login', async (req, res, next) => {
 
 router.post('/signup', async (req, res, next) => {
     try {
-        const { email, username, password } = req.body;
-        const result = await createUser({ username, email, password });
+        const { email, username, password, theme } = req.body;
+        const result = await createUser({ username, email, password, theme });
         res.status(201).send({ messsage: "Resitered user", email: result?.email })
     } catch (err) {
         next(err)

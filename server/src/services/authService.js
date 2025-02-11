@@ -8,7 +8,7 @@ dotenv.config();
 const { JWT_SECRET_KEY } = process.env || '';
 
 
-const createUser = async ({ username, email, password }) => {
+const createUser = async ({ username, email, password, theme }) => {
     if (!username || !email || !password) {
         throw createBadRequestError(400, "credentials missing");
     }
@@ -31,6 +31,10 @@ const createUser = async ({ username, email, password }) => {
     });
 
     await newUser.save();
+    const createDetails = new UserDetailsModel({
+        userId, theme
+    })
+    await createDetails.save();
     return newUser;
 }
 
