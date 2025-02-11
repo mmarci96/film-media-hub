@@ -4,7 +4,6 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/mmarci96/film-media-hub?style=for-the-badge)
 ![GitHub license](https://img.shields.io/github/license/mmarci96/film-media-hub?style=for-the-badge)
 
-
 ## Table of context
 <div align="center">
 <a href="#overview"><kbd> Overview </kbd></a>&ensp;&ensp;
@@ -15,8 +14,9 @@
 </div>
 
 ## Overview
-The Film Hub webapp lets users browse, filter, and search for movies or TV series, while saving them for later in their favorites. 
-This project represents my first attempt at creating a visually appealing web application during my coding journey, utilizing React with the HeroUI library. It integrates external APIs for data retrieval and employs an Express server with MongoDB for storing user preferences. Discover, explore, and compare movies or TV series. Save favorites, access detailed information, and find streaming availability.
+The Film Hub webapp let users browse, filter and search for movies or tv series, as well as saving them for later into their favorites. 
+I wanted to racreate my first visually pleasant webapp during my coding jorney with using React with the HeroUI library and using outside API-s to get data as well as using an Express server with MongoDB to save and store users preferences.
+Browse, search and find movies or TV series. Save favorites, get data about them, find and compare streaming services.
 
 ## Stack
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
@@ -24,19 +24,26 @@ This project represents my first attempt at creating a visually appealing web ap
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+I implemented TypeScript in the frontend to enhance long-term maintainability. 
+HeroUI provides a wide variety of components and extendable React hooks, combined with Tailwind CSS for custom styling. 
+The backend currently uses Express.js with Mongoose, offering flexibility for future TypeScript integration as the project evolves.
 
 ---
-I implemented TypeScript in the frontend to enhance long-term maintainability. HeroUI provides a wide variety of components and extendable React hooks, combined with Tailwind CSS for custom styling. The backend currently uses Express.js with Mongoose, offering flexibility for future TypeScript integration as the project evolves.
-
 ## External APIs
 ### TMDB - [TMDB API](https://developer.themoviedb.org/docs/getting-started)
 This project utilizes TMDB's free API for content display. You'll need to obtain your own API key to run the application.
 ### Jikan - [Jikan API](https://jikan.moe/)
 Jikan (時間) offers an unofficial, open-source API for anime and manga data. While completely free to use, it enforces rate limiting (30 requests/minute).
 
+## Outside API-s
+### TMDB - [TMDB API](https://developer.themoviedb.org/docs/getting-started)
+Since I'm using TMDB free API to display many of my content to run the code you will need to aquire one.
+### Jikan - [Jikan API](https://jikan.moe/)
+Jikan (時間) is an unofficial & open-source API for the “most active online anime + manga community and database”. It's completely free to use. Only limiting your maximal request per minute.
+
 ---
 ## Screenshots
-<div align="center"><table><tr>Theme Selection</tr><tr><td>
+<div align="center"><table><tr>Theme Select</tr><tr><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/light.png"/></td><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/dark.png"/></td></tr></table></div>
 
