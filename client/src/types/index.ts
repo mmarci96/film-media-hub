@@ -21,6 +21,17 @@ export const mediaDetailToItem = (mediaDetails: MediaDetails): MediaItem => {
     return item;
 }
 
+export interface MediaSearchItem {
+    id: number;
+    title?: string;
+    name?: string;
+    overview?: string;
+    poster_path?: string;
+    backdrop_path?: string;
+    media_type?: MediaType;
+
+}
+
 export interface MediaItem {
     id: number;
     title?: string;
