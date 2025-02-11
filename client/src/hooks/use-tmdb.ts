@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 import { UseTmdbResult, MediaType, MediaItem, ListType } from "@/types";
-const PREFIX_800 = 'https://image.tmdb.org/t/p/w780/'
-const PREFIX_400 = 'https://image.tmdb.org/t/p/w400/'
+const PREFIX_800 = 'https://image.tmdb.org/t/p/w780'
+const PREFIX_400 = 'https://image.tmdb.org/t/p/w400'
 export const useTmdb = (
     type: MediaType,
     page: number,
@@ -23,7 +23,12 @@ export const useTmdb = (
 
         return list
             .filter((movie, index) => idList.indexOf(movie.id) === index)
-            .map(movie => ({ ...movie, ['backdrop_path']: PREFIX_800 + movie['backdrop_path'], ['mediaType']: type }));
+            .map(movie => ({
+                ...movie,
+                ['backdrop_path']: PREFIX_800 + movie['backdrop_path'],
+                ['poster_path']: PREFIX_400 + movie['poster_path'],
+                ['mediaType']: type
+            }));
     };
 
     const fetchMedia = async (

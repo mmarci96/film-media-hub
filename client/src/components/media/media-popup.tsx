@@ -15,6 +15,7 @@ import PopupDetails from "@/components/media/popup-details";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useAnimeDetails } from "@/hooks/use-anime-details";
 import { MediaDetails } from "@/types";
+import { Link } from "react-router-dom";
 interface MediaPopupProps {
     media: MediaItem;
     children: any;
@@ -76,7 +77,7 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
                             <div
                                 className="absolute inset-0 w-full h-full max-h-[480px] bg-cover bg-center"
                                 style={{
-                                    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1)), url(${media.backdrop_path?.startsWith('http') ? "" : "https://image.tmdb.org/t/p/w780"}${media.backdrop_path})`,
+                                    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1)), url(${media.backdrop_path})`,
                                 }}
                             />)}
                         <Card
@@ -109,8 +110,10 @@ const MediaPopup: React.FC<MediaPopupProps> = ({ media, children, mediaType }) =
                                 color="success">
                                 Save to Favorites <FaRegStar />
                             </Button>}
-                        <Button color="primary" onPress={handleMediaDetailsPage}>
-                            Watch Now
+                        <Button color="primary" >
+                            <Link to={`/${mediaType}/${media.id}`}>
+                                Watch Now
+                            </Link>
                         </Button>
                     </DrawerFooter>
                 </DrawerContent>
