@@ -36,12 +36,6 @@ This project utilizes TMDB's free API for content display. You'll need to obtain
 ### Jikan - [Jikan API](https://jikan.moe/)
 Jikan (時間) offers an unofficial, open-source API for anime and manga data. While completely free to use, it enforces rate limiting (30 requests/minute).
 
-## Outside API-s
-### TMDB - [TMDB API](https://developer.themoviedb.org/docs/getting-started)
-Since I'm using TMDB free API to display many of my content to run the code you will need to aquire one.
-### Jikan - [Jikan API](https://jikan.moe/)
-Jikan (時間) is an unofficial & open-source API for the “most active online anime + manga community and database”. It's completely free to use. Only limiting your maximal request per minute.
-
 ---
 ## Screenshots
 <div align="center"><table><tr>Theme Select</tr><tr><td>
