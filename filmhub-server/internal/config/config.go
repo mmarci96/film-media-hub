@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"time"
 
@@ -42,7 +41,7 @@ func Load() (*Config, error) {
 	cfg.Server.ReadTimeout = time.Second * 15
 	cfg.Server.WriteTimeout = time.Second * 15
 
-	cfg.Database.Host = getEnv("DB_HOST", "127.0.0.1")
+	cfg.Database.Host = getEnv("DB_HOST", "localhost")
 	cfg.Database.Port = getEnv("DB_PORT", "3306")
 	cfg.Database.User = getEnv("DB_USER", "root")
 	cfg.Database.Password = getEnv("DB_PASSWORD", "secret")
@@ -62,14 +61,13 @@ func Load() (*Config, error) {
 
 func getEnv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
-		log.Println(key, value)
 		return value
 	}
 	return defaultValue
 }
 
 func (c *Config) GetDSN() string {
-	connectioString := fmt.Sprintf("%s:%s@127.0.0.1:3306/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	connectioString := fmt.Sprintf("%s:%s@tcp(db:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.Database.User,
 		c.Database.Password,
 		c.Database.DBName,

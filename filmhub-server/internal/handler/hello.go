@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +12,6 @@ func NewHelloHandler() *HelloHandler {
 	return &HelloHandler{}
 }
 
-func (hello *HelloHandler) SayHello(ctx *gin.Context) {
-	helloMsg := fmt.Sprintf("Hello world %s", "kaki")
-	ctx.JSON(http.StatusOK, gin.H{"message": helloMsg})
+func (h *HelloHandler) SayHello(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{"message": "hello"})
 }
