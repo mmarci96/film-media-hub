@@ -9,10 +9,8 @@ interface AuthContextType {
 }
 
 interface CurrentUser {
-    username: string;
+    user_id: number;
     email: string;
-    theme: string;
-    avatar: string;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -30,7 +28,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
     const updateCurrentUserData = async (token: string) => {
         try {
-            const res = await fetch("/api/vi/profile", {
+            const res = await fetch("/api/v1/profile", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -43,9 +41,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }
             const data = await res.json();
             if (data) {
-                // const currentUser: CurrentUser = data;
-                // setCurrentUser(currentUser);
-                console.log(data);
+                const currentUser: CurrentUser = data;
+                setCurrentUser(currentUser);
             }
         } catch (err) {
             console.error(err);

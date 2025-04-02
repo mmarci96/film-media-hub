@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Form } from "@heroui/form"
-import { Input } from "@heroui/input"
+import { Form } from "@heroui/form";
+import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
@@ -8,55 +8,55 @@ import { useTheme } from "@/hooks/use-theme";
 const AuthForms = () => {
     const { login } = useAuth();
     const { theme } = useTheme();
-    const [hasAccount, setHasAccount] = useState(false)
+    const [hasAccount, setHasAccount] = useState(false);
     const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        password: '',
-        theme
-    })
-    const [messege, setMessege] = useState<string | null>(null)
+        email: "",
+        password: "",
+        theme,
+    });
+    const [messege, setMessege] = useState<string | null>(null);
     const resetFormData = () => {
         setFormData({
-            username: '',
-            email: '',
-            password: '',
-            theme
-        })
-    }
+            email: "",
+            password: "",
+            theme,
+        });
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            setMessege(null)
-            const authType = hasAccount ? "login" : "signup";
-            const res = await fetch(`/api/auth/${authType}`, {
+            setMessege(null);
+            const authType = hasAccount ? "login" : "register";
+            const res = await fetch(`/api/v1/${authType}`, {
                 method: "POST",
                 body: JSON.stringify(formData),
-                headers: { 'Content-Type': 'application/json' },
-            })
+                headers: { "Content-Type": "application/json" },
+            });
             if (!res.ok) {
-                let msg = '';
-                hasAccount ?
-                    msg = 'Login failed! No user with the email or incorrect password...' :
-                    msg = 'Unsuccessful registration. Username or email taken...'
+                let msg = "";
+                hasAccount
+                    ? (msg =
+                          "Login failed! No user with the email or incorrect password...")
+                    : (msg =
+                          "Unsuccessful registration. Username or email taken...");
                 setMessege(msg);
-                return
+                return;
             }
 
             const data = await res.json();
-            const { token } = data;
+            const token = data;
             console.log("data:", data);
 
             if (token && authType === "login") {
                 login(token);
             } else {
-                setMessege('Account created! Log in to continue.')
+                setMessege("Account created! Log in to continue.");
             }
-            setHasAccount(true)
+            setHasAccount(true);
         } catch (err) {
             console.error(err);
-            setMessege("Error processing request... Try again!")
+            setMessege("Error processing request... Try again!");
         }
     };
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,21 +70,7 @@ const AuthForms = () => {
             onReset={resetFormData}
             onSubmit={handleSubmit}
         >
-            <h1>
-                {hasAccount ? "Login" : "Register"}
-            </h1>
-            {!hasAccount &&
-                <Input
-                    isRequired
-                    errorMessage="Please enter a valid username"
-                    label="Username"
-                    labelPlacement="outside"
-                    name="username"
-                    placeholder="Enter your username"
-                    type="text"
-                    onChange={handleChange}
-                    value={formData.username}
-                />}
+            <h1>{hasAccount ? "Login" : "Register"}</h1>
 
             <Input
                 isRequired
@@ -118,14 +104,24 @@ const AuthForms = () => {
                 </Button>
             </div>
             <div className="flex flex-col mx-auto items-center">
-                <p className="mb-4"> {hasAccount ? "Do you have an account already?" : "You don\'t have and account yet?"}</p>
-                <Button color="default" onPress={() => { setHasAccount(!hasAccount); setMessege(null) }}>
+                <p className="mb-4">
+                    {" "}
+                    {hasAccount
+                        ? "Do you have an account already?"
+                        : "You don't have and account yet?"}
+                </p>
+                <Button
+                    color="default"
+                    onPress={() => {
+                        setHasAccount(!hasAccount);
+                        setMessege(null);
+                    }}
+                >
                     {!hasAccount ? "Sign In" : "Create Account"}
                 </Button>
             </div>
-
         </Form>
     );
-}
+};
 
 export default AuthForms;
