@@ -17,8 +17,8 @@ func NewDatabase(connectionString string) (*Database, error) {
 		return nil, err
 	}
 
-	db.SetMaxOpenConns(25)                 
-	db.SetMaxIdleConns(5)                 
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(5)
 	db.SetConnMaxLifetime(5 * time.Minute)
 
 	// Verify connection is working

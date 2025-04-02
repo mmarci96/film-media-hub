@@ -27,13 +27,14 @@ func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
 
 	authHandler := handlers.NewAuthHandler(db, []byte(cfg.JWT.Secret))
 	mediaHandler := handlers.NewMediaHandler(db)
-	tmdbHandler := handlers.NewTMDBHandler(db, cfg.TMDB.ApiKey)
+	tmdbHandler := handlers.NewTMDBHandler(db, &cfg.TMDB.ApiKey)
 
 	public := r.Group("/api/v1")
 	{
 		public.POST("/register", authHandler.Register)
 		public.POST("/login", authHandler.Login)
 		public.GET("/tmdb/:type/:list", tmdbHandler.FetchMedia)
+		public.GET("/tmdb_id/:type/:id", tmdbHandler.FetchMediaByID)
 	}
 
 	protected := r.Group("/api/v1")
