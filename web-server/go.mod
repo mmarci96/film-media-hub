@@ -1,4 +1,4 @@
-module codelcool.com/web-server
+module web-server
 
 go 1.24.1
 

@@ -4,7 +4,7 @@ ENV GOPATH /go
 
 WORKDIR $GOPATH/src/app
 
-COPY web-server-go.go .
+COPY web-server.go .
 
 RUN go mod init
 
