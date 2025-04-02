@@ -7,60 +7,118 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"web-server/internal/database"
+	"web-server/internal/models"
 )
 
 type TMDBHandler struct {
+	db         *database.Database
 	tmdbAPIKey string
 }
 
-func NewTMDBHandler(tmdbAPIKey string) *TMDBHandler {
-	return &TMDBHandler{tmdbAPIKey: tmdbAPIKey}
+type TMDBResponse struct {
+	Page         int                `json:"page"`
+	Results      []models.TMDBMovie `json:"results"`
+	TotalPages   int                `json:"total_pages"`
+	TotalResults int                `json:"total_results"`
+}
+
+func NewTMDBHandler(db *database.Database, apiKey string) *TMDBHandler {
+	return &TMDBHandler{
+		db:         db,
+		tmdbAPIKey: apiKey,
+	}
 }
 
 func (h *TMDBHandler) FetchMedia(c *gin.Context) {
-	typeParam := c.Param("type") // Example: "movie" or "tv"
-	listParam := c.Param("list") // Example: "popular", "top_rated"
+	mediaType := c.Param("type") // "movie" or "tv"
+	listType := c.Param("list")  // "popular", "top_rated"
 	page := c.DefaultQuery("page", "1")
+	searchQuery := c.DefaultQuery("search", "")
 
-	tmdbAPIKey := h.tmdbAPIKey
-	if tmdbAPIKey == "" {
-		log.Println("TMDB_API_KEY is missing in environment variables")
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server configuration error"})
+	tmdbURL := h.buildTMDBURL(mediaType, listType, page, searchQuery)
+	if tmdbURL == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid media type or list"})
 		return
 	}
 
-	tmdbURL := fmt.Sprintf("https://api.themoviedb.org/3/%s/%s?language=en-US&page=%s",
-		typeParam, listParam, page)
-
-	req, err := http.NewRequest("GET", tmdbURL, nil)
+	tmdbResponse, err := h.fetchFromTMDB(tmdbURL)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create request"})
+		log.Println("TMDB request failed:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch media"})
 		return
 	}
 
-	// Add Authorization header
+	c.JSON(http.StatusOK, tmdbResponse)
+}
+
+func (h *TMDBHandler) buildTMDBURL(mediaType, listType, page, search string) string {
+	if h.tmdbAPIKey == "" {
+		log.Println("TMDB_API_KEY is missing")
+		return ""
+	}
+
+	baseURL := "https://api.themoviedb.org/3"
+	if search != "" {
+		return fmt.Sprintf("%s/search/%s?query=%s&include_adult=false&language=en-US&page=%s",
+			baseURL, mediaType, search, page)
+	}
+	return fmt.Sprintf("%s/%s/%s?language=en-US&page=%s", baseURL, mediaType, listType, page)
+}
+
+func (h *TMDBHandler) fetchFromTMDB(url string) (*TMDBResponse, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Authorization", "Bearer "+tmdbAPIKey)
+	req.Header.Set("Authorization", "Bearer "+h.tmdbAPIKey)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch data"})
-		return
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		c.JSON(resp.StatusCode, gin.H{"error": "TMDB API error"})
-		return
+		return nil, fmt.Errorf("TMDB API returned status: %d", resp.StatusCode)
 	}
 
-	var result map[string]any
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse response"})
-		return
+	var tmdbResponse TMDBResponse
+	if err := json.NewDecoder(resp.Body).Decode(&tmdbResponse); err != nil {
+		return nil, err
 	}
-
-	c.JSON(http.StatusOK, result)
+	return &tmdbResponse, nil
 }
 
+func (h *TMDBHandler) SaveMedia(c *gin.Context) {
+	var movie models.TMDBMovie
+	if err := c.ShouldBindJSON(&movie); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data"})
+		return
+	}
+
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
+		return
+	}
+	if userID == "" {
+		log.Println("no userID")
+		return
+	}
+
+	_, err := h.db.DB.Exec(`
+		INSERT INTO saved (user_id, tmdb_id)
+		VALUES ($1, $2)`,
+		userID, movie.ID,
+	)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save media"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"message": "Media saved successfully!"})
+}

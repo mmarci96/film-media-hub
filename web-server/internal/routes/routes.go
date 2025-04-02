@@ -9,8 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRouter(db *database.Database, r *gin.Engine, cfg *config.Config) {
-	// CORS middleware
+func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
+	r := gin.New()
+	r.Use(gin.Recovery())
+	r.Use(gin.Logger())
 	r.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
@@ -23,12 +25,10 @@ func SetupRouter(db *database.Database, r *gin.Engine, cfg *config.Config) {
 		c.Next()
 	})
 
-	// Initialize handlers with JWT configuration
 	authHandler := handlers.NewAuthHandler(db, []byte(cfg.JWT.Secret))
 	mediaHandler := handlers.NewMediaHandler(db)
-	tmdbHandler := handlers.NewTMDBHandler(cfg.TMDB.ApiKey)
+	tmdbHandler := handlers.NewTMDBHandler(db, cfg.TMDB.ApiKey)
 
-	// Public routes
 	public := r.Group("/api/v1")
 	{
 		public.POST("/register", authHandler.Register)
@@ -36,16 +36,17 @@ func SetupRouter(db *database.Database, r *gin.Engine, cfg *config.Config) {
 		public.GET("/tmdb/:type/:list", tmdbHandler.FetchMedia)
 	}
 
-	// Protected routes with JWT middleware
 	protected := r.Group("/api/v1")
 	protected.Use(middleware.AuthMiddleware([]byte(cfg.JWT.Secret)))
 	{
 		protected.POST("/refresh-token", authHandler.RefreshToken)
 		protected.POST("/logout", authHandler.Logout)
 		protected.GET("/profile", getUserProfile)
+		protected.POST("/saved", tmdbHandler.SaveMedia)
 		protected.GET("/media", mediaHandler.GetAllMedia)
 		protected.POST("/media", mediaHandler.Create)
 	}
+	return r
 }
 
 func getUserProfile(c *gin.Context) {

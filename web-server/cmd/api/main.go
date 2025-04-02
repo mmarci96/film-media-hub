@@ -11,30 +11,22 @@ import (
 )
 
 func main() {
-	// Load configuration
 	cfg, err := config.Load()
 	if err != nil {
 		log.Fatal("Failed to load config:", err)
 	}
 
-	// Initialize database
 	db, err := database.NewDatabase(cfg.GetDSN())
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
 	defer db.DB.Close()
 
-	// Set Gin mode
 	if cfg.Environment == "production" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	// Initialize router with middleware
-	r := gin.New()
-	r.Use(gin.Recovery())
-	r.Use(gin.Logger())
-	// Start server with configured host and port
-	routes.SetupRouter(db, r, cfg)
+	r := routes.SetupRouter(db, cfg)
 	serverAddr := cfg.Server.Host + ":" + cfg.Server.Port
 	log.Printf("Server starting on %s", serverAddr)
 
