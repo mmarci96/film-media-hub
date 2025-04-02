@@ -1,21 +1,27 @@
-FROM golang:1.19.5-alpine3.17 as build
+# Build stage
+FROM golang:1.24.1-alpine AS builder
 
-ENV GOPATH /go
+WORKDIR /app
 
-WORKDIR $GOPATH/src/app
+# Copy module files first to cache dependencies
+COPY go.mod go.sum ./
+RUN go mod download
 
+# Copy source code
 COPY . .
 
-RUN go mod init
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./cmd/api/main.go
 
-RUN go build cmd/api/main.go
-
-RUN chmod +x main
-
+# Final stage
 FROM alpine:3.17
 
-COPY --from=build go/src/app/main /
+WORKDIR /app
+
+# Copy binary from builder
+COPY --from=builder /app/main .
+COPY --from=builder /app/api.env .
 
 EXPOSE 8080
 
-ENTRYPOINT [ "/main" ]
+ENTRYPOINT ["/app/main"]
