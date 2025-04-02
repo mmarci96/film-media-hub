@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"web-server/internal/database"
 	"web-server/internal/models"
+
+	"github.com/gin-gonic/gin"
 )
 
 type MediaHandler struct {
@@ -18,7 +19,8 @@ func NewMediaHandler(db *database.Database) *MediaHandler {
 func (h *MediaHandler) GetAllMedia(c *gin.Context) {
 	var medias []models.Media
 
-	rows, err := h.db.DB.Query("SELECT id, name, created_at FROM medias")
+	// Query all media records
+	rows, err := h.db.DB.Query("SELECT id, title, description, updated_at, created_at FROM media")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch media"})
 		return
@@ -27,7 +29,7 @@ func (h *MediaHandler) GetAllMedia(c *gin.Context) {
 
 	for rows.Next() {
 		var media models.Media
-		if err := rows.Scan(&media.ID, &media.Title, &media.UpdatedAt, &media.CreatedAt); err != nil {
+		if err := rows.Scan(&media.ID, &media.Title, &media.Description, &media.UpdatedAt, &media.CreatedAt); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to scan media"})
 			return
 		}
@@ -67,7 +69,7 @@ func (h *MediaHandler) Create(c *gin.Context) {
 
 	var id int
 	err = tx.QueryRow(`
-        INSERT INTO medias (title, description) 
+        INSERT INTO media (title, description) 
         VALUES ($1, $2) 
         RETURNING id`,
 		media.Title, media.Description,
