@@ -1,12 +1,19 @@
 services:
-  # api:
-  #   build: ./web-server
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - DB_HOST=db
-  #   depends_on:
-  #     - db
+  filmhub-server:
+    image: filmhub-server:latest
+    container_name: filmhub-server
+    build:
+      context: ./filmhub-server
+      dockerfile: Dockerfile
+      target: filmhub-server
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=db
+      - DB_PASSWORD=secret
+      - ENV=development
+    depends_on:
+      - db
 
   db:
     image: mysql:8.0
