@@ -99,16 +99,7 @@ func (h *TMDBHandler) SaveMedia(c *gin.Context) {
 		return
 	}
 
-	userID, exists := c.Get("user_id")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
-		return
-	}
-	if userID == "" {
-		log.Println("no userID")
-		return
-	}
-
+	userID, _ := c.Get("user_id")
 	_, err := h.db.DB.Exec(`
 		INSERT INTO saved (user_id, tmdb_id)
 		VALUES ($1, $2)`,
