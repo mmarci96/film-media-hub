@@ -17,9 +17,9 @@ export const mediaDetailToItem = (mediaDetails: MediaDetails): MediaItem => {
         poster_path: mediaDetails.poster_path,
         backdrop_path: mediaDetails.backdrop_path,
         mediaType: mediaDetails?.mediaType,
-    }
+    };
     return item;
-}
+};
 
 export interface MediaSearchItem {
     id: number;
@@ -29,7 +29,6 @@ export interface MediaSearchItem {
     poster_path?: string;
     backdrop_path?: string;
     media_type?: MediaType;
-
 }
 
 export interface MediaItem {
@@ -43,7 +42,7 @@ export interface MediaItem {
 }
 
 export interface MediaDetails {
-    mediaType?: MediaType
+    mediaType?: MediaType;
     id: number;
     title?: string;
     original_title?: string;
@@ -91,6 +90,7 @@ export interface UseTmdbResult {
     mediaList: MediaItem[] | null;
     error: string | null;
     loading: boolean;
+    onSearch: (searchValue: string) => void;
 }
 
 export type MediaType = "movie" | "tv" | "anime";
@@ -155,6 +155,3 @@ export interface AnimeItem {
         timezone?: string;
     };
 }
-
-
-

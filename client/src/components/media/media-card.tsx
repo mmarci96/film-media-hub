@@ -27,7 +27,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ media, mediaType }) => {
                         <div className="flex justify-center p-2">
                             <h1 className="text-lg font-bold">
                                 {" "}
-                                {media.name || media.title}
+                                {media?.name || media?.title}
                             </h1>
                         </div>
                     </CardBody>
