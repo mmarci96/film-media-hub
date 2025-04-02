@@ -13,15 +13,12 @@ type Media struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-// UserLogin represents login request data
-type MediaRequestData struct {
+// UserRegister represents registration request data
+type MediaRegister struct {
 	Title       string `json:"title" binding:"required,title"`
 	Description string `json:"description" binding:"required,description"`
 }
 
-// UserRegister represents registration request data
-type MediaResponseData struct {
-	ID       int    `json:"id" binding:"required:id"`
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=6"`
+type MediaFavoriteRequest struct {
+	ID int `json:"id" binding:"required,id"`
 }

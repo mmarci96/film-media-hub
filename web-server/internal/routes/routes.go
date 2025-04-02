@@ -1,30 +1,58 @@
-// package routes
-//
-// import (
-// 	"github.com/gin-gonic/gin"
-// 	"gorm.io/gorm"
-// 	"web-server/internal/handlers"
-// 	"web-server/internal/repositories"
-// )
-//
-// func SetupRouter(db *gorm.DB) *gin.Engine {
-// 	router := gin.Default()
-//
-// 	// Initialize repository and handler
-// 	itemRepo := repositories.NewItemRepository(db)
-// 	itemHandler := handlers.NewItemHandler(itemRepo)
-//
-// 	api := router.Group("/api/v1")
-// 	{
-// 		items := api.Group("/items")
-// 		{
-// 			items.POST("", itemHandler.CreateItem)
-// 			items.GET("", itemHandler.GetAllItems)
-// 			items.GET("/:id", itemHandler.GetItem)
-// 			items.PUT("/:id", itemHandler.UpdateItem)
-// 			items.DELETE("/:id", itemHandler.DeleteItem)
-// 		}
-// 	}
-//
-// 	return router
-// }
+package routes
+
+import (
+	"web-server/internal/config"
+	"web-server/internal/database"
+	"web-server/internal/handlers"
+	"web-server/internal/middleware"
+
+	"github.com/gin-gonic/gin"
+)
+
+func SetupRouter(db *database.Database, r *gin.Engine, cfg *config.Config) *gin.Engine {
+	// CORS middleware
+	r.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+		c.Next()
+	})
+
+	// Initialize handlers with JWT configuration
+	authHandler := handlers.NewAuthHandler(db, []byte(cfg.JWT.Secret))
+	mediaHandler := handlers.NewMediaHandler(db)
+
+	// Public routes
+	public := r.Group("/api/v1")
+	{
+		public.POST("/register", authHandler.Register)
+		public.POST("/login", authHandler.Login)
+	}
+
+	// Protected routes with JWT middleware
+	protected := r.Group("/api/v1")
+	protected.Use(middleware.AuthMiddleware([]byte(cfg.JWT.Secret)))
+	{
+		protected.POST("/refresh-token", authHandler.RefreshToken)
+		protected.POST("/logout", authHandler.Logout)
+		protected.GET("/profile", getUserProfile)
+		protected.GET("/media", mediaHandler.GetAllMedia)
+		protected.POST("/media", mediaHandler.Create)
+	}
+	return r
+}
+
+func getUserProfile(c *gin.Context) {
+	userID, _ := c.Get("user_id")
+	email, _ := c.Get("email")
+
+	c.JSON(200, gin.H{
+		"user_id": userID,
+		"email":   email,
+	})
+}

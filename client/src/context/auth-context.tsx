@@ -18,41 +18,43 @@ interface CurrentUser {
 export const AuthContext = createContext<AuthContextType>({
     token: null,
     isAuthenticated: false,
-    login: () => { },
-    logout: () => { },
+    login: () => {},
+    logout: () => {},
     currentUser: null,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [token, setToken] = useState<string | null>(() => localStorage.getItem("authToken"));
+    const [token, setToken] = useState<string | null>(() =>
+        localStorage.getItem("authToken"),
+    );
     const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
     const updateCurrentUserData = async (token: string) => {
         try {
-            const res = await fetch('/api/users/my-account', {
-                method: 'GET',
+            const res = await fetch("/api/vi/profile", {
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                }
-            })
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             if (!res.ok) {
                 console.log("request err");
                 return;
             }
-            const { data } = await res.json();
+            const data = await res.json();
             if (data) {
-                const currentUser: CurrentUser = data;
-                setCurrentUser(currentUser);
+                // const currentUser: CurrentUser = data;
+                // setCurrentUser(currentUser);
+                console.log(data);
             }
         } catch (err) {
             console.error(err);
         }
-    }
+    };
 
     useEffect(() => {
         if (token) updateCurrentUserData(token);
-    }, [token])
-
+    }, [token]);
 
     useEffect(() => {
         if (token) {
@@ -70,12 +72,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setToken(null);
     };
 
-
     return (
-        <AuthContext.Provider value={{ token, login, logout, isAuthenticated: !!token, currentUser }
-        }>
+        <AuthContext.Provider
+            value={{
+                token,
+                login,
+                logout,
+                isAuthenticated: !!token,
+                currentUser,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
 };
-
