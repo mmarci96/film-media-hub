@@ -2,46 +2,80 @@ package config
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/joho/godotenv"
-	"github.com/kelseyhightower/envconfig"
+	"os"
+	"time"
 )
 
 type Config struct {
-	ServerPort string `envconfig:"SERVER_PORT" default:"8080"`
-	Env        string `envconfig:"ENV" default:"development"`
-
-	DBHost     string `envconfig:"DB_HOST" required:"true"`
-	DBPort     string `envconfig:"DB_PORT" default:"3306"`
-	DBUser     string `envconfig:"DB_USER" required:"true"`
-	DBPassword string `envconfig:"DB_PASSWORD" required:"true"`
-	DBName     string `envconfig:"DB_NAME" required:"true"`
-
-	ReadTimeout  time.Duration `envconfig:"READ_TIMEOUT" default:"5s"`
-	WriteTimeout time.Duration `envconfig:"WRITE_TIMEOUT" default:"10s"`
-}
-
-func LoadConfig() (*Config, error) {
-	// Load .env file if exists
-	_ = godotenv.Load("api.env")
-
-	var cfg Config
-	err := envconfig.Process("", &cfg)
-	if err != nil {
-		return nil, fmt.Errorf("failed to process env vars: %w", err)
+	Server struct {
+		Port         string
+		Host         string
+		ReadTimeout  time.Duration
+		WriteTimeout time.Duration
 	}
 
-	return &cfg, nil
+	Database struct {
+		Host     string
+		Port     string
+		User     string
+		Password string
+		DBName   string
+		SSLMode  string
+	}
+
+	JWT struct {
+		Secret        string
+		TokenExpiry   time.Duration
+		RefreshExpiry time.Duration
+	}
+
+	Environment string
 }
 
-// Helper function to create DSN from config
-func (c *Config) DSN() string {
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		c.DBUser,
-		c.DBPassword,
-		c.DBHost,
-		c.DBPort,
-		c.DBName,
+func Load() (*Config, error) {
+	godotenv.Load() // Load .env if exists
+
+	cfg := &Config{}
+
+	// Server config
+	cfg.Server.Port = getEnv("SERVER_PORT", "8080")
+	cfg.Server.Host = getEnv("SERVER_HOST", "0.0.0.0")
+	cfg.Server.ReadTimeout = time.Second * 15
+	cfg.Server.WriteTimeout = time.Second * 15
+
+	// Database config
+	cfg.Database.Host = getEnv("DB_HOST", "localhost")
+	cfg.Database.Port = getEnv("DB_PORT", "5432")
+	cfg.Database.User = getEnv("DB_USER", "postgres")
+	cfg.Database.Password = getEnv("DB_PASSWORD", "")
+	cfg.Database.DBName = getEnv("DB_NAME", "auth_service")
+	cfg.Database.SSLMode = getEnv("DB_SSLMODE", "disable")
+
+	// JWT config
+	cfg.JWT.Secret = getEnv("JWT_SECRET", "your-secret-key")
+	cfg.JWT.TokenExpiry = time.Hour * 24    // 24 hours
+	cfg.JWT.RefreshExpiry = time.Hour * 168 // 7 days
+
+	cfg.Environment = getEnv("ENV", "development")
+
+	return cfg, nil
+}
+
+func getEnv(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return defaultValue
+}
+
+func (c *Config) GetDSN() string {
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		c.Database.Host,
+		c.Database.Port,
+		c.Database.User,
+		c.Database.Password,
+		c.Database.DBName,
+		c.Database.SSLMode,
 	)
 }

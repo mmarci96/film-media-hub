@@ -1,28 +1,31 @@
 package database
 
 import (
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	"database/sql"
+	_ "github.com/lib/pq"
+	"time"
 )
 
-type DB struct {
-	Gorm *gorm.DB
+type Database struct {
+	DB *sql.DB
 }
 
-func NewMySQLConnection(dsn string) (*gorm.DB, error) {
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+func NewDatabase(connectionString string) (*Database, error) {
+	// Open database connection
+	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
 		return nil, err
 	}
 
-	sqlDB, err := db.DB()
-	if err != nil {
+	// Configure connection pool
+	db.SetMaxOpenConns(25)                 // Limit maximum simultaneous connections
+	db.SetMaxIdleConns(5)                  // Keep some connections ready
+	db.SetConnMaxLifetime(5 * time.Minute) // Refresh connections periodically
+
+	// Verify connection is working
+	if err := db.Ping(); err != nil {
 		return nil, err
 	}
 
-	// Set connection pool parameters
-	sqlDB.SetMaxIdleConns(10)
-	sqlDB.SetMaxOpenConns(100)
-
-	return db, nil
+	return &Database{DB: db}, nil
 }
