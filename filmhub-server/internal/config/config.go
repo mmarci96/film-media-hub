@@ -2,9 +2,11 @@ package config
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
+	"log"
 	"os"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -40,11 +42,11 @@ func Load() (*Config, error) {
 	cfg.Server.ReadTimeout = time.Second * 15
 	cfg.Server.WriteTimeout = time.Second * 15
 
-	cfg.Database.Host = getEnv("DB_HOST", "localhost")
-	cfg.Database.Port = getEnv("DB_PORT", "5432")
-	cfg.Database.User = getEnv("DB_USER", "postgres")
-	cfg.Database.Password = getEnv("DB_PASSWORD", "")
-	cfg.Database.DBName = getEnv("DB_NAME", "auth_service")
+	cfg.Database.Host = getEnv("DB_HOST", "db")
+	cfg.Database.Port = getEnv("DB_PORT", "3306")
+	cfg.Database.User = getEnv("DB_USER", "root")
+	cfg.Database.Password = getEnv("DB_PASSWORD", "secret")
+	cfg.Database.DBName = getEnv("DB_NAME", "mydatabase")
 	cfg.Database.SSLMode = getEnv("DB_SSLMODE", "disable")
 
 	cfg.JWT.Secret = getEnv("JWT_SECRET", "your-secret-key")
@@ -66,12 +68,14 @@ func getEnv(key, defaultValue string) string {
 }
 
 func (c *Config) GetDSN() string {
-	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		c.Database.Host,
-		c.Database.Port,
+	connectioString := "root:secret@/mydatabase"
+	log.Println(connectioString)
+	idk := fmt.Sprintf("%s:%s@/%s",
 		c.Database.User,
 		c.Database.Password,
 		c.Database.DBName,
-		c.Database.SSLMode,
 	)
+	log.Println(idk)
+
+	return connectioString
 }

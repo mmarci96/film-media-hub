@@ -17,10 +17,9 @@ func NewDatabase(connectionString string) (*Database, error) {
 		return nil, err
 	}
 
-	// Configure connection pool
-	db.SetMaxOpenConns(25)                 // Limit maximum simultaneous connections
-	db.SetMaxIdleConns(5)                  // Keep some connections ready
-	db.SetConnMaxLifetime(5 * time.Minute) // Refresh connections periodically
+	db.SetMaxOpenConns(25)                 
+	db.SetMaxIdleConns(5)                 
+	db.SetConnMaxLifetime(5 * time.Minute)
 
 	// Verify connection is working
 	if err := db.Ping(); err != nil {
