@@ -29,6 +29,9 @@ type Config struct {
 		TokenExpiry   time.Duration
 		RefreshExpiry time.Duration
 	}
+	TMDB struct {
+		ApiKey string
+	}
 
 	Environment string
 }
@@ -56,6 +59,8 @@ func Load() (*Config, error) {
 	cfg.JWT.Secret = getEnv("JWT_SECRET", "your-secret-key")
 	cfg.JWT.TokenExpiry = time.Hour * 24    // 24 hours
 	cfg.JWT.RefreshExpiry = time.Hour * 168 // 7 days
+
+	cfg.TMDB.ApiKey = getEnv("TMDB_API_KEY", "")
 
 	cfg.Environment = getEnv("ENV", "development")
 

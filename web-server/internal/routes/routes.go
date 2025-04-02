@@ -26,12 +26,14 @@ func SetupRouter(db *database.Database, r *gin.Engine, cfg *config.Config) *gin.
 	// Initialize handlers with JWT configuration
 	authHandler := handlers.NewAuthHandler(db, []byte(cfg.JWT.Secret))
 	mediaHandler := handlers.NewMediaHandler(db)
+	tmdbHandler := handlers.NewTMDBHandler(cfg.TMDB.ApiKey)
 
 	// Public routes
 	public := r.Group("/api/v1")
 	{
 		public.POST("/register", authHandler.Register)
 		public.POST("/login", authHandler.Login)
+		public.GET("/tmdb/:type/:list", tmdbHandler.FetchMedia)
 	}
 
 	// Protected routes with JWT middleware
