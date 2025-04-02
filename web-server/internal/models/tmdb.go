@@ -1,5 +1,17 @@
 package models
 
+type TmdbTvData struct {
+	ID           int    `json:"id"`
+	TmdbId       int    `json:"tmdb_id"`
+	Name         string `json:"name"`
+	Overview     string `json:"overview"`
+	BackdropPath string `json:"backdrop_path"`
+	PosterPath   string `json:"poster_path"`
+	Popularity   int    `json:"popularity"`
+	VoteAverage  int    `json:"vote_average"`
+	VoteCount    int    `json:"vote_count"`
+}
+
 type TmdbMovieData struct {
 	ID           int    `json:"id"`
 	TmdbId       int    `json:"tmdb_id"`
@@ -20,8 +32,4 @@ type SavedTmdbMovieData struct {
 type SaveTmdbRequestData struct {
 	TmdbId int `json:"id"`
 	Title  string
-}
-
-func CreateTmdbMovieData(userId int) (SavedTmdbMovieData, error) {
-
 }

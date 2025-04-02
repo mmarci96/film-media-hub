@@ -83,4 +83,4 @@ func (c *Config) GetDSN() string {
 		c.Database.DBName,
 		c.Database.SSLMode,
 	)
-}
+} 

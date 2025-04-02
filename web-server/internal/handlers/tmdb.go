@@ -38,7 +38,6 @@ func (h *TMDBHandler) FetchMedia(c *gin.Context) {
 		return
 	}
 
-	// Add Authorization header
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Authorization", "Bearer "+tmdbAPIKey)
 
@@ -61,6 +60,6 @@ func (h *TMDBHandler) FetchMedia(c *gin.Context) {
 		return
 	}
 
+	// log.Println(result)
 	c.JSON(http.StatusOK, result)
 }
-
