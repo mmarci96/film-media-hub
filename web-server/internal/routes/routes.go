@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRouter(db *database.Database, r *gin.Engine, cfg *config.Config) *gin.Engine {
+func SetupRouter(db *database.Database, r *gin.Engine, cfg *config.Config) {
 	// CORS middleware
 	r.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -46,7 +46,6 @@ func SetupRouter(db *database.Database, r *gin.Engine, cfg *config.Config) *gin.
 		protected.GET("/media", mediaHandler.GetAllMedia)
 		protected.POST("/media", mediaHandler.Create)
 	}
-	return r
 }
 
 func getUserProfile(c *gin.Context) {
