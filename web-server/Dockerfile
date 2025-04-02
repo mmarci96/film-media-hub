@@ -4,20 +4,18 @@ ENV GOPATH /go
 
 WORKDIR $GOPATH/src/app
 
-COPY web-server.go .
+COPY . .
 
 RUN go mod init
 
-RUN go get github.com/gin-gonic/gin@latest
+RUN go build cmd/api/main.go
 
-RUN go build -ldflags "-s -w" -o website
-
-RUN chmod +x website
+RUN chmod +x main
 
 FROM alpine:3.17
 
-COPY --from=build go/src/app/website /
+COPY --from=build go/src/app/main /
 
 EXPOSE 8080
 
-ENTRYPOINT [ "/website" ]
+ENTRYPOINT [ "/main" ]

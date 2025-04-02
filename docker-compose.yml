@@ -1,0 +1,11 @@
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+  web-server:
+    image: ./web-server
+    ports:
+      - "8080:8080"
