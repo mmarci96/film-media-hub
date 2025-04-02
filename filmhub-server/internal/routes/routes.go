@@ -7,8 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
-	router := gin.New()
+func SetupRouter(db *database.Database, cfg *config.Config, router *gin.Engine) {
 	router.Use(gin.Recovery())
 	router.Use(gin.Logger())
 
@@ -29,5 +28,4 @@ func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
 		}
 	})
 
-	return router
 }

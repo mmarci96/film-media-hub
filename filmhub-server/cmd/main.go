@@ -7,6 +7,7 @@ import (
 	"codecool.com/mmarci96/filmhub-server/internal/config"
 	"codecool.com/mmarci96/filmhub-server/internal/database"
 	"codecool.com/mmarci96/filmhub-server/internal/routes"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -14,6 +15,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to load dotenv", err, cfg)
 	}
+	log.Println(cfg)
 
 	db, err := database.NewDataBase(cfg.GetDSN())
 	if err != nil {
@@ -21,13 +23,14 @@ func main() {
 	}
 
 	defer db.DB.Close()
-	// if cfg.Environment == "production" {
-	// 	gin.SetMode(gin.ReleaseMode)
-	// }
-	router := routes.SetupRouter(db, cfg)
+	r := gin.New()
+	if cfg.Environment == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+	routes.SetupRouter(db, cfg, r)
 	server := &http.Server{
 		Addr:         cfg.Server.Host + ":" + cfg.Server.Port,
-		Handler:      router,
+		Handler:      r,
 		ReadTimeout:  cfg.Server.ReadTimeout,
 		WriteTimeout: cfg.Server.WriteTimeout,
 	}
