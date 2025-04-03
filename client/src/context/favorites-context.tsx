@@ -15,7 +15,7 @@ export interface FavoritesContentList {
     favoriteIds: string[];
 }
 export interface FavoriteElement {
-    _id: string;
+    id: string;
     createdAt: string;
     mediaId: string;
     mediaType: MediaType;
