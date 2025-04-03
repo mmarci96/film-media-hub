@@ -37,28 +37,25 @@ type Config struct {
 }
 
 func Load() (*Config, error) {
-	godotenv.Load() // Load .env if exists
+	godotenv.Load()
 
 	cfg := &Config{}
 
-	// Server config
 	cfg.Server.Port = getEnv("SERVER_PORT", "8080")
 	cfg.Server.Host = getEnv("SERVER_HOST", "0.0.0.0")
 	cfg.Server.ReadTimeout = time.Second * 15
 	cfg.Server.WriteTimeout = time.Second * 15
 
-	// Database config
 	cfg.Database.Host = getEnv("DB_HOST", "localhost")
 	cfg.Database.Port = getEnv("DB_PORT", "5432")
 	cfg.Database.User = getEnv("DB_USER", "postgres")
-	cfg.Database.Password = getEnv("DB_PASSWORD", "")
+	cfg.Database.Password = getEnv("DB_PASSWORD", "secure-password")
 	cfg.Database.DBName = getEnv("DB_NAME", "auth_service")
 	cfg.Database.SSLMode = getEnv("DB_SSLMODE", "disable")
 
-	// JWT config
 	cfg.JWT.Secret = getEnv("JWT_SECRET", "your-secret-key")
-	cfg.JWT.TokenExpiry = time.Hour * 24    // 24 hours
-	cfg.JWT.RefreshExpiry = time.Hour * 168 // 7 days
+	cfg.JWT.TokenExpiry = time.Hour * 24
+	cfg.JWT.RefreshExpiry = time.Hour * 168
 
 	cfg.TMDB.ApiKey = getEnv("TMDB_API_KEY", "")
 
@@ -75,7 +72,8 @@ func getEnv(key, defaultValue string) string {
 }
 
 func (c *Config) GetDSN() string {
-	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+	return fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		c.Database.Host,
 		c.Database.Port,
 		c.Database.User,
