@@ -28,6 +28,7 @@ func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
 	authHandler := handlers.NewAuthHandler(db, []byte(cfg.JWT.Secret))
 	mediaHandler := handlers.NewMediaHandler(db)
 	tmdbHandler := handlers.NewTMDBHandler(db, &cfg.TMDB.ApiKey)
+	favoriteHandler := handlers.FavoriteHandler(db)
 
 	public := r.Group("/api/v1")
 	{
@@ -46,6 +47,7 @@ func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
 		protected.POST("/saved", tmdbHandler.SaveMedia)
 		protected.GET("/media", mediaHandler.GetAllMedia)
 		protected.POST("/media", mediaHandler.Create)
+		protected.POST("/favorites", favoriteHandler.Create)
 	}
 	return r
 }
