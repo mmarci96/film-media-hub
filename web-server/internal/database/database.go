@@ -11,7 +11,6 @@ type Database struct {
 }
 
 func NewDatabase(connectionString string) (*Database, error) {
-	// Open database connection
 	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
 		return nil, err
@@ -21,7 +20,6 @@ func NewDatabase(connectionString string) (*Database, error) {
 	db.SetMaxIdleConns(5)
 	db.SetConnMaxLifetime(5 * time.Minute)
 
-	// Verify connection is working
 	if err := db.Ping(); err != nil {
 		return nil, err
 	}
