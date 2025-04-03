@@ -39,15 +39,74 @@ func NewTMDBHandler(db *database.Database, apiKey *string) *TMDBHandler {
 	}
 }
 
+func (h *TMDBHandler) fetchDetailsByID(id string, mediaType string) (*map[string]any, error) {
+	url := fmt.Sprintf("%s/%s/%s?language=en-US", getTmdbPrefix(), mediaType, id)
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		log.Println("Failed to create request:", err)
+		return nil, err
+	}
+
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Authorization", "Bearer "+h.tmdbAPIKey)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println("Request error:", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		log.Printf("TMDB API error: %s", string(body))
+		return nil, fmt.Errorf("TMDB API returned status: %d", resp.StatusCode)
+	}
+
+	var tmdbResponse map[string]any
+	if err := json.NewDecoder(resp.Body).Decode(&tmdbResponse); err != nil {
+		log.Println("JSON decoding error:", err)
+		return nil, err
+	}
+
+	return &tmdbResponse, nil
+}
+
+func (h *TMDBHandler) fetchFromTMDB(url string) (*TMDBResponse, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Authorization", "Bearer "+h.tmdbAPIKey)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("TMDB API returned status: %d", resp.StatusCode)
+	}
+
+	var tmdbResponse TMDBResponse
+	if err := json.NewDecoder(resp.Body).Decode(&tmdbResponse); err != nil {
+		return nil, err
+	}
+	return &tmdbResponse, nil
+}
+
 func (h *TMDBHandler) FetchMediaByID(c *gin.Context) {
 	mediaType := c.Param("type")
 	mediaId := c.Param("id")
-
 	tmdbResponse, err := h.fetchDetailsByID(mediaId, mediaType)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid id provided"})
 	}
-	log.Println(tmdbResponse)
 	c.JSON(http.StatusOK, tmdbResponse)
 }
 
@@ -90,72 +149,6 @@ func (h *TMDBHandler) buildTMDBURL(mediaType, listType, page, search string) str
 func getTmdbPrefix() string {
 	baseURL := "https://api.themoviedb.org/3"
 	return baseURL
-}
-
-func (h *TMDBHandler) fetchDetailsByID(id string, mediaType string) (*models.TMDBMovieDetails, error) {
-	// Construct the API request URL
-	url := fmt.Sprintf("%s/%s/%s?language=en-US", getTmdbPrefix(), mediaType, id)
-	log.Println("URL", url)
-
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		log.Println("Failed to create request:", err)
-		return nil, err
-	}
-
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Authorization", "Bearer "+h.tmdbAPIKey)
-	log.Println(req)
-
-	// Make the HTTP request
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Println("Request error:", err)
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	// Check for unsuccessful responses
-	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body) // Read response body to inspect error
-		log.Printf("TMDB API error: %s", string(body))
-		return nil, fmt.Errorf("TMDB API returned status: %d", resp.StatusCode)
-	}
-
-	// Decode JSON response
-	var tmdbResponse models.TMDBMovieDetails
-	if err := json.NewDecoder(resp.Body).Decode(&tmdbResponse); err != nil {
-		log.Println("JSON decoding error:", err)
-		return nil, err
-	}
-
-	return &tmdbResponse, nil
-}
-func (h *TMDBHandler) fetchFromTMDB(url string) (*TMDBResponse, error) {
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Authorization", "Bearer "+h.tmdbAPIKey)
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("TMDB API returned status: %d", resp.StatusCode)
-	}
-
-	var tmdbResponse TMDBResponse
-	if err := json.NewDecoder(resp.Body).Decode(&tmdbResponse); err != nil {
-		return nil, err
-	}
-	return &tmdbResponse, nil
 }
 
 func (h *TMDBHandler) SaveMedia(c *gin.Context) {
