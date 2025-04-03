@@ -15,26 +15,6 @@ export default function MoviesPage() {
         setPage(page);
     };
 
-    const { token } = useAuth();
-    const fetchMedia = async (token: string) => {
-        const res = await fetch("/api/v1/media", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        if (!res.ok) {
-            console.error(res);
-        }
-        const { media } = await res.json();
-        console.log(media);
-    };
-
-    useEffect(() => {
-        token && fetchMedia(token);
-    }, [token]);
-
     return (
         <DefaultLayout>
             <div className="hidden md:inline-block py-0 mt-6 w-8">
