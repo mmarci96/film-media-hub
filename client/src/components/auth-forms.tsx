@@ -3,23 +3,19 @@ import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { useAuth } from "@/hooks/use-auth";
-import { useTheme } from "@/hooks/use-theme";
 
 const AuthForms = () => {
     const { login } = useAuth();
-    const { theme } = useTheme();
     const [hasAccount, setHasAccount] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
         password: "",
-        theme,
     });
     const [messege, setMessege] = useState<string | null>(null);
     const resetFormData = () => {
         setFormData({
             email: "",
             password: "",
-            theme,
         });
     };
 

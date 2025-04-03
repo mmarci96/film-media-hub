@@ -18,13 +18,6 @@ type TMDBHandler struct {
 	tmdbAPIKey string
 }
 
-type TMDBData struct {
-	Page         int                `json:"page"`
-	Results      []models.TMDBMovie `json:"results"`
-	TotalPages   int                `json:"total_pages"`
-	TotalResults int                `json:"total_results"`
-}
-
 type TMDBResponse struct {
 	Page         int                `json:"page"`
 	Results      []models.TMDBMovie `json:"results"`
