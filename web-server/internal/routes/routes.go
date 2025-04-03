@@ -15,9 +15,14 @@ func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
 	r.Use(gin.Logger())
 	r.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-
+		c.Writer.Header().Set(
+			"Access-Control-Allow-Methods",
+			"POST, GET, OPTIONS, PUT, DELETE",
+		)
+		c.Writer.Header().Set(
+			"Access-Control-Allow-Headers",
+			"Content-Type, Authorization",
+		)
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
 			return
@@ -45,6 +50,8 @@ func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
 		protected.GET("/profile", getUserProfile)
 		protected.POST("/saved", tmdbHandler.SaveMedia)
 		protected.POST("/favorites", favoriteHandler.CreateFavorite)
+		protected.GET("/favorites", favoriteHandler.GetFavorites)
+		protected.DELETE("/favorites/:id", favoriteHandler.DeleteFavorite)
 	}
 	return r
 }

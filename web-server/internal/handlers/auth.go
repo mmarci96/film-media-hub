@@ -12,22 +12,19 @@ import (
 )
 
 type AuthHandler struct {
-	db        *database.Database
-	jwtSecret []byte
-	// Add token expiration configuration
+	db              *database.Database
+	jwtSecret       []byte
 	tokenExpiration time.Duration
 }
 
-// NewAuthHandler creates a new authentication handler
 func NewAuthHandler(db *database.Database, jwtSecret []byte) *AuthHandler {
 	return &AuthHandler{
 		db:              db,
 		jwtSecret:       jwtSecret,
-		tokenExpiration: 24 * time.Hour, // Default 24 hour expiration
+		tokenExpiration: 24 * time.Hour,
 	}
 }
 
-// Register handles user registration
 func (h *AuthHandler) Register(c *gin.Context) {
 	var user models.UserRegister
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -47,7 +44,9 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	err := h.db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)",
 		user.Email).Scan(&exists)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Database error",
+		})
 		return
 	}
 	if exists {

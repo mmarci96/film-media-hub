@@ -14,6 +14,7 @@ CREATE TABLE favorites (
     tmdb_id INT NOT NULL, 
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     media_type VARCHAR(80) NOT NULL,
+    status TEXT CHECK (status IN ('watching', 'paused', 'planned', 'completed', 'dropped', 'rewatching', 'skipped', 'on_hold')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
