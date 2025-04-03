@@ -12,7 +12,7 @@ export const useTmdbDetails = () => {
     ): Promise<MediaDetails | void> => {
         setLoading(true);
         try {
-            const response = await fetch(`/api/v1/${type}/${id}`, {
+            const response = await fetch(`/api/v1/tmdb_id/${type}/${id}`, {
                 method: "GET",
                 headers: {
                     accept: "application/json",
