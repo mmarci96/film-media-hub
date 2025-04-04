@@ -129,7 +129,9 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(h.jwtSecret)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token generation failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Token generation failed",
+		})
 		return
 	}
 
@@ -157,7 +159,9 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(h.jwtSecret)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token refresh failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Token refresh failed",
+		})
 		return
 	}
 
