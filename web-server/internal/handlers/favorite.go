@@ -193,15 +193,6 @@ func (h *FavoriteHandler) CreateFavorite(c *gin.Context) {
 		return
 	}
 
-	// mediaID, err := favorite.getIDAsInt()
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{
-	// 		"error":   "ID must be a number",
-	// 		"details": err.Error(),
-	// 	})
-	// 	return
-	// }
-
 	userId, _ := c.Get("user_id")
 	var exists bool
 	err := h.db.DB.QueryRow(`
