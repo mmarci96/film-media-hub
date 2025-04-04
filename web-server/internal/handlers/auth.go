@@ -41,7 +41,8 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	}
 
 	var exists bool
-	err := h.db.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)",
+	err := h.db.DB.QueryRow(`
+	SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)`,
 		user.Email).Scan(&exists)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -60,7 +61,9 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	}
 	tx, err := h.db.DB.Begin()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Transaction start failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Transaction start failed",
+		})
 		return
 	}
 
@@ -79,7 +82,9 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	}
 
 	if err = tx.Commit(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Transaction commit failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Transaction commit failed",
+		})
 		return
 	}
 
@@ -109,7 +114,9 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Login process failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Login process failed",
+		})
 		return
 	}
 
@@ -145,7 +152,9 @@ func (h *AuthHandler) Login(c *gin.Context) {
 func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	userID, exists := c.Get("user_id")
 	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "User not authenticated",
+		})
 		return
 	}
 
