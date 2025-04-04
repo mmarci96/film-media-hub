@@ -1,9 +1,8 @@
 import { title } from "@/components/primitives";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DefaultLayout from "@/layouts/default";
 import MediaList from "@/components/media/media-list";
 import { useTmdb } from "@/hooks/use-tmdb";
-import { useAuth } from "@/hooks/use-auth";
 import { ListType } from "@/types";
 
 export default function MoviesPage() {

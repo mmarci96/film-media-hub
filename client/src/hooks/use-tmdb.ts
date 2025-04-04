@@ -55,7 +55,7 @@ export const useTmdb = (
             }
 
             const data = await response.json();
-            console.log("API response", data);
+            // console.log("API response", data);
 
             const mediaListed = checkMediaListForDuplicates(
                 data.results as MediaItem[],

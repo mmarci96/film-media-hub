@@ -16,6 +16,7 @@ import { useFavorites } from "@/hooks/use-favorites";
 import { useAnimeDetails } from "@/hooks/use-anime-details";
 import { MediaDetails } from "@/types";
 import { Link } from "react-router-dom";
+
 interface MediaPopupProps {
     media: MediaItem;
     children: any;
@@ -27,6 +28,7 @@ const MediaPopup: React.FC<MediaPopupProps> = ({
     children,
     mediaType,
 }) => {
+    const [currentId, setCurrentId] = useState<number | null>(null);
     const [favorite, setFavorite] = useState(false);
     const { addToFavorite, removeFavorite, fetchFavorites, favoriteIds } =
         useFavorites();
@@ -34,6 +36,18 @@ const MediaPopup: React.FC<MediaPopupProps> = ({
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { fetchAnimeDetails } = useAnimeDetails();
     const { fetchMediaDetails } = useTmdbDetails();
+    const handleOpen = (id: number) => {
+        console.log("Current: ", id);
+        setCurrentId(id);
+        onOpen();
+    };
+    const handleSave = (id: number, mediaType: MediaType) => {
+        addToFavorite(id, mediaType);
+    };
+    const handleRemove = (id: number) => {
+        removeFavorite(id);
+    };
+
     const getMediaDetails = async (mediaId: number, mediaType: MediaType) => {
         if (mediaType === "anime") {
             const details = await fetchAnimeDetails(mediaId.toString());
@@ -49,20 +63,23 @@ const MediaPopup: React.FC<MediaPopupProps> = ({
             fetchFavorites();
             getMediaDetails(media.id, mediaType);
         }
-    }, [isOpen]);
-
+    }, [currentId]);
     useEffect(() => {
-        if (favoriteIds?.includes(media.id.toString())) {
-            setFavorite(true);
-        } else {
-            setFavorite(false);
+        if (currentId) {
+            const savedTmdbId = favoriteIds?.map((fav) => fav.tmdb_id);
+            console.log("curr", currentId, "list", savedTmdbId);
+
+            savedTmdbId.includes(currentId)
+                ? setFavorite(true)
+                : setFavorite(false);
         }
-    }, [isOpen, addToFavorite, removeFavorite, favoriteIds]);
+    }, [currentId, handleRemove, handleSave]);
+
     if (!media) return null;
 
     return (
         <>
-            <div onClick={onOpen}>{children}</div>
+            <div onClick={() => handleOpen(media.id)}>{children}</div>
 
             <Drawer
                 isOpen={isOpen}
@@ -110,17 +127,13 @@ const MediaPopup: React.FC<MediaPopupProps> = ({
                         {favorite ? (
                             <Button
                                 color="warning"
-                                onPress={() =>
-                                    removeFavorite(media.id, mediaType)
-                                }
+                                onPress={() => handleRemove(media.id)}
                             >
                                 Remove Favorite <FaStar />
                             </Button>
                         ) : (
                             <Button
-                                onPress={() =>
-                                    addToFavorite(media.id, mediaType)
-                                }
+                                onPress={() => handleSave(media.id, mediaType)}
                                 color="success"
                             >
                                 Save to Favorites <FaRegStar />

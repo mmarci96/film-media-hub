@@ -3,7 +3,7 @@ import { Skeleton } from "@heroui/skeleton";
 import { Select, SelectItem } from "@heroui/select";
 import { Button } from "@heroui/button";
 import MediaCard from "@/components/media/media-card";
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 import { ListType, MediaItem, MediaType } from "@/types";
 
 interface MediaListProps {
@@ -16,31 +16,34 @@ interface MediaListProps {
     onSelectListType: (listType: ListType) => void;
 }
 
-const MediaList: React.FC<MediaListProps> = (
-    { mediaType, listType, mediaList, error, loading, onLoadMore, onSelectListType }
-) => {
+const MediaList: React.FC<MediaListProps> = ({
+    mediaType,
+    listType,
+    mediaList,
+    error,
+    loading,
+    onLoadMore,
+    onSelectListType,
+}) => {
     const [page, setPage] = useState(1);
 
     useEffect(() => {
         onLoadMore(page);
     }, [page, onLoadMore]);
 
-    const listOptions: ListType[] = [
-        "popular",
-        "top_rated",
-    ];
-    if (mediaType === 'movie') {
-        listOptions.push("upcoming", "now_playing")
+    const listOptions: ListType[] = ["popular", "top_rated"];
+    if (mediaType === "movie") {
+        listOptions.push("upcoming", "now_playing");
     }
-    if (mediaType === 'tv') {
-        listOptions.push('on_the_air', 'airing_today')
+    if (mediaType === "tv") {
+        listOptions.push("on_the_air", "airing_today");
     }
-    if (mediaType === 'anime') {
-        listOptions.push("upcoming", "on_the_air")
+    if (mediaType === "anime") {
+        listOptions.push("upcoming", "on_the_air");
     }
 
     const handleListTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onSelectListType(e.target.value as ListType)
+        onSelectListType(e.target.value as ListType);
         onLoadMore(1);
     };
 
@@ -56,7 +59,8 @@ const MediaList: React.FC<MediaListProps> = (
                 >
                     {listOptions.map((option) => (
                         <SelectItem key={option} value={option}>
-                            {option[0].toUpperCase() + option.split("_").join(" ").substring(1)}
+                            {option[0].toUpperCase() +
+                                option.split("_").join(" ").substring(1)}
                         </SelectItem>
                     ))}
                 </Select>
@@ -65,7 +69,10 @@ const MediaList: React.FC<MediaListProps> = (
             {loading && (
                 <div className="flex flex-wrap justify-center">
                     {Array.from({ length: 8 }).map((_, index) => (
-                        <Card key={index} className="rounded-lg my-4 mx-2 w-[320px] h-[440px] overflow-hidden shadow-md ring-2 radius-lg" >
+                        <Card
+                            key={index}
+                            className="rounded-lg my-4 mx-2 w-[320px] h-[440px] overflow-hidden shadow-md ring-2 radius-lg"
+                        >
                             <Skeleton className="w-[302px] mx-2 my-2 h-[420px] rounded-lg" />
                             <div>
                                 <Skeleton className="w-4/5 m-2 rounded-lg">
@@ -88,11 +95,12 @@ const MediaList: React.FC<MediaListProps> = (
             </div>
 
             <div className="mt-6 flex gap-4">
-                <Button onPress={() => setPage((prevPage) => prevPage + 1)}>Show More</Button>
+                <Button onPress={() => setPage((prevPage) => prevPage + 1)}>
+                    Show More
+                </Button>
             </div>
         </section>
     );
 };
 
 export default MediaList;
-
