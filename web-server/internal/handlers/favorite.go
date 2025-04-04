@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
 	"web-server/internal/database"
 	"web-server/internal/models"
 
@@ -14,13 +13,14 @@ type FavoriteHandler struct {
 }
 
 type MediaFavoriteRequest struct {
-	TMDBID    string `json:"id"`
+	TMDBID    int    `json:"id"`
 	MediaType string `json:"media_type"`
 }
 
 type SavedFavoriteResponse struct {
-	Id     int `json:"id"`
-	TMDBID int `json:"tmdb_id"`
+	Id        int    `json:"id"`
+	TMDBID    int    `json:"tmdb_id"`
+	MediaType string `json:"media_type"`
 }
 
 func NewFavoriteHandler(db *database.Database) *FavoriteHandler {
@@ -101,7 +101,7 @@ func (h *FavoriteHandler) DeleteFavorite(c *gin.Context) {
 func (h *FavoriteHandler) GetFavoriteIds(c *gin.Context) {
 	userId, _ := c.Get("user_id")
 	favoriteIdList, err := h.db.DB.Query(`
-		SELECT id, tmdb_id
+		SELECT id, tmdb_id, media_type
 		FROM favorites
 		WHERE user_id = $1`,
 		userId,
@@ -119,6 +119,7 @@ func (h *FavoriteHandler) GetFavoriteIds(c *gin.Context) {
 		if err := favoriteIdList.Scan(
 			&favorite.Id,
 			&favorite.TMDBID,
+			&favorite.MediaType,
 		); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": "Error scanning rows",
@@ -192,25 +193,25 @@ func (h *FavoriteHandler) CreateFavorite(c *gin.Context) {
 		return
 	}
 
-	mediaID, err := favorite.getIDAsInt()
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   "ID must be a number",
-			"details": err.Error(),
-		})
-		return
-	}
+	// mediaID, err := favorite.getIDAsInt()
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{
+	// 		"error":   "ID must be a number",
+	// 		"details": err.Error(),
+	// 	})
+	// 	return
+	// }
 
 	userId, _ := c.Get("user_id")
 	var exists bool
-	err = h.db.DB.QueryRow(`
+	err := h.db.DB.QueryRow(`
 		SELECT EXISTS(
 			SELECT 1 FROM favorites 
 			WHERE tmdb_id = $1 
 			AND user_id = $2 
 			AND media_type = $3
 		)`,
-		mediaID, userId, favorite.MediaType,
+		favorite.TMDBID, userId, favorite.MediaType,
 	).Scan(&exists)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -249,8 +250,4 @@ func (h *FavoriteHandler) CreateFavorite(c *gin.Context) {
 		"id":      id,
 		"tmdb_id": favorite.TMDBID,
 	})
-}
-
-func (req *MediaFavoriteRequest) getIDAsInt() (int, error) {
-	return strconv.Atoi(req.TMDBID)
 }
