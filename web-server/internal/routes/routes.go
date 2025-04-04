@@ -53,6 +53,7 @@ func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
 		protected.GET("/favorites", favoriteHandler.GetFavorites)
 		protected.DELETE("/favorites/:id", favoriteHandler.DeleteFavorite)
 		protected.PATCH("/favorites/:id", favoriteHandler.UpdateFavoriteWatchStatus)
+		protected.GET("/favorites/id_list", favoriteHandler.GetFavoriteIds)
 	}
 	return r
 }

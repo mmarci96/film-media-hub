@@ -18,6 +18,11 @@ type MediaFavoriteRequest struct {
 	MediaType string `json:"media_type"`
 }
 
+type SavedFavoriteResponse struct {
+	Id     int `json:"id"`
+	TMDBID int `json:"tmdb_id"`
+}
+
 func NewFavoriteHandler(db *database.Database) *FavoriteHandler {
 	return &FavoriteHandler{db: db}
 }
@@ -91,6 +96,45 @@ func (h *FavoriteHandler) DeleteFavorite(c *gin.Context) {
 		"message": "Deleted successfully from favorites",
 		"deleted": ra,
 	})
+}
+
+func (h *FavoriteHandler) GetFavoriteIds(c *gin.Context) {
+	userId, _ := c.Get("user_id")
+	favoriteIdList, err := h.db.DB.Query(`
+		SELECT id, tmdb_id
+		FROM favorites
+		WHERE user_id = $1`,
+		userId,
+	)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Server error quering the db.",
+		})
+		return
+	}
+	defer favoriteIdList.Close()
+	var favorites []SavedFavoriteResponse
+	for favoriteIdList.Next() {
+		var favorite SavedFavoriteResponse
+		if err := favoriteIdList.Scan(
+			&favorite.Id,
+			&favorite.TMDBID,
+		); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Error scanning rows",
+			})
+			return
+		}
+		favorites = append(favorites, favorite)
+	}
+	if err = favoriteIdList.Err(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Row iteration error",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"favorite_ids": favorites})
 }
 
 func (h *FavoriteHandler) GetFavorites(c *gin.Context) {
