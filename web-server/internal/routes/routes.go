@@ -13,6 +13,8 @@ func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
+	r.Use(middleware.ErrorHandler())
+
 	r.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set(
