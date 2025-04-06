@@ -7,27 +7,22 @@ import (
 	"log"
 	"net/http"
 
-	"server/internal/database"
-	"server/internal/models"
-
 	"github.com/gin-gonic/gin"
 )
 
 type TMDBHandler struct {
-	db         *database.Database
 	tmdbAPIKey string
 }
 
 type TMDBResponse struct {
-	Page         int                `json:"page"`
-	Results      []models.TMDBMovie `json:"results"`
-	TotalPages   int                `json:"total_pages"`
-	TotalResults int                `json:"total_results"`
+	Page         int   `json:"page"`
+	Results      []any `json:"results"`
+	TotalPages   int   `json:"total_pages"`
+	TotalResults int   `json:"total_results"`
 }
 
-func NewTMDBHandler(db *database.Database, apiKey *string) *TMDBHandler {
+func NewTMDBHandler(apiKey *string) *TMDBHandler {
 	return &TMDBHandler{
-		db:         db,
 		tmdbAPIKey: *apiKey,
 	}
 }
@@ -142,26 +137,4 @@ func (h *TMDBHandler) buildTMDBURL(mediaType, listType, page, search string) str
 func getTmdbPrefix() string {
 	baseURL := "https://api.themoviedb.org/3"
 	return baseURL
-}
-
-func (h *TMDBHandler) SaveMedia(c *gin.Context) {
-	var movie models.TMDBMovie
-	if err := c.ShouldBindJSON(&movie); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request data"})
-		return
-	}
-
-	userID, _ := c.Get("user_id")
-	_, err := h.db.DB.Exec(`
-		INSERT INTO saved (user_id, tmdb_id)
-		VALUES ($1, $2)`,
-		userID, movie.ID,
-	)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save media"})
-		return
-	}
-
-	c.JSON(http.StatusCreated, gin.H{"message": "Media saved successfully!"})
 }

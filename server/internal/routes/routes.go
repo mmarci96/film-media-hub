@@ -33,13 +33,17 @@ func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
 	})
 
 	authHandler := handlers.NewAuthHandler(db, []byte(cfg.JWT.Secret))
-	tmdbHandler := handlers.NewTMDBHandler(db, &cfg.TMDB.ApiKey)
+	tmdbHandler := handlers.NewTMDBHandler(&cfg.TMDB.ApiKey)
 	favoriteHandler := handlers.NewFavoriteHandler(db)
+	animeHandler := handlers.NewAnimeHandler()
 
 	public := r.Group("/api/v1")
 	{
 		public.POST("/register", authHandler.Register)
 		public.POST("/login", authHandler.Login)
+		public.GET("/anime", animeHandler.GetAnimeList)
+		public.GET("/anime/:id", animeHandler.GetAnimeByID)
+		// public.GET("/anime/:list", animeHandler.GetAnimeList)
 		public.GET("/tmdb/:type/:list", tmdbHandler.FetchMedia)
 		public.GET("/tmdb_id/:type/:id", tmdbHandler.FetchMediaByID)
 	}
@@ -50,7 +54,6 @@ func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
 		protected.POST("/refresh-token", authHandler.RefreshToken)
 		protected.POST("/logout", authHandler.Logout)
 		protected.GET("/profile", getUserProfile)
-		protected.POST("/saved", tmdbHandler.SaveMedia)
 		protected.POST("/favorites", favoriteHandler.CreateFavorite)
 		protected.GET("/favorites", favoriteHandler.GetFavorites)
 		protected.DELETE("/favorites/:id", favoriteHandler.DeleteFavorite)
