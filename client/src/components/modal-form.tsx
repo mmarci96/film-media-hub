@@ -8,8 +8,8 @@ import {
     useDisclosure,
     Checkbox,
     Input,
-    Link,
 } from "@heroui/react";
+import { Link } from "react-router-dom";
 import { MailIcon, LockIcon } from "@/components/nav/icons";
 import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
@@ -17,25 +17,25 @@ import { useState } from "react";
 export default function ModalForm() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    })
+        email: "",
+        password: "",
+    });
     const { login } = useAuth();
 
     const handleSubmit = async () => {
         //e.preventDefault();
         try {
-
-            const res = await fetch('/api/auth/login', {
+            const res = await fetch("/api/v1/login", {
                 method: "POST",
                 body: JSON.stringify(formData),
-                headers: { 'Content-Type': 'application/json' },
-            })
+                headers: { "Content-Type": "application/json" },
+            });
             if (!res.ok) {
-                console.error('res not ok')
+                console.error("res not ok");
             }
             const data = await res.json();
             const { token } = data;
+            console.log("Toke", token);
 
             if (token) {
                 login(token);
@@ -48,17 +48,25 @@ export default function ModalForm() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-
     return (
         <>
-            <Button className="text-white bg-opacity-0 text-md" onPress={onOpen}>
+            <Button
+                className="text-white bg-opacity-0 text-md"
+                onPress={onOpen}
+            >
                 Login
             </Button>
-            <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
+            <Modal
+                isOpen={isOpen}
+                placement="top-center"
+                onOpenChange={onOpenChange}
+            >
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex  z-10 flex-col gap-1">Log in</ModalHeader>
+                            <ModalHeader className="flex  z-10 flex-col gap-1">
+                                Log in
+                            </ModalHeader>
                             <ModalBody>
                                 <Input
                                     endContent={
@@ -91,13 +99,17 @@ export default function ModalForm() {
                                     >
                                         Remember me
                                     </Checkbox>
-                                    <Link color="primary" href="#" size="sm">
-                                        Forgot password?
+                                    <Link to={"/"} color="primary">
+                                        No account yet? Click here to sign up!
                                     </Link>
                                 </div>
                             </ModalBody>
                             <ModalFooter>
-                                <Button color="danger" variant="flat" onPress={onClose}>
+                                <Button
+                                    color="danger"
+                                    variant="flat"
+                                    onPress={onClose}
+                                >
                                     Close
                                 </Button>
                                 <Button color="primary" onPress={handleSubmit}>
@@ -111,4 +123,3 @@ export default function ModalForm() {
         </>
     );
 }
-

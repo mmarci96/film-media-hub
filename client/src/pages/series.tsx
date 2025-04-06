@@ -7,13 +7,13 @@ import { ListType } from "@/types";
 
 export default function SeriesPage() {
     const [page, setPage] = useState(1);
-    const [listType, setListType] = useState<ListType>('popular')
-    const mediaType = 'tv'
+    const [listType, setListType] = useState<ListType>("popular");
+    const mediaType = "tv";
 
     const { mediaList, error, loading } = useTmdb(mediaType, page, listType);
     const onLoadMore = (page: number) => {
         setPage(page);
-    }
+    };
 
     return (
         <DefaultLayout>

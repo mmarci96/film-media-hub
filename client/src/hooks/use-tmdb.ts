@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 
-const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-
 import { UseTmdbResult, MediaType, MediaItem, ListType } from "@/types";
-const PREFIX_800 = 'https://image.tmdb.org/t/p/w780'
-const PREFIX_400 = 'https://image.tmdb.org/t/p/w400'
+const PREFIX_800 = "https://image.tmdb.org/t/p/w780";
+const PREFIX_400 = "https://image.tmdb.org/t/p/w400";
 export const useTmdb = (
     type: MediaType,
     page: number,
     list: ListType,
 ): UseTmdbResult => {
+    const [search, setSearch] = useState<string>("");
     const [mediaList, setMediaList] = useState<MediaItem[] | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -23,11 +22,11 @@ export const useTmdb = (
 
         return list
             .filter((movie, index) => idList.indexOf(movie.id) === index)
-            .map(movie => ({
+            .map((movie) => ({
                 ...movie,
-                ['backdrop_path']: PREFIX_800 + movie['backdrop_path'],
-                ['poster_path']: PREFIX_400 + movie['poster_path'],
-                ['mediaType']: type
+                ["backdrop_path"]: PREFIX_800 + movie["backdrop_path"],
+                ["poster_path"]: PREFIX_400 + movie["poster_path"],
+                ["mediaType"]: type,
             }));
     };
 
@@ -35,31 +34,24 @@ export const useTmdb = (
         type: MediaType,
         currentPage: number,
         tmdbList: ListType,
+        search: string,
     ) => {
         setLoading(true);
         try {
             const response = await fetch(
-                `https://api.themoviedb.org/3/${type}/${tmdbList}?language=en-US&page=${currentPage}`,
-                {
-                    method: "GET",
-                    headers: {
-                        accept: "application/json",
-                        Authorization: `Bearer ${TMDB_API_KEY}`,
-                    },
-                },
+                `/api/v1/tmdb/${type}/${tmdbList}?page=${currentPage}&search=${search}`,
             );
-
             if (!response.ok) {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
+                setError("Bad request error.");
             }
-
             const data = await response.json();
             const mediaListed = checkMediaListForDuplicates(
                 data.results as MediaItem[],
             );
-
             setMediaList((prevList) =>
-                currentPage === 1 ? mediaListed : [...(prevList || []), ...mediaListed],
+                currentPage === 1
+                    ? mediaListed
+                    : [...(prevList || []), ...mediaListed],
             );
         } catch (err) {
             if (err instanceof Error) {
@@ -73,10 +65,11 @@ export const useTmdb = (
             setLoading(false);
         }
     };
+    const onSearch = (searchValue: string) => setSearch(searchValue);
 
     useEffect(() => {
-        fetchMedia(type, page, list);
-    }, [type, page, list]);
+        fetchMedia(type, page, list, search);
+    }, [type, page, list, search]);
 
-    return { mediaList, error, loading };
+    return { mediaList, error, loading, onSearch };
 };

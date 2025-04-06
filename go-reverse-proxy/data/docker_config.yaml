@@ -1,0 +1,14 @@
+server:
+  host: "0.0.0.0"
+  listen_port: "80"
+
+static:
+  dir: "/app/internal/html/dist"
+
+resources:
+  - name: Server1
+    endpoint: /api/v1/
+    destination_url: "http://go_server:8080/api/v1/"
+  - name: Second example 
+    endpoint: /second-examplt
+    destination_url: "http://localhost:3001"

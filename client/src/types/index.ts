@@ -17,9 +17,9 @@ export const mediaDetailToItem = (mediaDetails: MediaDetails): MediaItem => {
         poster_path: mediaDetails.poster_path,
         backdrop_path: mediaDetails.backdrop_path,
         mediaType: mediaDetails?.mediaType,
-    }
+    };
     return item;
-}
+};
 
 export interface MediaSearchItem {
     id: number;
@@ -29,7 +29,6 @@ export interface MediaSearchItem {
     poster_path?: string;
     backdrop_path?: string;
     media_type?: MediaType;
-
 }
 
 export interface MediaItem {
@@ -39,14 +38,15 @@ export interface MediaItem {
     overview?: string;
     poster_path?: string;
     backdrop_path?: string;
-    mediaType?: MediaType;
+    mediaType: MediaType;
 }
-
 export interface MediaDetails {
-    mediaType?: MediaType
+    mediaType: MediaType;
     id: number;
     title?: string;
+    name?: string;
     original_title?: string;
+    original_name?: string;
     overview?: string;
     genres?: Genre[];
     release_date?: string;
@@ -85,12 +85,22 @@ export interface MediaDetails {
     origin_country?: string[];
     original_language?: string;
     video?: boolean;
+    last_episode_to_air?: {
+        air_date: string;
+        episode_number: number;
+        episode_type: string;
+    };
+    next_episode_to_air?: {
+        air_date: string;
+        episode_number: number;
+        episode_type: string;
+    };
 }
-
 export interface UseTmdbResult {
     mediaList: MediaItem[] | null;
     error: string | null;
     loading: boolean;
+    onSearch: (searchValue: string) => void;
 }
 
 export type MediaType = "movie" | "tv" | "anime";
@@ -155,6 +165,3 @@ export interface AnimeItem {
         timezone?: string;
     };
 }
-
-
-

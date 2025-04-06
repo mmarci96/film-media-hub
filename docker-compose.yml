@@ -1,0 +1,37 @@
+services:
+  go_server:
+    build: ./server
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=secret
+      - DB_NAME=mydatabase
+      - DB_SSLMODE=disable
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - SERVER_PORT=${SERVER_PORT}
+      - SERVER_HOST=${SERVER_HOST}
+      - JWT_SECRET=${JWT_SECRET}
+      - ENV=development
+    depends_on:
+      - db
+
+  go_proxy:
+     build: .
+     ports:
+      - "80:80"
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+

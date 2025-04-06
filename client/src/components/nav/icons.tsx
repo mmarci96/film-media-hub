@@ -20,7 +20,7 @@ export const MailIcon = (props: any) => {
     );
 };
 
-export const LockIcon = (props) => {
+export const LockIcon = (props: any) => {
     return (
         <svg
             aria-hidden="true"
@@ -43,7 +43,6 @@ export const LockIcon = (props) => {
         </svg>
     );
 };
-
 
 export const PlusIcon = (props: any) => {
     return (
@@ -70,7 +69,6 @@ export const PlusIcon = (props: any) => {
         </svg>
     );
 };
-
 
 export const GithubIcon: React.FC<IconSvgProps> = ({
     size = 24,

@@ -1,8 +1,8 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-    name: "Vite + HeroUI",
-    description: "Make beautiful websites regardless of your design experience.",
+    name: "Film Hub",
+    description: "A website all about movies and TV series.",
     navItems: [
         {
             label: "Home",
@@ -48,6 +48,6 @@ export const siteConfig = {
         },
     ],
     links: {
-        github: "https://github.com/mmarci96/film-media-hub"
+        github: "https://github.com/mmarci96/film-media-hub",
     },
 };
