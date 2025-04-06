@@ -38,10 +38,10 @@ export interface MediaItem {
     overview?: string;
     poster_path?: string;
     backdrop_path?: string;
-    mediaType?: MediaType;
+    mediaType: MediaType;
 }
 export interface MediaDetails {
-    mediaType?: MediaType;
+    mediaType: MediaType;
     id: number;
     title?: string;
     name?: string;

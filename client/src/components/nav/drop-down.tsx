@@ -73,6 +73,7 @@ export default function DropDownComponent() {
                         key="profile"
                         isReadOnly
                         className="h-14 gap-2 opacity-100"
+                        textValue="User Profile"
                     >
                         <User
                             avatarProps={{
@@ -90,12 +91,14 @@ export default function DropDownComponent() {
                     <DropdownItem
                         key="favorites"
                         endContent={<FaStar className="text-medium" />}
+                        textValue="Favorites"
                     >
                         <Link to={"/favorites"}>Favorites</Link>
                     </DropdownItem>
                     <DropdownItem
                         key="new_something"
                         endContent={<PlusIcon className="text-large" />}
+                        textValue="Create List"
                     >
                         Create list
                     </DropdownItem>
@@ -105,10 +108,15 @@ export default function DropDownComponent() {
                     <DropdownItem
                         onPress={() => console.log("not implemented")}
                         key="help_and_feedback"
+                        textValue="Help & Feedback"
                     >
                         Help & Feedback
                     </DropdownItem>
-                    <DropdownItem onPress={logout} key="logout">
+                    <DropdownItem
+                        onPress={logout}
+                        key="logout"
+                        textValue="Log Out"
+                    >
                         Log Out
                     </DropdownItem>
                 </DropdownSection>

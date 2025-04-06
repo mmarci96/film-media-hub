@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import { useAnimeDetails } from "@/hooks/use-anime-details";
 import { useTmdbDetails } from "@/hooks/use-tmdb-details";
 import MediaFullPage from "@/components/media/media-full-page";
-
 const MediaPage = () => {
     const [mediaData, setMediaData] = useState<MediaDetails | null>(null);
     const { fetchMediaDetails } = useTmdbDetails();
