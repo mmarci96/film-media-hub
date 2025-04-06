@@ -22,9 +22,7 @@ export interface SavedFavoriteData {
 }
 
 export const FavoritesContext = createContext<FavoritesContentList>({
-    addToFavorite: async () => {
-        console.log("hello");
-    },
+    addToFavorite: async () => {},
     removeFavorite: async () => {},
     fetchFavorites: async () => {},
     favoriteIds: [],
@@ -51,8 +49,9 @@ export const FavoritesProvider = ({
                 const { favorite_ids } = await res.json();
                 const favoritesList: SavedFavoriteIdSet[] = favorite_ids;
 
-                setFavoriteIds(favoritesList);
-                console.log("Favorite id list: ", favoritesList);
+                if (favoritesList) {
+                    setFavoriteIds(() => [...favoritesList]);
+                }
             }
         } catch (error) {
             console.error(error);
@@ -80,8 +79,6 @@ export const FavoritesProvider = ({
                 return;
             }
             const data: { id: number; tmdb_id: number } = await res.json();
-            console.log("Added response", data);
-
             if (data) {
                 setFavoriteIds((prev) => [
                     ...prev,
@@ -112,8 +109,6 @@ export const FavoritesProvider = ({
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log(res);
-
             if (res.ok) {
                 const clearedList = favoriteIds.filter(
                     (id) => id.tmdb_id !== tmdbId,

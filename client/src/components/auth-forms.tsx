@@ -41,8 +41,8 @@ const AuthForms = () => {
             }
 
             const data = await res.json();
-            const token = data;
-            console.log("data:", data);
+            const { token } = data;
+            console.log("token:", token);
 
             if (token && authType === "login") {
                 login(token);

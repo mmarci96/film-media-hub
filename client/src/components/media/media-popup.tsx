@@ -69,7 +69,7 @@ const MediaPopup: React.FC<MediaPopupProps> = ({
             const savedTmdbId = favoriteIds?.map((fav) => fav.tmdb_id);
             console.log("curr", currentId, "list", savedTmdbId);
 
-            savedTmdbId.includes(currentId)
+            savedTmdbId && savedTmdbId.includes(currentId)
                 ? setFavorite(true)
                 : setFavorite(false);
         }

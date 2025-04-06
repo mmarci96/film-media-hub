@@ -6,7 +6,7 @@ export const useAnimeDetails = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<any>(null);
     const fetchAnimeDetails = async (
-        animeId: string,
+        animeId: string | number,
     ): Promise<MediaDetails | void> => {
         setLoading(true);
         try {

@@ -7,7 +7,7 @@ export const useTmdbDetails = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const fetchMediaDetails = async (
-        id: number,
+        id: number | string,
         type: MediaType,
     ): Promise<MediaDetails | void> => {
         setLoading(true);

@@ -15,7 +15,7 @@ export default function FavoritesPage() {
     const { fetchMediaDetails } = useTmdbDetails();
 
     const fetchFavoriteData = async (
-        mediaId: string,
+        mediaId: string | number,
         mediaType: MediaType,
     ): Promise<MediaDetails | null> => {
         try {
@@ -23,7 +23,7 @@ export default function FavoritesPage() {
                 const data = await fetchAnimeDetails(mediaId);
                 if (data) return data;
             }
-            const data = await fetchMediaDetails(parseInt(mediaId), mediaType);
+            const data = await fetchMediaDetails(mediaId, mediaType);
             if (data) return data;
 
             return null;
@@ -40,10 +40,7 @@ export default function FavoritesPage() {
         const fetchMediaDataFromList = async (list: SavedFavoriteIdSet[]) => {
             const promises: Promise<MediaDetails | null>[] = list.map(
                 (favorite) =>
-                    fetchFavoriteData(
-                        favorite.id.toString(),
-                        favorite.media_type,
-                    ),
+                    fetchFavoriteData(favorite.id, favorite.media_type),
             );
 
             const results = await Promise.all(promises);

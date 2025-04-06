@@ -40,12 +40,13 @@ export interface MediaItem {
     backdrop_path?: string;
     mediaType?: MediaType;
 }
-
 export interface MediaDetails {
     mediaType?: MediaType;
     id: number;
     title?: string;
+    name?: string;
     original_title?: string;
+    original_name?: string;
     overview?: string;
     genres?: Genre[];
     release_date?: string;
@@ -84,8 +85,17 @@ export interface MediaDetails {
     origin_country?: string[];
     original_language?: string;
     video?: boolean;
+    last_episode_to_air?: {
+        air_date: string;
+        episode_number: number;
+        episode_type: string;
+    };
+    next_episode_to_air?: {
+        air_date: string;
+        episode_number: number;
+        episode_type: string;
+    };
 }
-
 export interface UseTmdbResult {
     mediaList: MediaItem[] | null;
     error: string | null;
