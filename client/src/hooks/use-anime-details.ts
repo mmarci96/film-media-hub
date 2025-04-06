@@ -11,7 +11,7 @@ export const useAnimeDetails = () => {
         setLoading(true);
         try {
             const res = await fetch(`/api/v1/anime/${animeId}`);
-            const data = await res.json();
+            const { data } = await res.json();
             if (!res.ok) {
                 setLoading(false);
                 setError("No response from server...");
