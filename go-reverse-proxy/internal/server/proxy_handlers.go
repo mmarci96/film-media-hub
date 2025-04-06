@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -15,6 +16,7 @@ func NewProxy(target *url.URL) *httputil.ReverseProxy {
 			req.URL.Scheme = target.Scheme
 			req.URL.Host = target.Host
 			req.URL.Path = singleJoiningSlash(target.Path, req.URL.Path)
+			log.Println("Path: ", req.URL.Path)
 			if target.RawQuery == "" || req.URL.RawQuery == "" {
 				req.URL.RawQuery = target.RawQuery + req.URL.RawQuery
 			} else {
@@ -34,7 +36,7 @@ func ProxyRequestHandler(proxy *httputil.ReverseProxy, url *url.URL, endpoint st
 		r.Host = url.Host
 
 		path := r.URL.Path
-		r.URL.Path = strings.TrimLeft(path, endpoint)
+		r.URL.Path = strings.TrimPrefix(path, endpoint)
 		fmt.Printf("[ TinyRP ] Redirecting request to %s at %s\n", r.URL, time.Now().UTC())
 		proxy.ServeHTTP(w, r)
 	}
