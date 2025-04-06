@@ -35,6 +35,10 @@ type AnimeResponse struct {
 	Data []AnimeItem `json:"data"`
 }
 
+type AnimeDetailResponse struct {
+	Data any `json:"data"`
+}
+
 type MediaItem struct {
 	ID           int    `json:"id"`
 	Title        string `json:"title"`
@@ -118,31 +122,24 @@ func (h *AnimeHandler) GetAnimeByID(c *gin.Context) {
 	}
 	defer resp.Body.Close()
 
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Println("Error reading the response body:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read the response body"})
+		return
+	}
+
 	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
 		log.Printf("Jikan API error: %s", string(body))
 		c.JSON(resp.StatusCode, gin.H{"error": "Jikan API returned non-200 status"})
 		return
 	}
 
-	// Parse the Jikan API response
-	var animeDetails AnimeItem
-	if err := json.NewDecoder(resp.Body).Decode(&animeDetails); err != nil {
+	var animeDetailResponse AnimeDetailResponse
+	if err := json.Unmarshal(body, &animeDetailResponse); err != nil {
 		log.Println("Failed to decode Jikan response:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode anime details"})
 		return
 	}
-
-	// Map the Jikan data to the format required for frontend
-	mediaItem := MediaItem{
-		ID:           animeDetails.MalID,
-		Title:        animeDetails.Title,
-		Name:         animeDetails.English,
-		Overview:     animeDetails.Synopsis,
-		PosterPath:   animeDetails.Images.JPG.ImageURL,
-		BackdropPath: animeDetails.Trailer.Images.MaximumImageUrl,
-		MediaType:    "anime",
-	}
-
-	c.JSON(http.StatusOK, mediaItem)
+	c.JSON(http.StatusOK, animeDetailResponse)
 }
