@@ -31,18 +31,17 @@ const AuthForms = () => {
             });
             if (!res.ok) {
                 let msg = "";
+                console.log(res);
+
                 hasAccount
-                    ? (msg =
-                          "Login failed! No user with the email or incorrect password...")
-                    : (msg =
-                          "Unsuccessful registration. Username or email taken...");
+                    ? (msg = "Login failed!" + res)
+                    : (msg = "Unsuccessful registration.");
                 setMessege(msg);
                 return;
             }
 
             const data = await res.json();
             const { token } = data;
-            console.log("token:", token);
 
             if (token && authType === "login") {
                 login(token);
@@ -66,7 +65,9 @@ const AuthForms = () => {
             onReset={resetFormData}
             onSubmit={handleSubmit}
         >
-            <h1>{hasAccount ? "Login" : "Register"}</h1>
+            <h2 className="w-full text-xl mx-auto">
+                {hasAccount ? "Login" : "Register"}
+            </h2>
 
             <Input
                 isRequired

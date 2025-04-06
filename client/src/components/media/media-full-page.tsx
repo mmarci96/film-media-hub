@@ -16,7 +16,6 @@ const MediaFullPage: React.FC<MediaFullPageProps> = ({ mediaDetails }) => {
     const { favoriteIds, addToFavorite, removeFavorite, fetchFavorites } =
         useFavorites();
 
-    // Helper function to format currency
     const formatCurrency = (value: number | undefined) => {
         return value
             ? new Intl.NumberFormat("en-US", {
@@ -34,9 +33,11 @@ const MediaFullPage: React.FC<MediaFullPageProps> = ({ mediaDetails }) => {
     const handleRemove = () => {
         removeFavorite(mediaDetails.id);
     };
+
     useEffect(() => {
         fetchFavorites();
     }, []);
+
     useEffect(() => {
         const savedTmdbId = favoriteIds?.map((fav) => fav.tmdb_id);
 
@@ -45,20 +46,8 @@ const MediaFullPage: React.FC<MediaFullPageProps> = ({ mediaDetails }) => {
             : setFavorite(false);
     }, [fetchFavorites]);
 
-    //
-    // // Fetch favorite items on mount
-    // useEffect(() => {
-    //     fetchFavorites();
-    // }, [fetchFavorites]);
-    //
-    // useEffect(() => {
-    //     const savedTmdbId = favoriteIds?.map((fav) => fav.tmdb_id);
-    //     setFavorite(savedTmdbId?.includes(mediaDetails.id) || false);
-    // }, [favoriteIds, mediaDetails.id]);
-    //
     return (
         <div className="p-4 pt-0 m-2 mt-1">
-            {/* Backdrop Image */}
             <div
                 className="absolute inset-0 w-full h-full max-h-[480px] bg-cover bg-center"
                 style={{

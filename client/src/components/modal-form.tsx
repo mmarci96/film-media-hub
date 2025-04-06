@@ -8,8 +8,8 @@ import {
     useDisclosure,
     Checkbox,
     Input,
-    Link,
 } from "@heroui/react";
+import { Link } from "react-router-dom";
 import { MailIcon, LockIcon } from "@/components/nav/icons";
 import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
@@ -99,8 +99,8 @@ export default function ModalForm() {
                                     >
                                         Remember me
                                     </Checkbox>
-                                    <Link color="primary" size="sm">
-                                        Forgot password?
+                                    <Link to={"/"} color="primary">
+                                        No account yet? Click here to sign up!
                                     </Link>
                                 </div>
                             </ModalBody>

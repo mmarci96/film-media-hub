@@ -19,9 +19,8 @@ export const useTmdbDetails = () => {
                 },
             });
             if (!response.ok) {
-                setError("Unextected error");
+                setError("Bad request error.");
             }
-
             const data = await response.json();
             const details: MediaDetails = data;
             details["poster_path"] = PREFIX_400 + details["poster_path"];
@@ -29,10 +28,11 @@ export const useTmdbDetails = () => {
             details.mediaType = type;
             return details;
         } catch (err) {
+            const msg = "There was an error fetching the data.";
+            console.error(err);
+            setError(msg);
+        } finally {
             setLoading(false);
-            setError(
-                err instanceof Error ? err.message : "Could not load details.",
-            );
         }
     };
 

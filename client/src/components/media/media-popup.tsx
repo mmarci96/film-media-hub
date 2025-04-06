@@ -16,6 +16,7 @@ import { useFavorites } from "@/hooks/use-favorites";
 import { useAnimeDetails } from "@/hooks/use-anime-details";
 import { MediaDetails } from "@/types";
 import { Link } from "react-router-dom";
+import LoadingAnimation from "@/layouts/fallback";
 
 interface MediaPopupProps {
     media: MediaItem;
@@ -35,9 +36,8 @@ const MediaPopup: React.FC<MediaPopupProps> = ({
     const [mediaDetails, setMediaDetails] = useState<MediaDetails | null>(null);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const { fetchAnimeDetails } = useAnimeDetails();
-    const { fetchMediaDetails } = useTmdbDetails();
+    const { fetchMediaDetails, loading, error } = useTmdbDetails();
     const handleOpen = (id: number) => {
-        console.log("Current: ", id);
         setCurrentId(id);
         onOpen();
     };
@@ -67,8 +67,6 @@ const MediaPopup: React.FC<MediaPopupProps> = ({
     useEffect(() => {
         if (currentId) {
             const savedTmdbId = favoriteIds?.map((fav) => fav.tmdb_id);
-            console.log("curr", currentId, "list", savedTmdbId);
-
             savedTmdbId && savedTmdbId.includes(currentId)
                 ? setFavorite(true)
                 : setFavorite(false);
@@ -77,7 +75,9 @@ const MediaPopup: React.FC<MediaPopupProps> = ({
 
     if (!media) return null;
 
-    return (
+    return loading ? (
+        <LoadingAnimation />
+    ) : (
         <>
             <div onClick={() => handleOpen(media.id)}>{children}</div>
 
@@ -147,6 +147,11 @@ const MediaPopup: React.FC<MediaPopupProps> = ({
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
+            {error && (
+                <p className="text-warning-600 text-lg w-full mx-auto my-8">
+                    {error}
+                </p>
+            )}
         </>
     );
 };

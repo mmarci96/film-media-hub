@@ -40,27 +40,14 @@ export const useTmdb = (
         try {
             const response = await fetch(
                 `/api/v1/tmdb/${type}/${tmdbList}?page=${currentPage}&search=${search}`,
-                {
-                    method: "GET",
-                    headers: {
-                        accept: "application/json",
-                    },
-                },
             );
-
             if (!response.ok) {
-                throw new Error(
-                    `Error: ${response.status} ${response.statusText}`,
-                );
+                setError("Bad request error.");
             }
-
             const data = await response.json();
-            // console.log("API response", data);
-
             const mediaListed = checkMediaListForDuplicates(
                 data.results as MediaItem[],
             );
-
             setMediaList((prevList) =>
                 currentPage === 1
                     ? mediaListed
