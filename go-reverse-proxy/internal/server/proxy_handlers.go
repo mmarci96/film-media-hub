@@ -10,9 +10,23 @@ import (
 )
 
 func NewProxy(target *url.URL) *httputil.ReverseProxy {
-	proxy := httputil.NewSingleHostReverseProxy(target)
-	return proxy
+	return &httputil.ReverseProxy{
+		Director: func(req *http.Request) {
+			req.URL.Scheme = target.Scheme
+			req.URL.Host = target.Host
+			req.URL.Path = singleJoiningSlash(target.Path, req.URL.Path)
+			// keep query string
+			if target.RawQuery == "" || req.URL.RawQuery == "" {
+				req.URL.RawQuery = target.RawQuery + req.URL.RawQuery
+			} else {
+				req.URL.RawQuery = target.RawQuery + "&" + req.URL.RawQuery
+			}
+			// Set host to target's host
+			req.Host = target.Host
+		},
+	}
 }
+
 func ProxyRequestHandler(proxy *httputil.ReverseProxy, url *url.URL, endpoint string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("[ TinyRP ] Request received at %s at %s\n", r.URL, time.Now().UTC())
@@ -28,4 +42,14 @@ func ProxyRequestHandler(proxy *httputil.ReverseProxy, url *url.URL, endpoint st
 		fmt.Printf("[ TinyRP ] Redirecting request to %s at %s\n", r.URL, time.Now().UTC())
 		proxy.ServeHTTP(w, r)
 	}
+}
+
+func singleJoiningSlash(a, b string) string {
+	switch {
+	case strings.HasSuffix(a, "/") && strings.HasPrefix(b, "/"):
+		return a + b[1:]
+	case !strings.HasSuffix(a, "/") && !strings.HasPrefix(b, "/"):
+		return a + "/" + b
+	}
+	return a + b
 }
