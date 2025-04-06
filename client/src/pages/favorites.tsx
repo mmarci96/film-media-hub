@@ -40,7 +40,7 @@ export default function FavoritesPage() {
         const fetchMediaDataFromList = async (list: SavedFavoriteIdSet[]) => {
             const promises: Promise<MediaDetails | null>[] = list.map(
                 (favorite) =>
-                    fetchFavoriteData(favorite.id, favorite.media_type),
+                    fetchFavoriteData(favorite.tmdb_id, favorite.media_type),
             );
 
             const results = await Promise.all(promises);
@@ -52,7 +52,6 @@ export default function FavoritesPage() {
                 .map((item): MediaDetails => mediaDetailToItem(item));
 
             setFavoriteMediaList(validResults);
-            console.log(validResults);
         };
 
         if (favoriteIds.length >= 1) {
@@ -60,18 +59,13 @@ export default function FavoritesPage() {
         }
     }, [favoriteIds]);
 
-    useEffect(() => {
-        console.log(favoriteIds);
-        console.log(favoriteMediaList);
-    }, [favoriteIds, favoriteMediaList]);
-
     return (
         <DefaultLayout>
             <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
                 <div className="inline-block max-w-lg text-center justify-center">
                     <h1 className={title()}>Favorites Page</h1>
                 </div>
-                <div className="flex flex-wrap justify-center w-[92vw]">
+                <div className="flex flex-wrap justify-center w-[100vw]">
                     {favoriteMediaList?.map((media) => (
                         <div key={media.id}>
                             <MediaCard

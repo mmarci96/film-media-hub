@@ -86,7 +86,7 @@ const MediaList: React.FC<MediaListProps> = ({
 
             {error && <p className="text-red-500 font-medium">{error}</p>}
 
-            <div className="flex flex-wrap justify-center w-[92vw]">
+            <div className="flex flex-wrap col-span-4 mx-2 justify-center w-[100vw]">
                 {mediaList?.map((media) => (
                     <div key={media.id}>
                         <MediaCard media={media} mediaType={mediaType} />
