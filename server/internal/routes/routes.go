@@ -43,7 +43,6 @@ func SetupRouter(db *database.Database, cfg *config.Config) *gin.Engine {
 		public.POST("/login", authHandler.Login)
 		public.GET("/anime", animeHandler.GetAnimeList)
 		public.GET("/anime/:id", animeHandler.GetAnimeByID)
-		// public.GET("/anime/:list", animeHandler.GetAnimeList)
 		public.GET("/tmdb/:type/:list", tmdbHandler.FetchMedia)
 		public.GET("/tmdb_id/:type/:id", tmdbHandler.FetchMediaByID)
 	}
