@@ -6,12 +6,9 @@ static:
   dir: "/home/meirl/Documents/film-media-hub/client/dist"
 
 resources:
-  - name: Server1
+  - name: Film Hub Server1
     endpoint: /api/v1/
     destination_url: "http://localhost:8080/api/v1/"
-  - name: Server2
-    endpoint: /server2
-    destination_url: "http://localhost:9002"
-  - name: Server3
-    endpoint: /server3
-    destination_url: "http://localhost:9003"
+  - name: Example
+    endpoint: /example
+    destination_url: "http://localhost:3000"
