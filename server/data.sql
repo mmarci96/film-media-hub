@@ -20,15 +20,14 @@ CREATE TABLE favorites (
 );
 
 
-CREATE  TABLE tmdb_movies (
+CREATE TABLE tmdb_movies (
     id SERIAL PRIMARY KEY,
-    title VARCHAR(63),
+    title VARCHAR(80),
     overview VARCHAR(200),
-
     poster_path VARCHAR(200),
     backdrop_path VARCHAR(200),
     release_date DATE,
     popularity INT,
     vote_average INT,
-    vote_count INT, 5
+    vote_count INT
 );
