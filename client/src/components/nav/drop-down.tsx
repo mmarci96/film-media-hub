@@ -25,7 +25,7 @@ export default function DropDownComponent() {
             showArrow
             classNames={{
                 base: "before:bg-default-200",
-                content: "p-0 border-small border-divider bg-background",
+                content: "p-0 border-small border-divider",
             }}
             radius="sm"
         >
