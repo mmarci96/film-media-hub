@@ -35,18 +35,18 @@ export default function DropDownComponent() {
                         onClick={() => setOpen(!isOpen)}
                         className="w-8 h-8 rounded-full ring-1 ring-foreground opacity-70 bg-default-100 cursor-pointer"
                     >
-                        {isOpen ?
+                        {isOpen ? (
                             <RiAccountCircleLine
                                 size={32}
                                 className="ring-2 rounded-full ring-foreground"
                             />
-                            :
+                        ) : (
                             <RiAccountCircleFill size={32} />
-                        }
+                        )}
                     </div>
                 </DropdownTrigger>
             ) : (
-                <Button variant="ghost" >
+                <Button variant="ghost">
                     <ModalForm />
                 </Button>
             )}
@@ -69,11 +69,15 @@ export default function DropDownComponent() {
                 }}
             >
                 <DropdownSection showDivider aria-label="Profile & Actions">
-                    <DropdownItem key="profile" isReadOnly className="h-14 gap-2 opacity-100">
+                    <DropdownItem
+                        key="profile"
+                        isReadOnly
+                        className="h-14 gap-2 opacity-100"
+                    >
                         <User
                             avatarProps={{
                                 size: "sm",
-                                icon: <MdAccountCircle size={32} />
+                                icon: <MdAccountCircle size={32} />,
                             }}
                             classNames={{
                                 name: "text-default-600",
@@ -83,21 +87,30 @@ export default function DropDownComponent() {
                             name={currentUser?.username}
                         />
                     </DropdownItem>
-                    <DropdownItem key="favorites" endContent={<FaStar className="text-medium" />}>
-                        <Link to={'/favorites'}>
-                            Favorites
-                        </Link>
+                    <DropdownItem
+                        key="favorites"
+                        endContent={<FaStar className="text-medium" />}
+                    >
+                        <Link to={"/favorites"}>Favorites</Link>
                     </DropdownItem>
-                    <DropdownItem key="new_something" endContent={<PlusIcon className="text-large" />}>
+                    <DropdownItem
+                        key="new_something"
+                        endContent={<PlusIcon className="text-large" />}
+                    >
                         Create list
                     </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection aria-label="Help & Feedback">
-                    <DropdownItem onPress={() => console.log('not implemented')} key="help_and_feedback">
+                    <DropdownItem
+                        onPress={() => console.log("not implemented")}
+                        key="help_and_feedback"
+                    >
                         Help & Feedback
                     </DropdownItem>
-                    <DropdownItem onPress={logout} key="logout">Log Out</DropdownItem>
+                    <DropdownItem onPress={logout} key="logout">
+                        Log Out
+                    </DropdownItem>
                 </DropdownSection>
             </DropdownMenu>
         </Dropdown>

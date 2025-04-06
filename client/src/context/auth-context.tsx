@@ -11,6 +11,7 @@ interface AuthContextType {
 interface CurrentUser {
     user_id: number;
     email: string;
+    username?: string;
 }
 
 export const AuthContext = createContext<AuthContextType>({
