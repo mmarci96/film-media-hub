@@ -28,7 +28,7 @@ func main() {
 
 	r := routes.SetupRouter(db, cfg)
 	serverAddr := cfg.Server.Host + ":" + cfg.Server.Port
-	log.Printf("Server starting on %s", serverAddr)
+	log.Printf("Server started on %s", serverAddr)
 
 	srv := &http.Server{
 		Addr:         serverAddr,
