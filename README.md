@@ -44,7 +44,6 @@ Jikan (時間) offers an unofficial, open-source API for anime and manga data. W
 
 <div align="center"><table><tr>Browse and Save Media</tr><tr><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/browse-filter.png"/></td><td>
-<img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/search-filter.png"/></td><td>
 <img src="https://raw.githubusercontent.com/mmarci96/film-media-hub/development/screenshots/save-favorites.png"/></td></tr></table></div>
 
 <div align="center"><table><tr>Manage Your Favorites</tr><tr><td>
